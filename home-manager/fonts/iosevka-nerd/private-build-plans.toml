@@ -1,0 +1,9 @@
+[buildPlans.IosevkaCustom]
+family = "IosevkaCustom"
+spacing = "term"
+serifs = "sans"
+noCvSs = false
+exportGlyphNames = true
+
+  [buildPlans.IosevkaCustom.ligations]
+  inherits = "dlig"

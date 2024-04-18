@@ -1,0 +1,25 @@
+body {
+  /* General */
+  /* --color-gray-05: #fafafa; */
+  /* --color-gray-10: #f4f4f5; */
+  /* --color-gray-20: #e4e4e7; */
+  /* --color-gray-30: #d4d4d8; */
+  /* --color-gray-40: #a1a1aa; */
+  /* --color-gray-50: #71717a; */
+  --color-gray-60: #393348;
+  --color-gray-70: #332e41;
+  --color-gray-80: #232330;
+  --color-gray-90: #1e1e24;
+  --layout-background-0: #1e1e24;
+  --layout-background-1: #1e1e24;
+  /* --layout-background-2: var(--color-gray-70); */
+  /* --layout-background-3: var(--color-gray-60); */
+  /* --layout-background-4: var(--color-gray-50); */
+  /* --layout-color-0: var(--color-white); */
+  /* --layout-color-1: var(--color-gray-10); */
+  /* --layout-color-2: var(--color-gray-30); */
+  /* --layout-color-3: var(--color-gray-50); */
+  --layout-border-0: transparent;
+  /* --layout-border-1: var(--color-gray-60); */
+  /* --layout-border-2: var(--color-gray-50); */
+}
