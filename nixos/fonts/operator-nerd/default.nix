@@ -1,13 +1,13 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "operator-nerd";
-  version = "2024-04-18";
+  version = "2024-04-19";
 
   src = ./operator-nerd;
 
   installPhase = ''
-    install -D -m 444 $src/*.otf -t $out/share/fonts/otf
+    install -D -m 444 $src/*.otf -t $out/share/fonts/opentype
   '';
 
   meta = with lib; {

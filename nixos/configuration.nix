@@ -1,14 +1,21 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./base
-    ./modules/sunshine.nix
-  ];
+  imports =
+    [ ./hardware-configuration.nix ./base ./fonts ./modules/sunshine.nix ];
 
-  networking.hostName = "liam-desktop";
   system.stateVersion = "24.05";
+
+  networking.hostName = "nixos";
+  networking.hostId = "968d12a1";
+  networking.networkmanager.enable = true; # Automatic networking confiugration
+  services.resolved.enable = true; # DNS caching
+
+  # Set your time zone.
+  time.timeZone = "America/Toronto";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_CA.UTF-8";
 
   nix.settings = {
     # Enable flakes and new 'nix' command
@@ -18,24 +25,22 @@
   };
 
   nixpkgs = {
-    overlays = [ inputs.nvidia-patch.overlays.default ];
-    config = {
-      allowUnfree = true;
-    };
+    overlays = [
+      inputs.neovim-nightly-overlay.overlay
+      inputs.nvidia-patch.overlays.default
+    ];
+    config = { allowUnfree = true; };
   };
 
   users.users = {
     saghen = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
-      extraGroups = ["wheel" "docker"];
+      extraGroups = [ "wheel" "docker" "networkmanager" ];
     };
   };
 
-  # enable alongside home-manager for completions
-  programs.fish.enable = true; 
+  # Fish
+  users.defaultUserShell = pkgs.fish;
+  programs.fish.enable = true;
 }
 

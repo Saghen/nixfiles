@@ -1,29 +1,31 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
-  home = {
-    sessionVariables = { BROWSER = "firefox-developer-edition -p saghen"; };
-  };
+  home = { sessionVariables = { BROWSER = "firefox-developer-edition"; }; };
 
   programs.firefox = {
     enable = true;
-
     package = pkgs.firefox-devedition-bin;
 
     profiles = {
-      saghen = {
+      # Must be named dev-edition-default see:
+      # https://github.com/nix-community/home-manager/issues/4703#issuescomment-2025005453
+      dev-edition-default = {
         settings = {
           # required for userChrome.css and userContent.css
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
           "browser.aboutConfig.showWarning" = false;
           "browser.bookmarks.restore_default_bookmarks" = false;
+          "browser.toolbars.bookmarks.visibility" = "never";
           "browser.contentblocking.category" = "strict";
           "browser.newtabpage.activity-stream.feeds.section.highlights" = true;
           "browser.newtabpage.activity-stream.section.highlights.includePocket" =
             false;
           "browser.newtabpage.activity-stream.showSponsored" = false;
           "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+
+          "cookiebanners.service.mode.privateBrowsing" = 1;
 
           "devtools.chrome.enabled" = true;
           "devtools.debugger.remote-enabled" = true;
@@ -156,25 +158,6 @@
                 "https://home-manager-options.extranix.com/home-manager-option-search/images/favicon.png";
               updateInterval = updateInterval;
               definedAliases = [ "hm" ];
-            };
-            "Arch Wiki" = {
-              urls = [{
-                template =
-                  "https://wiki.archlinux.org/index.php?search={searchTerms}";
-              }];
-              iconUpdateURL = "https://wiki.archlinux.org/favicon.ico";
-              updateInterval = updateInterval;
-              definedAliases = [ "aw" ];
-            };
-            "AUR" = {
-              urls = [{
-                template =
-                  "https://aur.archlinux.org/packages?O=0&K={searchTerms}";
-              }];
-              iconUpdateURL =
-                "https://aur.archlinux.org/static/images/favicon.ico";
-              updateInterval = updateInterval;
-              definedAliases = [ "aur" ];
             };
             "NPM" = {
               urls =

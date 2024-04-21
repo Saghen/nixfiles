@@ -1,14 +1,6 @@
 { pkgs, ... }:
 
 {
-  home = {
-    sessionVariables = {
-      DISPLAY1 = "DP-0";
-      DISPLAY2 = "DP-2";
-    };
-    packages = with pkgs; [ xorg.xrandr ];
-  };
-
   xsession.enable = true;
   xsession.windowManager.bspwm = {
     enable = true;
@@ -19,8 +11,8 @@
       ${pkgs.bspwm}/bin/bspc wm -O $DISPLAY1 $DISPLAY2
     '';
     monitors = {
-      "DP-0" = ["I" "II" "III" "IV" "V" "VI"];
-      "DP-2" = ["VII" "VIII" "IX" "X"];
+      "DP-0" = [ "I" "II" "III" "IV" "V" "VI" ];
+      "DP-2" = [ "VII" "VIII" "IX" "X" ];
     };
     settings = {
       # Gap
@@ -57,16 +49,23 @@
       "Code:*:Open File" = { state = "floating"; };
       neovide = { state = "tiled"; };
       neovim = { state = "tiled"; };
-      obsidian = { state = "tiled"; desktop = "^3"; };
-      thunderbird = { state = "tiled"; desktop = "^6"; };
-      firefoxdeveloperedition = { state = "tiled"; };
+      obsidian = {
+        state = "tiled";
+        desktop = "^3";
+      };
+      thunderbird = {
+        state = "tiled";
+        desktop = "^6";
+      };
+      firefox-aurora = { state = "tiled"; };
+      steam = { desktop = "^6"; };
     };
     startupPrograms = with pkgs; [
       "${xorg.xrandr}/bin/xrandr --output $DISPLAY1 --right-of $DISPLAY2"
       "${sxhkd}/bin/sxhkd"
       "${dunst}/bin/dunst"
       "${flameshot}/bin/flameshot"
-      "${feh}/bin/feh --bg-fill ~/pictures/wallpapers/2024/soviet-rocket.jpg"
+      "${feh}/bin/feh --no-fehbg --bg-fill ~/pictures/wallpapers/2024/soviet-rocket.jpg"
     ];
   };
 }

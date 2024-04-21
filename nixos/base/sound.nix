@@ -1,11 +1,6 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    pavucontrol # GUI Volume mixer and device settings
-    helvum # GUI Audio routing: Control what apps get what audio
-  ];
-
   services.pipewire = {
     enable = true;
     audio.enable = true;

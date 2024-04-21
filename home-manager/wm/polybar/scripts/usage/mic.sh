@@ -1,5 +1,3 @@
-#!/bin/sh
-
 if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
   echo "Usage: $0 <on> <off>"
   exit 1

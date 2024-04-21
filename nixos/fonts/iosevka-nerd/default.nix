@@ -5,16 +5,16 @@
 # TODO: Not sure that the xavgcharwidth did anything
 # NOTE: Edit PN to adjust parallelization
 
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "iosevka-nerd";
-  version = "2024-04-18";
+  version = "2024-04-19";
 
   src = ./iosevka-nerd;
 
   installPhase = ''
-    install -D -m 444 $src/*.ttf -t $out/share/fonts/ttf
+    install -D -m 444 $src/*.ttf -t $out/share/fonts/truetype
   '';
 
   meta = with lib; {

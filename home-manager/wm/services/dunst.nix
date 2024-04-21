@@ -1,6 +1,7 @@
 { pkgs, ... }:
 
 {
+  home.packages = with pkgs; [ libnotify ]; # provides notify-send
   services.dunst = {
     enable = true;
 

@@ -17,9 +17,10 @@
     extraLuaConfig = ''
       -- bootstrap lazy.nvim, lazyvim and my plugins
       require('config.lazy')
-      '';
+    '';
 
     extraPackages = with pkgs; [
+      tree-sitter
       ## LSPs, formatters, linters
       # kubernetes
       helm-ls
@@ -31,7 +32,7 @@
       nodePackages.bash-language-server
       # nix
       nil
-      nixfmt
+      nixfmt-classic
       # python
       black
       nodePackages.pyright

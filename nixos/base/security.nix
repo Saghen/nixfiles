@@ -5,32 +5,35 @@
 
 # (for V2) secure boot via https://github.com/nix-community/lanzaboote
 
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 {
+  # todo: are the yubikey/yubico ones needed?
   environment.systemPackages = with pkgs; [
     yubikey-personalization
     yubikey-manager
     yubico-pam
   ];
 
-  security = {
-    polkit.enable = true;
+  programs.gnupg.agent.enable = true;
+  hardware.gpgSmartcards.enable = true;
 
-    # Enable PAM module for Yubikey for logging in
-    pam = {
-      services = {
-        login.u2fAuth = true;
-        sudo.u2fAuth = true;
-      };
-      u2f.authFile = "/etc/u2f-mappings";
+  security.polkit.enable = true;
+
+  # Enable PAM module for Yubikey for login and sudo
+  security.pam = {
+    u2f = {
+      enable = true;
+      cue = true;
+      authFile = "/etc/u2f-mappings";
+    };
+    services = {
+      login.u2fAuth = true;
+      sudo.u2fAuth = true;
     };
   };
-
-  environment.etc."u2f-mappings".text = builtins.concatStringsSep "\n" ( 
-    builtins.map (
-      user: "${user}:uFCRmYevdOwCbnTg+AGbr8nCQSg1moNskkrwLaPkKnyJquwnhAwLahG0dYhWn4pniezXMbC0EKL8Pd46i51VZQ==,ksFBONzb15tfTzkK9MIzy6QWcFk27sj5/7Dwtjnuf2Meq0445QWnR9hk/+fv/dpjhPNawqU8ej/3pDkF/h+r+w==,es256,+presence:eEep3vG8EXQ5FjRM63/zjMghptZAGHhTRCIFgTQF2xAwqrdYpPKlZmrNpt+iQEHsKuHu9yjleLZNmOVIfIWYBA==,Nc+pNII4aXBtRfePZ+h1VgEV4DXmH0U599hpTF5IZfv4DnDnQN3aGdi/b6zuKoPxPraLHZM1C8D3S4UKA3ZABg==,es256,+presence"
-    )
-    ( builtins.attrNames config.users.users )
-  );
+  # Public keys of Yubikeys. Generated via:
+  # https://nixos.wiki/wiki/Yubikey#pam_u2f
+  environment.etc."u2f-mappings".text =
+    "saghen:DgBwRAkbzjUiiE6WikxyEadH/p1ze4p6w3/Wc0qQd7aI5qvQL9vn5joqOI/Gq1zPKf6P2Af3swf2cgG71WUriw==,DqEsqsA3Fnmc2EVm75neLy7PMLkN4bhgiFEp0OaqpNxqiEMMn7s4bWcrO4a6wsR7dVxK6cLDxNBzEJ+GvyHiVg==,es256,+presence:0mFOuATIQI9mpfkDuwQy1PEsYNFWgLzkDiZRxND4R1jWhq0AbkCtyoQN53oThRlvj/oChjrvrb3lQ6AJYvqDvA==,E2zkjzC0nd19Cix8uOeQ20zN1D9mJduG1c0JA04Dr/+OHw2TekZA4ZeNCjvkUY7Bj6oAy1ioNCIamXypxCQ4Aw==,es256,+presence";
 }

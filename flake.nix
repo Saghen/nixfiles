@@ -18,29 +18,27 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, hardware, spicetify-nix, neovim-nightly-overlay, nvidia-patch, ... }: {
-    nixosConfigurations = {
-      gigachad = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./nixos/configuration.nix
-          hardware.nixosModules.common-gpu-nvidia-nonprime
-          hardware.nixosModules.common-pc-ssd
-        ];
-        specialArgs = { inherit inputs; };
-      };
-    };
-
-    homeConfigurations = {
-      saghen = home-manager.lib.homeManagerConfiguration {
-        modules = [ ./home-manager/home.nix ];
-        extraSpecialArgs = { inherit spicetify-nix; };
-        pkgs = import nixpkgs {
+  outputs = inputs@{ nixpkgs, home-manager, hardware, spicetify-nix
+    , neovim-nightly-overlay, nvidia-patch, ... }: {
+      nixosConfigurations = {
+        nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          config.allowUnfree = true;
-          overlays = [ neovim-nightly-overlay.overlay ];
+          modules = [
+            ./nixos/configuration.nix
+            hardware.nixosModules.common-gpu-nvidia-nonprime
+            hardware.nixosModules.common-pc-ssd
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useUserPackages = true;
+                useGlobalPkgs = true;
+                extraSpecialArgs = { inherit spicetify-nix; };
+                users.saghen = import ./home-manager/home.nix;
+              };
+            }
+          ];
+          specialArgs = { inherit inputs; };
         };
       };
     };
-  };
 }

@@ -1,13 +1,13 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "feather";
-  version = "2024-04-18";
+  version = "2024-04-19";
 
   src = ./feather;
 
   installPhase = ''
-    install -D -m 444 $src/*.ttf -t $out/share/fonts/ttf
+    install -D -m 444 $src/*.ttf -t $out/share/fonts/truetype
   '';
 
   meta = with lib; {

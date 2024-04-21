@@ -8,9 +8,15 @@
 
   # games
   hardware.steam-hardware.enable = true;
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    extraCompatPackages = [ pkgs.proton-ge-bin ];
+    localNetworkGameTransfers.openFirewall = true;
+  };
+  programs.gamescope.enable = true; # TODO: doesnt work on nvidia
   programs.gamemode = {
     enable = true;
+    enableRenice = true;
     settings = {
       general = {
         softrealtime = "on";
@@ -22,10 +28,7 @@
       };
     };
   };
-  environment.systemPackages = with pkgs; [
-    protontricks
-    mangohud
-  ];
+  environment.systemPackages = with pkgs; [ protontricks mangohud ];
 
   # streaming
   services.sunshine = {
@@ -47,25 +50,21 @@
 
     applications = {
       env = { PATH = "$(PATH):$(HOME)/.local/bin"; };
-      apps = [
-        { 
-          name = "Steam";
-          output = "";
-          cmd = "";
-          exclude-global-prep-cmd = "false";
-          elevated = "false";
-          auto-detach = "true";
-          image-path = "steam.png";
-          detached = [
-            "setsid steam steam:\/\/open\/bigpicture"
-          ];
-        }
-      ];
+      apps = [{
+        name = "Steam";
+        output = "";
+        cmd = "";
+        exclude-global-prep-cmd = "false";
+        elevated = "false";
+        auto-detach = "true";
+        image-path = "steam.png";
+        detached = [ "setsid steam steam://open/bigpicture" ];
+      }];
     };
   };
   # adds support for nvfbc hardware capture and higher nvenc limits
   # nixpkgs.overlays = [inputs.nvidia-patch.overlays.default];
-  hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc (
-    pkgs.nvidia-patch.patch-fbc config.boot.kernelPackages.nvidiaPackages.stable
-  );
+  hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc
+    (pkgs.nvidia-patch.patch-fbc
+      config.boot.kernelPackages.nvidiaPackages.stable);
 }

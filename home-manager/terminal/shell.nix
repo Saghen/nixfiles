@@ -1,14 +1,16 @@
 { pkgs, ... }:
 
 {
-  programs = { 
+  home.packages = with pkgs; [ sqlite ]; # for atuin
+
+  programs = {
     fish = {
       enable = true;
       functions = {
         # disables greeting
-        fish_greeting = ""; 
+        fish_greeting = "";
         # use search menu when pressing tab for completion
-        fish_user_key_bindings = "bind \t complete-and-search";
+        fish_user_key_bindings = "bind 	 complete-and-search";
         # color for kubectl
         kubectl = "kubecolor $argv";
       };
@@ -19,9 +21,16 @@
         kn = "kubens";
         kg = "kubectl get";
         kd = "kubectl describe";
+        # nix
+        nsr = "nix run nixpkgs#";
+        nsn = "nix shell nixpkgs#";
+        nbn = "nix build nixpkgs#";
+        nbp =
+          "nix-build -E 'with import <nixpkgs> {}; callPackage ./default.nix {}'";
+        nrr = "nixos-rebuild-remote";
       };
-      # fzf all the things
-      interactiveShellInit = "fzf_configure_bindings";
+      # TODO: fzf all the things
+      # interactiveShellInit = "fzf_configure_bindings";
       plugins = with pkgs;
         with fishPlugins; [
           # package manager
@@ -62,11 +71,10 @@
         ];
     };
 
-
     # sqlite history
     atuin = {
       enable = true;
-      flags = ["--disable-up-arrow"];
+      flags = [ "--disable-up-arrow" ];
       settings = {
         sync_address = "https://atuin.super.fish";
         style = "compact";
@@ -81,30 +89,20 @@
         # Inserts a blank line between shell prompts
         add_newline = false;
 
-        format = ''
-        $container\
-        $kubernetes\
-        $directory\
-        $git_branch\
-        $git_state\
-        $docker_context\
-        $conda\
-        $jobs\
-        $sudo\
-        $character\
-        '';
+        format =
+          "$container$kubernetes$directory$git_branch$git_state$docker_context$conda$jobs$sudo$character";
 
-        container = { 
+        container = {
           format = "[$symbol]($style) ";
-          style = "bold red"; 
+          style = "bold red";
         };
 
         # Replace the "❯" symbol in the prompt with "➜"
-        character = { 
+        character = {
           success_symbol = "[~>](green)";
-          error_symbol = "[~>](blue)"; 
+          error_symbol = "[~>](blue)";
         };
       };
-    }; 
+    };
   };
 }

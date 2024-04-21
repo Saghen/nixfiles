@@ -3,37 +3,22 @@
 # TODO: set fonts
 
 let
-  polywins = pkgs.writeShellScriptBin "polywins" ''
-    ${pkgs.python3}/bin/python ${./scripts/polywins.py}
-  '';
-  micUsage = pkgs.writeShellScriptBin "mic-usage" ''
-    ${builtins.readFile ./scripts/mic-usage.sh}
-  '';
-  cameraUsage = pkgs.writeShellScriptBin "camera-usage" ''
-    ${builtins.readFile ./scripts/camera-usage.sh}
-  '';
-in
-{
-  home.packages = with pkgs; [
-    twitch-cli
-  ];
+  scripts = import ./scripts { inherit pkgs; };
 
+  xrandr = "${pkgs.xorg.xrandr}/bin/xrandr";
+  grep = "${pkgs.gnugrep}/bin/grep";
+  dunstctl = "${pkgs.dunst}/bin/dunstctl";
+in {
   services.polybar = {
     enable = true;
+    package = pkgs.polybarFull;
     script = ''
-      # Terminate already running bar instances
-      killall -q polybar
-
-      # To prevent an issue with the launch
-      sleep 0.5 
-      while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
-
       # Launch the bar
       # Check if monitor is connected and then launch on that monitor
-      if xrandr --listactivemonitors | grep "$DISPLAY2" > /dev/null; then
+      if ${xrandr} --listactivemonitors | ${grep} "$DISPLAY2" > /dev/null; then
         MONITOR=$DISPLAY2 polybar &
       fi
-      if xrandr --listactivemonitors | grep "$DISPLAY1" > /dev/null; then
+      if ${xrandr} --listactivemonitors | ${grep} "$DISPLAY1" > /dev/null; then
         # Sleep so the dock goes on the other monitor
         sleep 0.5
         MONITOR=$DISPLAY1 polybar &
@@ -125,9 +110,11 @@ in
         # the left and right block.
         fixed-center = true;
 
-        modules-right = "l1 twitch github gap dnd gap pulseaudio gap wlan gap date gap-small";
-        modules-center = "l1 spotify camera-usage-indicator mic-usage-indicator r1";
-        modules-left = "gap-small bspwm polywins r1";
+        modules-right =
+          "l1 twitch github gap dnd gap pulseaudio gap wlan gap date gap-small";
+        modules-center =
+          "l1 spotify camera-usage-indicator mic-usage-indicator r1";
+        modules-left = "gap-small workspaces windows r1";
 
         width = "100%";
         height = 30;
@@ -205,7 +192,7 @@ in
         tray-scale = 1.0;
       };
 
-      "module/bspwm" = {
+      "module/workspaces" = {
         type = "internal/bspwm";
 
         label-focused = "";
@@ -234,10 +221,10 @@ in
         label-dimmed-focused-padding = 1;
       };
 
-      "module/polywins" = {
+      "module/windows" = {
         # Can change colors in polywins file. need to use env vars
         type = "custom/script";
-        exec = "${polywins} $MONITOR";
+        exec = "${scripts.windows} $MONITOR";
         format = "<label>";
         format-background = "\${colors.background-alt}";
         label = "%output%";
@@ -314,7 +301,7 @@ in
 
       "module/mic-usage-indicator" = {
         type = "custom/script";
-        exec = "${micUsage} \"\" \"\"";
+        exec = ''${scripts.usage.mic} " " ""'';
         format-foreground = "\${colors.accent}";
         format-background = "\${colors.background-alt}";
         interal = 5;
@@ -322,7 +309,7 @@ in
 
       "module/camera-usage-indicator" = {
         type = "custom/script";
-        # exec = "${cameraUsage} \" \" \"\"";
+        exec = ''${scripts.usage.camera} " " ""'';
         format-foreground = "\${colors.accent}";
         format-background = "\${colors.background-alt}";
         interal = 5;
@@ -366,13 +353,13 @@ in
         format-foreground = "\${colors.foreground}";
         format-background = "\${colors.background-alt}";
         interval = 60;
-        exec = "python ~/scripts/twitch/is-streaming.py";
+        exec = scripts.twitch;
       };
 
       "module/github" = {
         type = "custom/script";
-        click-left = "exec ~/scripts/github/open-notifications.sh";
-        exec = "~/scripts/github/get-notification-count.sh";
+        click-left = scripts.github.openNotifications;
+        exec = scripts.github.notificationCount;
         format-prefix = " ";
         format-prefix-font = 2;
         # format-prefix = " " if you don't like feather
@@ -383,8 +370,9 @@ in
 
       "module/dnd" = {
         type = "custom/script";
-        click-left = "dunstctl set-paused toggle";
-        exec = "[ 'true' = $(dunstctl is-paused) ] && echo \"\" || echo \"\"";
+        click-left = "${dunstctl} set-paused toggle";
+        exec =
+          ''[ 'true' = $(${dunstctl} is-paused) ] && echo "" || echo ""'';
         format-foreground = "\${colors.red}";
         format-background = "\${colors.background-alt}";
         interval = 1;
@@ -407,20 +395,19 @@ in
 
       "module/spotify" = {
         type = "custom/script";
-        exec = "echo \"%{F#A4B9EF}$([[ 'Playing' == $(playerctl --player=spotify,ncspot status) ]] && echo '' || echo '')%{F-}%{F#A4B9EF}$(playerctl metadata --player=spotify,ncspot xesam:title) -%{F-} %{F#C9CBFF}$(playerctl metadata --player=spotify,ncspot xesam:artist)%{F-} %{F#C9CBFF}$(~/scripts/audio/get-spotify-volume.py)%%{F-} ";
+        exec = scripts.player.nowPlaying;
+        tail = true;
 
-        click-left = "playerctl --player=spotify,ncspot play-pause";
-        click-right = "playerctl --player=spotify,ncspot next";
-        click-middle = "playerctl --player=spotify,ncspot previous";
-        scroll-up = "~/scripts/audio/change-spotify-volume.py +10%";
-        scroll-down = "~/scripts/audio/change-spotify-volume.py -10%";
+        click-left = "playerctl --player=spotify play-pause";
+        click-right = "playerctl --player=spotify next";
+        click-middle = "playerctl --player=spotify previous";
+        scroll-up = "${scripts.player.setVolume} +10%";
+        scroll-down = "${scripts.player.setVolume} -10%";
 
         format = "<label>";
         format-maxlen = 30;
         format-foreground = "\${colors.foreground}";
         format-background = "\${colors.background-alt}";
-
-        interval = 1;
       };
     };
   };
