@@ -1,3 +1,6 @@
+# Requires cloning nvim config manually
+# git clone https://github.com/saghen/nvim ~/.config/nvim
+
 { pkgs, ... }:
 
 {

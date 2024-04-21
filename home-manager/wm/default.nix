@@ -6,8 +6,9 @@
     ./sxhkd
     ./services/dunst.nix
     ./services/flameshot.nix
-    ./services/rofi.nix
+    ./services/rofi
     ./polybar
+    ./theme.nix
     ./xdg.nix
   ];
   config = rec {

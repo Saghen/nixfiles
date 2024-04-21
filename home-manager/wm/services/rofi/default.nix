@@ -3,6 +3,6 @@
 {
   programs.rofi = {
     enable = true;
-    # TODO: theme
+    theme = ./theme.rasi;
   };
 }
