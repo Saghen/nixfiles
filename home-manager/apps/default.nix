@@ -1,7 +1,14 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./firefox ./thunderbird ./spotify.nix ];
+  imports = [
+    ./firefox
+    ./thunderbird
+    ./discord.nix
+    ./spotify.nix
+    ./todoist.nix
+    ./video.nix
+  ];
   config = {
     home.packages = with pkgs; [
       gnome.nautilus # File management
@@ -9,6 +16,8 @@
       obsidian # Notes
       pavucontrol # GUI Volume mixer and device settings
       helvum # GUI Audio routing: Control what apps get what audio
+      mpv # Video player
+      vlc # Video player
     ];
   };
 }

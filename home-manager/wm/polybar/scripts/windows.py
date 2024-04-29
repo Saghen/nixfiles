@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import os
+import shutil
 import sys
 import json
 import subprocess
@@ -43,8 +44,8 @@ def output_windows():
         if pretty_class_name == "firefoxdeveloperedition":
             pretty_class_name = "firefox-developer"
         stringified = (
-            "%{{A1:bspc node -f {}:}}%{{A2:bspc node {} -c:}}{}%{{A}}%{{A}}".format(
-                node["id"], node["id"], pretty_class_name
+            "%{{A1:{bspc} node -f {}:}}%{{A2:{bspc} node {} -c:}}{}%{{A}}%{{A}}".format(
+                node["id"], node["id"], pretty_class_name, bspc=shutil.which("bspc")
             )
         )
         if node["id"] == focused_node_id:

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 # TODO: set fonts
 
@@ -8,7 +8,20 @@ let
   xrandr = "${pkgs.xorg.xrandr}/bin/xrandr";
   grep = "${pkgs.gnugrep}/bin/grep";
   dunstctl = "${pkgs.dunst}/bin/dunstctl";
+  playerctl = "${pkgs.playerctl}/bin/playerctl";
+
+  colors = config.colors;
 in {
+  # polybar seems to start before bspwm is ready, so we need to restart it
+  systemd.user.services.polybar-restart = {
+    Service.Type = "oneshot";
+    Service.ExecStartPre = "${pkgs.coreutils}/bin/sleep 1";
+    Service.ExecStart =
+      "${pkgs.systemd}/bin/systemctl --user restart polybar.service";
+    Unit.After = [ "tray.target" ];
+    Install.WantedBy = [ "tray.target" ];
+  };
+
   services.polybar = {
     enable = true;
     package = pkgs.polybarFull;
@@ -19,8 +32,6 @@ in {
         MONITOR=$DISPLAY2 polybar &
       fi
       if ${xrandr} --listactivemonitors | ${grep} "$DISPLAY1" > /dev/null; then
-        # Sleep so the dock goes on the other monitor
-        sleep 0.5
         MONITOR=$DISPLAY1 polybar &
       fi
     '';
@@ -65,27 +76,30 @@ in {
         # NOTE: Some modules such as spotify, use format tags (${F#000}) which cannot use custom variables
         # https://github.com/polybar/polybar/issues/615
         # You must find and replace these values
+        # TODO: Use env vars for those
 
-        background = "#1E1E28"; # Bar BG
-        background-alt = "#332E41";
-        background-alt-2 = "#393348";
-        background-alt-3 = "#393348";
-        foreground = "#bfc9db";
-        accent = "#A4B9EF";
+        background = colors.base;
+        background-alt = colors.core;
+        background-alt-2 = colors.surface-0;
+        background-alt-3 = colors.surface-0;
+        foreground = colors.subtext-2;
+        accent = colors.blue;
         empty = "#00000000";
 
-        flamingo = "#f2cdcd";
-        mauve = "#DDB6F2";
-        pink = "#F5C2E7";
-        maroon = "#E8A2AF";
-        red = "#F28FAD";
-        peach = "#F8BD96";
-        yellow = "#FAE3B0";
-        green = "#98C379";
-        teal = "#B5E8E0";
-        blue = "#96CDFB";
-        sky = "#89DCEB";
-        lavendar = "#C9CBFF";
+        rosewater = colors.rosewater;
+        flamingo = colors.flamingo;
+        pink = colors.pink;
+        mauve = colors.mauve;
+        red = colors.red;
+        maroon = colors.maroon;
+        peach = colors.peach;
+        yellow = colors.yellow;
+        green = colors.green;
+        teal = colors.teal;
+        sky = colors.sky;
+        sapphire = colors.sapphire;
+        blue = colors.blue;
+        lavender = colors.lavender;
       };
 
       "bar/mybar" = {
@@ -156,7 +170,7 @@ in {
         #   center
         #   right
         #   none
-        tray-position = "right";
+        tray-position = "none";
 
         # If true, the bar will not shift its
         # contents when the tray changes
@@ -386,7 +400,7 @@ in {
         exec = "tail -f -n 1 /tmp/polypomo.status";
         tail = true;
 
-        format-foreground = "\${colors.lavendar}";
+        format-foreground = "\${colors.lavender}";
         format-background = "\${colors.background-alt}";
         click-left = "~/scripts/polybar/polypomo.py toggle";
         click-right = "~/scripts/polybar/polypomo.py end";
@@ -398,9 +412,9 @@ in {
         exec = scripts.player.nowPlaying;
         tail = true;
 
-        click-left = "playerctl --player=spotify play-pause";
-        click-right = "playerctl --player=spotify next";
-        click-middle = "playerctl --player=spotify previous";
+        click-left = "${playerctl} --player=spotify play-pause";
+        click-right = "${playerctl} --player=spotify next";
+        click-middle = "${playerctl} --player=spotify previous";
         scroll-up = "${scripts.player.setVolume} +10%";
         scroll-down = "${scripts.player.setVolume} -10%";
 

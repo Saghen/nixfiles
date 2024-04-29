@@ -8,8 +8,6 @@
 
   networking.hostName = "nixos";
   networking.hostId = "968d12a1";
-  networking.networkmanager.enable = true; # Automatic networking confiugration
-  services.resolved.enable = true; # DNS caching
 
   # Set your time zone.
   time.timeZone = "America/Toronto";
@@ -22,6 +20,8 @@
     experimental-features = "nix-command flakes";
     # Deduplicate and optimize nix store
     auto-optimise-store = true;
+    # Some old nix commands don't use XDG dirs, this forces it
+    use-xdg-base-directories = true;
   };
 
   nixpkgs = {

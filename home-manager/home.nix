@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  imports = [ ./apps ./terminal ./wm ];
+  imports = [ ./apps ./modules ./terminal ./wm ];
   config = {
     home = {
       username = "saghen";

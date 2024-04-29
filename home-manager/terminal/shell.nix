@@ -1,16 +1,12 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ sqlite ]; # for atuin
-
   programs = {
     fish = {
       enable = true;
       functions = {
         # disables greeting
         fish_greeting = "";
-        # use search menu when pressing tab for completion
-        fish_user_key_bindings = "bind 	 complete-and-search";
         # color for kubectl
         kubectl = "kubecolor $argv";
       };
@@ -29,8 +25,10 @@
           "nix-build -E 'with import <nixpkgs> {}; callPackage ./default.nix {}'";
         nrr = "nixos-rebuild-remote";
       };
-      # TODO: fzf all the things
-      # interactiveShellInit = "fzf_configure_bindings";
+      interactiveShellInit = ''
+        bind \t complete-and-search
+        fzf_configure_bindings
+      '';
       plugins = with pkgs;
         with fishPlugins; [
           # package manager
@@ -50,8 +48,8 @@
           }
           # adds support for fzf keybinds
           {
-            name = "fzf";
-            src = fzf.src;
+            name = "fzf.fish";
+            src = fzf-fish.src;
           }
           # text expansions such as .., !! and others
           {

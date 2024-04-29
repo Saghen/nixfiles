@@ -2,7 +2,6 @@
 
 {
   networking.networkmanager.enable = true; # Automatic networking confiugration
-  services.resolved.enable = true; # DNS caching
 
   # VPNs
   services.tailscale = {

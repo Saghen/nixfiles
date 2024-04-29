@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  imports = [ ./colors ./firefox-nativefy ];
+}

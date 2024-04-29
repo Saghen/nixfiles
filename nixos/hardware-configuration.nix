@@ -12,20 +12,24 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/5fa6853d-5ad0-452a-a758-0431ab2460cb";
-    fsType = "btrfs";
-    options = [ "subvol=@" ];
-  };
-
-  boot.initrd.luks.devices."luks-1d40f901-c67d-47fc-baaa-999584a9b801".device =
-    "/dev/disk/by-uuid/1d40f901-c67d-47fc-baaa-999584a9b801";
-
+  # Boot
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/9DEC-D79B";
     fsType = "vfat";
   };
 
+  # Root
+  boot.initrd.luks.devices."luks-1d40f901-c67d-47fc-baaa-999584a9b801".device =
+    "/dev/disk/by-uuid/1d40f901-c67d-47fc-baaa-999584a9b801";
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/5fa6853d-5ad0-452a-a758-0431ab2460cb";
+    fsType = "btrfs";
+    options = [ "subvol=@" "noatime" ];
+  };
+
+  # Swap
+  boot.initrd.luks.devices."luks-2a8aa1c6-ae58-4b7a-a25c-b86fb4fc8362".device =
+    "/dev/disk/by-uuid/2a8aa1c6-ae58-4b7a-a25c-b86fb4fc8362";
   swapDevices =
     [{ device = "/dev/disk/by-uuid/38dbed95-58f3-4e3d-a96a-16d07cf3f326"; }];
 

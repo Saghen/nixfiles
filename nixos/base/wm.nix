@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   services.xserver = {
@@ -8,8 +8,22 @@
     autoRepeatDelay = 240;
     autoRepeatInterval = 40;
 
-    displayManager.gdm.enable = true;
     windowManager.bspwm.enable = true;
+    displayManager.gdm.enable = true;
   };
-  services.displayManager.defaultSession = "none+bspwm";
+
+  environment.systemPackages = with pkgs; [ sddm-chili-theme ];
+  services.displayManager = {
+    # sddm = {
+    #   enable = true;
+    #   theme = "chili";
+    # };
+    defaultSession = "none+bspwm";
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    config = { common.default = "*"; };
+  };
 }

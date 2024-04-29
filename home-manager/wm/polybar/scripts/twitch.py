@@ -90,7 +90,7 @@ if len(live_channels) > 0:
             stream for stream in raw_channels if stream["user_login"] == channel.name
         ][0]
         os.system(
-            f"notify-send --expire-time 15000 -i /tmp/twitch-{channel.name}-icon '{channel.name.capitalize()} has gone live''{raw_channel['game_name']}'"
+            f"notify-send --expire-time 15000 -i /tmp/twitch-{channel.name}-icon '{channel.name.capitalize()} has gone live' '{raw_channel['game_name']}'"
         )
 else:
     print("")

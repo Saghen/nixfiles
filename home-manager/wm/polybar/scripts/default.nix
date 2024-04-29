@@ -1,7 +1,17 @@
 { pkgs ? import <nixpkgs> { } }:
 
 let
-  shellDeps = with pkgs; [ bash gh pulseaudio bspwm lsof jq dunst xdg-utils ];
+  shellDeps = with pkgs; [
+    bash
+    gawk
+    jq
+    gh
+    pipewire # for querying mic usage (and maybe other stuff by the time someone reads this)
+    bspwm # bspc
+    lsof # todo: remove after using wireplumber for camera access
+    xdg-utils # xdg-open
+    libnotify # notify-send
+  ];
   pythonEnv =
     pkgs.python312.withPackages (ps: with ps; [ pulsectl-asyncio dbus-next ]);
 

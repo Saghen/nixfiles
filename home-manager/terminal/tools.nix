@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   home.packages = with pkgs; [
@@ -13,10 +13,14 @@
     playerctl # interact with mpris players
     pulseaudio # utilities like pactl
     twitch-cli # login to twitch, used by some scripts
+    # google cloud sdk with GKE auth support
+    (pkgs.google-cloud-sdk.withExtraComponents
+      (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
 
     # devops
-    terraform
+    terraform # FIXME: stores credentials in plain text
     kubectl
+    kustomize
     kubectx # fast namespace and context switching
     kubecolor # colorized kubectl output
     kubernetes-helm # k8s package manager
@@ -33,6 +37,29 @@
     gcc
     gnumake
   ];
+
+  # Move a bunch of random dirs to XDG dirs
+  home.sessionVariables = let
+    home = "/home/${config.home.username}";
+    cache = "${home}/.cache";
+    cfg = "${home}/.config";
+    data = "${home}/.local/share";
+    # todo: find the UID of the user
+    runtime = "/run/user/1000";
+  in {
+    CUDA_CACHE_PATH = "${cache}/nv";
+    PNPM_HOME = "${data}/pnpm";
+    NODE_REPL_HISTORY = "${data}/node_repl_history";
+    NPM_CONFIG_PREFIX = "${data}/npm";
+    NPM_CONFIG_CACHE = "${cache}/npm";
+    NPM_CONFIG_TMP = "${runtime}/npm";
+    CARGO_HOME = "${data}/cargo";
+    RUSTUP_HOME = "${data}/rust";
+    GOPATH = "${data}/go";
+    W3M_DIR = "${data}/w3m";
+    XCOMPOSECACHE = "${cache}/X11/xcompose";
+    KUBECONFIG = "${cfg}/kube/config";
+  };
 
   services.ssh-agent.enable = true;
   programs = {

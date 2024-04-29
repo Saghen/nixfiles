@@ -11,6 +11,34 @@
       # Must be named dev-edition-default see:
       # https://github.com/nix-community/home-manager/issues/4703#issuescomment-2025005453
       dev-edition-default = {
+        containersForce = true; # replace existing containers (recommended)
+        containers = {
+          personal = {
+            name = "personal";
+            id = 1;
+            icon = "fingerprint";
+            color = "blue";
+          };
+          huggingface = {
+            name = "huggingface";
+            id = 2;
+            icon = "gift";
+            color = "yellow";
+          };
+          liqwid = {
+            name = "liqwid";
+            id = 3;
+            icon = "briefcase";
+            color = "purple";
+          };
+          bank = {
+            name = "bank";
+            id = 4;
+            icon = "dollar";
+            color = "yellow";
+          };
+        };
+
         settings = {
           # required for userChrome.css and userContent.css
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
@@ -24,6 +52,10 @@
             false;
           "browser.newtabpage.activity-stream.showSponsored" = false;
           "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+
+          # don't recommend text in forms
+          "browser.formfill.enable" = false;
+          "dom.forms.autocomplete.formautofill" = false;
 
           "cookiebanners.service.mode.privateBrowsing" = 1;
 
@@ -46,7 +78,6 @@
           "privacy.userContext.ui.enabled" = true;
 
           "services.sync.prefs.sync-seen.browser.newtabpage.pinned" = true;
-          "dom.forms.autocomplete.formautofill" = true;
           "media.ffmpeg.vaapi.enabled" = true;
           "network.dns.disablePrefetch" = false;
           "network.predictor.enabled" = true;

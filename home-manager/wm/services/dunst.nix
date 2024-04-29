@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   home.packages = with pkgs; [ libnotify ]; # provides notify-send
@@ -12,23 +12,23 @@
 
     settings = {
       global = {
-        frame_color = "#A4B9EF";
+        frame_color = config.colors.primary;
         frame_width = 2;
         separator_color = "frame";
         corner_radius = 0;
       };
       urgency_low = {
-        background = "#1E1E2E";
-        foreground = "#D9E0EE";
+        background = config.colors.base;
+        foreground = config.colors.text;
       };
       urgency_normal = {
-        background = "#1E1E2E";
-        foreground = "#D9E0EE";
+        background = config.colors.base;
+        foreground = config.colors.text;
       };
       urgency_critical = {
-        background = "#1E1E2E";
-        foreground = "#D9E0EE";
-        frame_color = "#F8BD96";
+        background = config.colors.base;
+        foreground = config.colors.text;
+        frame_color = config.colors.red;
       };
     };
   };

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./backups.nix
     ./boot.nix
     ./gaming.nix
     ./networking.nix
@@ -17,5 +18,8 @@
     };
     # required for nvidia support in docker
     hardware.opengl.driSupport32Bit = true;
+
+    # allow executables bundled for generic linux distros to run
+    programs.nix-ld.enable = true;
   };
 }
