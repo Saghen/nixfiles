@@ -1,1 +1,1 @@
-xdg-open https://github.com/notifications
+mimeo https://github.com/notifications

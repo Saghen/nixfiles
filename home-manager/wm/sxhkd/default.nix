@@ -49,7 +49,7 @@
 
       # neovim
       super + c
-        kitty --class neovim --override window_padding_width=0 fish -c nvim
+        kitty --class neovim fish -c nvim
 
       # -----------
       # media control

@@ -2,6 +2,7 @@
 
 let strip = base: "_" + (builtins.substring 1 (-1) base);
 in {
+  home.sessionVariables.TERMINAL = "kitty";
   programs.kitty = {
     enable = true;
 
@@ -22,6 +23,9 @@ in {
     '';
 
     settings = {
+      allow_remote_control = true;
+      listen_on = "unix:/tmp/kitty";
+
       strip_trailing_spaces = "smart";
       enable_audio_bell = false;
       window_padding_width = 8;

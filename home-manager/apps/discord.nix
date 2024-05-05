@@ -1,7 +1,8 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 # TODO: finish theming this, need hex -> rgb func
 {
+  home.packages = with pkgs; [ webcord-vencord ];
   programs.firefoxNativefy = {
     enable = true;
     apps = {
@@ -17,7 +18,7 @@
         userContent = ''
           html {
             --bg-primary: ${config.colors.base};
-            --bg-secondary: ${config.colors.crust};
+            --bg-secondary: ${config.colors.core};
             --bg-tertiary: ${config.colors.surface-0};
 
             --primary: #5f8cfb;
@@ -39,6 +40,8 @@
             --channeltextarea-background: var(--bg-secondary) !important;
 
             --text-link: var(--secondary);
+
+            --bg-overlay-hover: var(--bg-secondary) !important;
           }
 
           .theme-dark {

@@ -5,7 +5,7 @@ if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
   exit 1
 fi
 
-DEVICES_USING_CAMERA=$(lsof /dev/video0 | awk '!/wireplumb/ && NR>1')
+DEVICES_USING_CAMERA=$(lsof -w /dev/video0 | awk '!/wireplumb/ && NR>1')
 
 if [ -n "$DEVICES_USING_CAMERA" ]; then
   echo "$1"

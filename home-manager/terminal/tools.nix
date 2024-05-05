@@ -13,6 +13,7 @@
     playerctl # interact with mpris players
     pulseaudio # utilities like pactl
     twitch-cli # login to twitch, used by some scripts
+    mimeo # launch default application
     # google cloud sdk with GKE auth support
     (pkgs.google-cloud-sdk.withExtraComponents
       (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
@@ -61,7 +62,18 @@
     KUBECONFIG = "${cfg}/kube/config";
   };
 
-  services.ssh-agent.enable = true;
+  services = {
+    ssh-agent.enable = true;
+
+    gpg-agent = {
+      enable = true;
+      pinentryPackage = pkgs.pinentry-tty;
+      extraConfig = ''
+        allow-loopback-pinentry
+      '';
+    };
+  };
+
   programs = {
     ssh = {
       enable = true;
@@ -73,6 +85,11 @@
           identitiesOnly = true;
         };
       };
+    };
+
+    gpg = {
+      enable = true;
+      settings = { pinentry-mode = "loopback"; };
     };
 
     # cat with syntax highlighting
@@ -88,7 +105,7 @@
       userName = "Liam Dyer";
       signing = {
         signByDefault = true;
-        key = "A8F94F230A4470B1";
+        key = "85FB6947C8AA3EDF";
       };
       extraConfig = {
         core = { excludesfile = "~/.gitignore_global"; };

@@ -3,6 +3,7 @@ import json
 from dataclasses import dataclass
 import os
 import pickle
+import shutil
 
 
 # helpers
@@ -38,6 +39,7 @@ channels = [
     Channel(name="ster", display_name="⭐"),
     Channel(name="simply", display_name="🎩"),
     Channel(name="tarik", display_name="💨"),
+    Channel(name="wirtual", display_name="🏁"),
     # Channel(name="moonmoon", display_name="🌛"),
     # Channel(name="atrioc", display_name="💰"),
     Channel(name="jerma985", display_name="👴"),
@@ -68,10 +70,11 @@ with open("/tmp/twitch-live-channels", "wb") as f:
 
 # print output and send notifications for new live channels
 if len(live_channels) > 0:
+    mimeo = shutil.which("mimeo")
     print(
         " ".join(
             [
-                f"%{{A1:xdg-open https\\://twitch.tv/{channel.name}:}}{channel.display_name}%{{A}}"
+                f"%{{A1:{mimeo} https\\://twitch.tv/{channel.name}:}}{channel.display_name}%{{A}}"
                 for channel in live_channels
             ]
         )

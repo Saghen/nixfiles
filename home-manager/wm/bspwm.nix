@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   xsession.enable = true;
-  xsession.windowManager.bspwm = {
+  xsession.windowManager.bspwm = let colors = config.colors;
+  in {
     enable = true;
     # Sets the second monitor to be on the left side
     # and re-orders displays in bspwm
@@ -34,10 +35,10 @@
 
       # Border
       border_width = 2;
-      focused_border_color = "#A4B9EF";
-      normal_border_color = "#1E1E28";
-      active_border_color = "#575268";
-      presel_feedback_color = "#E5C07B";
+      focused_border_color = colors.primary;
+      normal_border_color = colors.base;
+      active_border_color = colors.surface-2;
+      presel_feedback_color = colors.primary-dark;
 
       # TODO: external rules command
     };
@@ -65,7 +66,7 @@
       "${sxhkd}/bin/sxhkd"
       "${dunst}/bin/dunst"
       "${flameshot}/bin/flameshot"
-      "${feh}/bin/feh --no-fehbg --bg-fill ~/pictures/wallpapers/2024/soviet-rocket.jpg"
+      "${feh}/bin/feh --no-fehbg --bg-fill ~/pictures/wallpaper.*"
     ];
   };
 }

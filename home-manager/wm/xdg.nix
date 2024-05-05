@@ -6,14 +6,16 @@
   xdg.portal = {
     enable = true;
     config.common.default = "*";
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    extraPortals = with pkgs; [ xdg-desktop-portal ];
     xdgOpenUsePortal = true;
   };
 
+  xdg.mime.enable = true;
   xdg.mimeApps = let
     firefox = "firefox-developer-edition.desktop";
-    nomacs = "nomacs.desktop";
     feh = "feh.desktop";
+    nomacs = "nomacs.desktop";
+    qimgv = "qimgv.desktop";
     nvim = "nvim.desktop";
     files = "org.gnome.Nautilus.desktop";
     mpv = "mpv.desktop";
@@ -22,35 +24,56 @@
     enable = true;
 
     associations.added = {
-      "image/jpeg" = [ feh nomacs ];
-      "image/png" = [ feh nomacs ];
-      "image/gif" = [ feh nomacs ];
-      "image/svg+xml" = [ feh nomacs nvim firefox ];
-      "application/xml" = [ nvim "sublime_text.desktop" ];
-      "text/plain" = [ nvim "sublime_text.desktop" ];
-      "text/html" = [ firefox nvim "sublime_text.desktop" ];
-      "application/javascript" = [ nvim ];
-      "application/json" = [ nvim ];
-      "application/octet-stream" = [ nvim ];
-      "application/toml" = [ nvim ];
-      "application/x-shellscript" = [ nvim "kitty-open.desktop" ];
-      "audio/ogg" = [ mpv vlc ];
-      "video/mp4" = [ mpv vlc ];
-    };
-    defaultApplications = {
       "inode/directory" = [ files ];
-      "image/jpeg" = [ feh ];
-      "image/png" = [ feh ];
-      "text/plain" = [ nvim ];
-      "application/json" = [ nvim ];
-      "application/x-gnome-saved-search" = [ files ];
-      "video/mp4" = [ mpv ];
-    };
-  };
 
-  # https://discourse.nixos.org/t/xdg-desktop-portal-org-freedesktop-portal-no-such-interface-filechooser-on-window-manager/40353
-  # systemd.user.services.xdg-desktop-portal-gtk = {
-  #   wantedBy = [ "xdg-desktop-portal.service" ];
-  #   before = [ "xdg-desktop-portal.service" ];
-  # };
+      "audio/aac" = [ mpv vlc ];
+      "audio/flac" = [ mpv vlc ];
+      "audio/mpeg" = [ mpv vlc ];
+      "audio/ogg" = [ mpv vlc ];
+      "audio/opus" = [ mpv vlc ];
+      "audio/wav" = [ mpv vlc ];
+      "audio/webm" = [ mpv vlc ];
+
+      "video/x-msvideo" = [ mpv vlc ]; # avi
+      "video/mp4" = [ mpv vlc ];
+      "video/mpeg" = [ mpv vlc ];
+      "video/ogg" = [ mpv vlc ];
+      "video/mp2t" = [ mpv vlc ];
+      "video/webm" = [ mpv vlc ];
+      "video/matroska" = [ mpv vlc ];
+
+      "image/jpeg" = [ qimgv nomacs feh ];
+      "image/heic" = [ qimgv nomacs feh ];
+      "image/heif" = [ qimgv nomacs feh ];
+      "image/png" = [ qimgv nomacs feh ];
+      "image/apng" = [ qimgv nomacs feh ];
+      "image/gif" = [ qimgv nomacs feh ];
+      "image/webp" = [ qimgv nomacs feh ];
+      "image/avif" = [ qimgv nomacs feh ];
+      "image/bmp" = [ qimgv nomacs feh ];
+      "image/ico" = [ qimgv nomacs feh ];
+      "image/tiff" = [ qimgv nomacs feh ];
+      "image/svg+xml" = [ qimgv nomacs feh nvim firefox ];
+
+      "text/html" = [ firefox nvim ];
+
+      "application/pdf" = [ firefox ];
+
+      "x-scheme-handler/http" = [ firefox ];
+      "x-scheme-handler/https" = [ firefox ];
+      "x-scheme-handler/about" = [ firefox ];
+      "x-scheme-handler/unknown" = [ firefox ];
+      "x-scheme-handler/webcal" = [ firefox ];
+    };
+    # defaultApplications = {
+    #   "audio" = [ vlc ];
+    #   "video" = [ mpv ];
+    #   "image" = [ qimgv ];
+    #   "inode/directory" = [ files ];
+    #
+    #   "application/json" = [ nvim ];
+    #   "text" = [ nvim ];
+    #   "text/html" = [ firefox ];
+    # };
+  };
 }

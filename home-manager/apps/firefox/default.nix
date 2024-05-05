@@ -53,6 +53,9 @@
           "browser.newtabpage.activity-stream.showSponsored" = false;
           "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
 
+          # always ask for download location
+          "browser.download.useDownloadDir" = false;
+
           # don't recommend text in forms
           "browser.formfill.enable" = false;
           "dom.forms.autocomplete.formautofill" = false;
@@ -203,19 +206,4 @@
       };
     };
   };
-
-  xdg.mimeApps.defaultApplications =
-    let firefox = "firefox-developer-edition.desktop";
-
-    in {
-      "text/html" = [ firefox ];
-      "text/xml" = [ firefox ];
-      "x-scheme-handler/http" = [ firefox ];
-      "x-scheme-handler/https" = [ firefox ];
-
-      "application/pdf" = [ firefox ];
-      "x-scheme-handler/about" = [ firefox ];
-      "x-scheme-handler/unknown" = [ firefox ];
-      "x-scheme-handler/webcal" = [ firefox ];
-    };
 }

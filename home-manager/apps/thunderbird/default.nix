@@ -49,25 +49,35 @@
 
   accounts.email.accounts = {
     saghendev = {
+      thunderbird.enable = true;
       primary = true;
       address = "saghendev@gmail.com";
       flavor = "gmail.com";
+      realName = "Liam Dyer";
     };
     liamcdyer = {
+      thunderbird.enable = true;
       address = "liamcdyer@gmail.com";
       flavor = "gmail.com";
+      realName = "Liam Dyer";
     };
     liqwid = {
+      thunderbird.enable = true;
       address = "liam@liqwid.finance";
       flavor = "gmail.com";
+      realName = "Liam Dyer";
     };
     liam-super = {
+      thunderbird.enable = true;
       address = "liam@super.fish";
       imap.host = "imap.purelymail.com";
+      realName = "Liam Dyer";
     };
     superlodon-super = {
+      thunderbird.enable = true;
       address = "superlodon@super.fish";
       imap.host = "imap.purelymail.com";
+      realName = "Liam Dyer";
     };
   };
 }

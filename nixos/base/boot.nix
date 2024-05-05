@@ -23,10 +23,16 @@
       };
     };
 
-    # Loading animation
+    # Loading animation and LUKS password prompt
+    kernelParams = [ "quiet" ];
+    initrd.systemd.enable = true;
     plymouth = {
       enable = true;
-      theme = "spinner";
+      extraConfig = ''
+        [Daemon]
+        ShowDelay=0
+      '';
+      theme = "breeze";
     };
 
     # zfs 

@@ -15,7 +15,11 @@
     yubico-pam
   ];
 
-  programs.gnupg.agent.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   pinentryPackage = pkgs.pinentry-tty;
+  #   settings = { allow-loopback-pinentry = true; };
+  # };
   hardware.gpgSmartcards.enable = true;
 
   security.polkit.enable = true;
