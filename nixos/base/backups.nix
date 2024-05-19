@@ -1,6 +1,39 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  # Backup game folders
+  systemd.services.ludusavi = {
+    description = "Backup game saves";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart =
+        "${pkgs.ludusavi}/bin/ludusavi --config /etc/ludusavi backup --force";
+    };
+  };
+  systemd.timers.ludusavi = {
+    description = "Backup game saves";
+    timerConfig = {
+      OnCalendar = "daily";
+      Unit = "ludusavi.service";
+    };
+  };
+  environment.etc.ludusavi = {
+    target = "ludusavi/config.yaml";
+    text = ''
+      manifest:
+        url: https://raw.githubusercontent.com/mtkennerly/ludusavi-manifest/master/data/manifest.yaml
+      roots:
+        - path: /home/saghen/.local/share/Steam
+          store: steam
+        - path: /home/saghen/games/steam
+          store: steam
+      backup:
+        path: /home/saghen/games/saves
+      restore:
+        path: /home/saghen/games/saves-restore
+    '';
+  };
+
   services = {
     # BTRFS snapshots to local storage
     btrbk.instances = {
@@ -19,14 +52,27 @@
       };
     };
 
-    # Backup local BTRFS snapshots to remote server
+    # Backup home directory to remote
     restic.backups = {
       home = {
         timerConfig = { OnCalendar = "daily"; };
-        repository = "rest:https://restic.super.fish/saghen/desktop/btrfs/home";
-        initialize = true; # create the repository if it doesn't exist
+        repositoryFile = "/etc/restic/super-fish-repository";
         passwordFile = "/etc/restic/super-fish-password";
-        paths = [ "/mnt/storage/backups/snapshots/home" ];
+        user = "saghen";
+        paths = [ "/home/saghen" ];
+        exclude = [
+          "/home/*/.cache"
+          "/home/*/downloads"
+          "/home/*/.local/share/Trash"
+
+          "/home/*/games/lutris"
+          "/home/*/games/steam"
+          "/home/*/.steam"
+          "/home/*/.local/share/Steam"
+
+          "/home/*/code/**/node_modules"
+          "/home/*/code/**/target"
+        ];
       };
     };
   };

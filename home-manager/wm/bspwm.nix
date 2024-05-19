@@ -1,3 +1,6 @@
+# TODO: figure out a way to prevent fullscreen apps from going back to floating
+# TODO: grab rules from qtile
+
 { pkgs, config, ... }:
 
 {
@@ -59,6 +62,14 @@
         desktop = "^6";
       };
       firefox-aurora = { state = "tiled"; };
+      Spotify = {
+        state = "tiled";
+        desktop = "^7";
+      };
+      discord = {
+        state = "tiled";
+        desktop = "^7";
+      };
       steam = { desktop = "^6"; };
     };
     startupPrograms = with pkgs; [
@@ -67,6 +78,11 @@
       "${dunst}/bin/dunst"
       "${flameshot}/bin/flameshot"
       "${feh}/bin/feh --no-fehbg --bg-fill ~/pictures/wallpaper.*"
+
+      # apps
+      "${firefox-devedition-bin}/bin/firefox-developer-edition"
+      "${gtk3}/bin/gtk-launch spotify"
+      "${gtk3}/bin/gtk-launch discord"
     ];
   };
 }

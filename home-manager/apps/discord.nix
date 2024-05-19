@@ -1,8 +1,7 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 # TODO: finish theming this, need hex -> rgb func
 {
-  home.packages = with pkgs; [ webcord-vencord ];
   programs.firefoxNativefy = {
     enable = true;
     apps = {
@@ -94,6 +93,11 @@
             --brand-experiment-830: #0c2c42;
             --brand-experiment-860: #092131;
             --brand-experiment-900: #061621;
+          }
+
+          /* Hide ads */
+          section[aria-label="User area"] > div[aria-hidden="false"] {
+            display: none;
           }
 
           /* Activity */

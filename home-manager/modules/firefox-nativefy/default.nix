@@ -174,7 +174,7 @@ in {
     programs.firefox.profiles = lib.attrsets.mapAttrs' (name: value:
       let nameDns = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] name);
       in {
-        name = "nativefy-${nameDns}";
+        name = nameDns;
         value = {
           isDefault = false;
           id = value.id;
@@ -209,7 +209,7 @@ in {
     xdg.desktopEntries = lib.attrsets.mapAttrs' (name: value:
       let nameDns = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] name);
       in {
-        name = "nativefy-${nameDns}";
+        name = nameDns;
         value = {
           type = "Application";
           name = value.name;
@@ -219,7 +219,7 @@ in {
           exec = ''
             ${
               getExe pkgs.firefox
-            } --name ${nameDns} --class ${nameDns} --new-instance -P nativefy-${nameDns} -url "${value.url}"'';
+            } --name ${nameDns} --class ${nameDns} --new-instance -P ${nameDns} -url "${value.url}"'';
           categories = [ "Network" ];
           settings = { StartupWMClass = nameDns; };
         };

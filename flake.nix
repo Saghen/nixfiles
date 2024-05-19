@@ -16,10 +16,15 @@
 
     spicetify-nix.url = "github:the-argus/spicetify-nix";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, hardware, spicetify-nix
-    , neovim-nightly-overlay, nvidia-patch, ... }: {
+    , neovim-nightly-overlay, nvidia-patch, nix-index-database, ... }: {
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -27,6 +32,12 @@
             ./nixos/configuration.nix
             hardware.nixosModules.common-gpu-nvidia-nonprime
             hardware.nixosModules.common-pc-ssd
+
+            # provides an index of the nix packages so that things like command-not-found
+            # can query the index to find the package that provides a command
+            nix-index-database.nixosModules.nix-index
+            { programs.command-not-found.enable = false; }
+
             home-manager.nixosModules.home-manager
             {
               home-manager = {

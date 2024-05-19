@@ -2,12 +2,14 @@
 { pkgs, spicetify-nix, ... }:
 let spicePkgs = spicetify-nix.packages.${pkgs.system}.default;
 in {
-  # import the flake's module for your system
   imports = [ spicetify-nix.homeManagerModule ];
 
-  # configure spicetify :)
   programs.spicetify = {
     enable = true;
+    # gives a warning on first setup, but it seems to be fine and avoids
+    # an issue with windowManagerPatch = true where the desktop entry doesn't exist
+    # https://github.com/the-argus/spicetify-nix/issues/10
+    spotifyPackage = pkgs.spotifywm;
     theme = spicePkgs.themes.catppuccin;
     colorScheme = "mocha";
 

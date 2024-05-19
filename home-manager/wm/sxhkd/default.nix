@@ -125,13 +125,13 @@
 
       # expand
       super + x
-        bspc node -z bottom_rig 200 120;\
-        bspc node -z top_left -200 -120
+        bspc node -z bottom_right 100 60 && \
+        bspc node -z top_left -100 -60
 
       # contract
       super + z
-        bspc node -z bottom_rig -200 -120;\
-        bspc node -z top_left 200 120
+        bspc node -z bottom_right -100 -60;\
+        bspc node -z top_left 100 60
 
       # -----------
       # focus/swap

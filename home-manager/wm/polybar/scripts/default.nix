@@ -9,7 +9,7 @@ let
     pipewire # for querying mic usage (and maybe other stuff by the time someone reads this)
     bspwm # bspc
     lsof # todo: remove after using wireplumber for camera access
-    mimeo # for opening default app from mimeapps.list
+    xdg-utils # for xdg-open
     libnotify # notify-send
   ];
   pythonEnv =

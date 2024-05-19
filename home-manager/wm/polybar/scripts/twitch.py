@@ -70,11 +70,11 @@ with open("/tmp/twitch-live-channels", "wb") as f:
 
 # print output and send notifications for new live channels
 if len(live_channels) > 0:
-    mimeo = shutil.which("mimeo")
+    xdg_open = shutil.which("xdg-open")
     print(
         " ".join(
             [
-                f"%{{A1:{mimeo} https\\://twitch.tv/{channel.name}:}}{channel.display_name}%{{A}}"
+                f"%{{A1:{xdg_open} https\\://twitch.tv/{channel.name}:}}{channel.display_name}%{{A}}"
                 for channel in live_channels
             ]
         )
