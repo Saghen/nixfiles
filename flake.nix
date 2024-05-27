@@ -21,10 +21,16 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # rust toolchain
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, hardware, spicetify-nix
-    , neovim-nightly-overlay, nvidia-patch, nix-index-database, ... }: {
+    , neovim-nightly-overlay, nvidia-patch, nix-index-database, fenix, ... }: {
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -43,7 +49,10 @@
               home-manager = {
                 useUserPackages = true;
                 useGlobalPkgs = true;
-                extraSpecialArgs = { inherit spicetify-nix; };
+                extraSpecialArgs = {
+                  inherit spicetify-nix;
+                  inherit fenix;
+                };
                 users.saghen = import ./home-manager/home.nix;
               };
             }
