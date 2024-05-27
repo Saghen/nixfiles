@@ -14,6 +14,7 @@
       gnome.nautilus # File management
       gnome.gnome-system-monitor # System resource monitor
       gparted # Disk management
+      blueman # Bluetooth manager
       obsidian # Notes
       pavucontrol # GUI Volume mixer and device settings
       helvum # GUI Audio routing: Control what apps get what audio

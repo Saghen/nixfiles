@@ -14,34 +14,34 @@
 
   # Boot
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/9DEC-D79B";
+    device = "/dev/disk/by-uuid/50F9-7C0B";
     fsType = "vfat";
   };
 
   # Root
-  boot.initrd.luks.devices."luks-1d40f901-c67d-47fc-baaa-999584a9b801".device =
-    "/dev/disk/by-uuid/1d40f901-c67d-47fc-baaa-999584a9b801";
+  boot.initrd.luks.devices."luks-1f9e8a13-0706-49fa-b0d3-ef7cdfd17c16".device =
+    "/dev/disk/by-uuid/1f9e8a13-0706-49fa-b0d3-ef7cdfd17c16";
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/5fa6853d-5ad0-452a-a758-0431ab2460cb";
+    device = "/dev/disk/by-uuid/21840175-0805-4dab-9497-536799b527cb";
     fsType = "btrfs";
     options = [ "subvol=@" "noatime" ];
   };
 
   # Swap
-  boot.initrd.luks.devices."luks-2a8aa1c6-ae58-4b7a-a25c-b86fb4fc8362".device =
-    "/dev/disk/by-uuid/2a8aa1c6-ae58-4b7a-a25c-b86fb4fc8362";
+  # NOTE: NixOS setup doesn't insert this luks device by default which leads to long boot times
+  # while it waits for the disk to appear.
+  # You can get the UUID of the swap partition by running `lsblk -f` and looking for the UUID
+  boot.initrd.luks.devices."luks-b003795a-f145-4b70-8bdb-79817697732b".device =
+    "/dev/disk/by-uuid/b003795a-f145-4b70-8bdb-79817697732b";
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/38dbed95-58f3-4e3d-a96a-16d07cf3f326"; }];
+    [{ device = "/dev/disk/by-uuid/11546c0d-92de-40cf-b136-4a55a09a7cf5"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.br-4f14e052c689.useDHCP = lib.mkDefault true;
-  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp5s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.tailscale0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp4s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
