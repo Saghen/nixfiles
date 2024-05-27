@@ -83,8 +83,15 @@
       require('config.lazy')
     '';
 
+    # for image.nvim
+    extraLuaPackages = ps: with ps; [ magick ];
+
     extraPackages = with pkgs; [
       tree-sitter
+
+      # for image.nvim
+      imagemagick
+
       ## LSPs, formatters, linters
       # fp
       nodePackages.purescript-language-server
@@ -104,6 +111,9 @@
       black
       nodePackages.pyright
       ruff-lsp
+      # rust
+      # NOTE: rust-analyzer is managed by rustup via: rustup component add rust-analyzer
+      graphviz # for crate graph visualization
       # terraform
       terraform-ls
       tflint
