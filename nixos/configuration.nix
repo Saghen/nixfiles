@@ -1,8 +1,7 @@
 { inputs, pkgs, ... }:
 
 {
-  imports =
-    [ ./hardware-configuration.nix ./base ./fonts ./modules/sunshine.nix ];
+  imports = [ ./hardware-configuration.nix ./base ./fonts ];
 
   system.stateVersion = "24.05";
 
@@ -28,6 +27,7 @@
     overlays = [
       inputs.neovim-nightly-overlay.overlay
       inputs.nvidia-patch.overlays.default
+      inputs.fenix.overlays.default
     ];
     config = { allowUnfree = true; };
   };

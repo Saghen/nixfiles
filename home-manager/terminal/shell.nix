@@ -19,12 +19,16 @@
         nbp =
           "nix-build -E 'with import <nixpkgs> {}; callPackage ./default.nix {}' $argv";
 
+        npr = "npm run --silent $argv";
+        pnpr = "pnpm run --silent $argv";
+
         # customize transcient prompt
         starship_transient_prompt_func =
           "starship module directory && starship module character";
       };
       shellAbbrs = {
         cd = "z";
+        n = "nvim";
         # kubectl plugin covers most except these ones
         kx = "kubectx";
         kn = "kubens";
@@ -96,7 +100,7 @@
       settings = {
         # instead of this, we defined a function --on-event fish-prompt
         # that runs echo. this 
-        add_newline = false;
+        add_newline = true;
 
         container = {
           format = "[$symbol]($style) ";
