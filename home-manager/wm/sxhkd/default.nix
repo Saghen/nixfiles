@@ -10,14 +10,9 @@
             ${builtins.readFile ./scripts/center-window.sh}
           ''
         }/bin/center-window";
-      select-local-desktop = "${
-          pkgs.writeShellScriptBin "select-local-desktop" ''
-            ${builtins.readFile ./scripts/select-local-desktop.sh}
-          ''
-        }/bin/select-local-desktop";
       reset-desktops = "${
           pkgs.writeShellScriptBin "reset-desktops" ''
-            ${pkgs.nodejs_21}/bin/node ${./scripts/reset-desktops.js}
+            ${pkgs.nodejs_22}/bin/node ${./scripts/reset-desktops.js}
           ''
         }/bin/reset-desktops";
     }; ''
@@ -125,7 +120,7 @@
 
       # expand
       super + x
-        bspc node -z bottom_right 100 60 && \
+        bspc node -z bottom_right 100 60;\
         bspc node -z top_left -100 -60
 
       # contract
@@ -144,9 +139,13 @@
       super + {r,alt + r}
       	bspc node -f {next,prev}.local.!hidden.window
 
-      # focus/send to the given desktop
-      super + {_,alt + }{1-9,0}
-        ${select-local-desktop} "{desktop -f,node -d}" {1-9,10} --follow
+      # focus the given desktop (local to monitor)
+      super + {1-9,0}
+        	bspc desktop -f (bspc query --desktops -m "focused" | sed -n "{1-9,10}p")
+
+      # send to the given desktop (local to monitor)
+      super + alt + {1-9,0}
+        bspc node -d (bspc query --desktops -m "focused" | sed -n "{1-9,10}p") --follow
 
       # focus/send to other monitor and follow
       super + {q,a}
