@@ -3,6 +3,7 @@
 {
   imports = [
     ./bspwm.nix
+    ./hyprland.nix
     ./sxhkd
     ./services/dunst.nix
     ./services/flameshot.nix

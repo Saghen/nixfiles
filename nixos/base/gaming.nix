@@ -8,6 +8,7 @@
   hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc
     (pkgs.nvidia-patch.patch-fbc
       config.boot.kernelPackages.nvidiaPackages.beta);
+  hardware.nvidia.modesetting.enable = true;
 
   # controller support
   hardware.xone.enable = true;
