@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, krewfile, config, ... }:
 
 {
   home.packages = with pkgs; [
@@ -11,7 +11,7 @@
     sd # better sed
     jq # transform json
     fx # interfactive view and transform json with actual js
-    yq # jq for yaml
+    yq-go # jq for yaml
     fzf # fuzzy finder
     gh # github cli FIXME: stores credentials in plain text
     trash-cli # put items into the trash
@@ -27,9 +27,12 @@
     terraform # FIXME: stores credentials in plain text
     kubectl
     kustomize
+    krew # package manager for kubectl
     kubectx # fast namespace and context switching
     kubecolor # colorized kubectl output
     kubernetes-helm # k8s package manager
+    talosctl # Talos (k8s OS)
+    omnictl # SaaS for Talos management
 
     # languages
     go
@@ -61,7 +64,7 @@
     state = "${home}/.local/state";
     # todo: find the UID of the user
     runtime = "/run/user/1000";
-  in {
+  in rec {
     CUDA_CACHE_PATH = "${cache}/nv";
     PNPM_HOME = "${data}/pnpm";
     NODE_REPL_HISTORY = "${data}/node_repl_history";
@@ -74,6 +77,7 @@
     W3M_DIR = "${data}/w3m";
     XCOMPOSECACHE = "${cache}/X11/xcompose";
     KUBECONFIG = "${cfg}/kube/config";
+    KREW_ROOT = "${data}/krew";
     PYTHONSTARTUP = "${cfg}/python/pythonrc";
     DOCKER_CONFIG = "${cfg}/docker";
     HISTFILE = "${state}/bash/history";

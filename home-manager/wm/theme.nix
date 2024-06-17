@@ -3,7 +3,7 @@
 rec {
   # Cursor theme (system-wide)
   home.pointerCursor = {
-    name = "Catppuccin-Mocha-Dark-Cursors";
+    name = "catppuccin-mocha-dark-cursors";
     package = pkgs.catppuccin-cursors.mochaDark;
   };
 

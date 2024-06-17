@@ -1,7 +1,13 @@
 { pkgs, config, inputs, ... }:
 
 {
+  # use the beta nvidia driver and
+  # adds support for nvfbc hardware capture and higher nvenc limits
   nixpkgs.config.nvidia.acceptLicense = true;
+  nixpkgs.overlays = [ inputs.nvidia-patch.overlays.default ];
+  hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc
+    (pkgs.nvidia-patch.patch-fbc
+      config.boot.kernelPackages.nvidiaPackages.beta);
 
   # controller support
   hardware.xone.enable = true;
@@ -13,7 +19,11 @@
     extraCompatPackages = [ pkgs.proton-ge-bin ];
     localNetworkGameTransfers.openFirewall = true;
   };
-  programs.gamescope.enable = true; # TODO: doesnt work on nvidia
+  # TODO: doesnt work on nvidia
+  programs.gamescope = {
+    enable = true;
+    capSysNice = true;
+  };
   programs.gamemode = {
     enable = true;
     enableRenice = true;
@@ -62,9 +72,4 @@
       }];
     };
   };
-  # adds support for nvfbc hardware capture and higher nvenc limits
-  # nixpkgs.overlays = [inputs.nvidia-patch.overlays.default];
-  hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc
-    (pkgs.nvidia-patch.patch-fbc
-      config.boot.kernelPackages.nvidiaPackages.stable);
 }

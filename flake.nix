@@ -15,7 +15,7 @@
     };
 
     spicetify-nix.url = "github:the-argus/spicetify-nix";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
 
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -30,7 +30,7 @@
   };
 
   outputs = inputs@{ nixpkgs, home-manager, hardware, spicetify-nix
-    , neovim-nightly-overlay, nvidia-patch, nix-index-database, fenix, ... }: {
+    , neovim-nightly, nvidia-patch, nix-index-database, fenix, ... }: {
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";

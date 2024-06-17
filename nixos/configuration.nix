@@ -25,7 +25,7 @@
 
   nixpkgs = {
     overlays = [
-      inputs.neovim-nightly-overlay.overlay
+      inputs.neovim-nightly.overlays.default
       inputs.nvidia-patch.overlays.default
       inputs.fenix.overlays.default
     ];

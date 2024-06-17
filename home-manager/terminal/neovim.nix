@@ -13,11 +13,13 @@
 
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-nightly;
 
     defaultEditor = true;
 
     extraLuaConfig = ''
+      -- required for smart-open.nvim
+      vim.g.sqlite_clib_path = "${pkgs.sqlite.out}/lib/libsqlite3.so"
+
       vim.g.colors = {
         crust = "${config.colors.crust}",
         mantle = "${config.colors.mantle}",
@@ -84,7 +86,7 @@
     '';
 
     # for image.nvim
-    extraLuaPackages = ps: with ps; [ magick ];
+    # extraLuaPackages = ps: with ps; [ magick ];
 
     extraPackages = with pkgs; [
       tree-sitter
@@ -103,13 +105,13 @@
       lua-language-server
       stylua
       # misc
-      nodePackages.bash-language-server
+      bash-language-server
       # nix
       nil
       nixfmt-classic
       # python
       black
-      nodePackages.pyright
+      pyright
       ruff-lsp
       # rust
       # NOTE: rust-analyzer is managed by rustup via: rustup component add rust-analyzer

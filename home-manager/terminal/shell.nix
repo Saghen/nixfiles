@@ -29,6 +29,7 @@
       shellAbbrs = {
         cd = "z";
         n = "nvim";
+        e = "exit";
         # kubectl plugin covers most except these ones
         kx = "kubectx";
         kn = "kubens";
@@ -39,6 +40,10 @@
         # Use backward-kill-bigword to act like W in vim
         bind \b backward-kill-word
         bind \t complete-and-search
+
+        # for krew
+        # TODO: should be a better way?
+        set -gx PATH $PATH $KREW_ROOT/bin
 
         fzf_configure_bindings
       '';
