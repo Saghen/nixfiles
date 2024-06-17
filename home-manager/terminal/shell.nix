@@ -44,30 +44,13 @@
         # for krew
         # TODO: should be a better way?
         set -gx PATH $PATH $KREW_ROOT/bin
-
-        fzf_configure_bindings
       '';
       plugins = with pkgs;
         with fishPlugins; [
-          # package manager
-          {
-            name = "fisher";
-            src = fetchFromGitHub {
-              owner = "jorgebucaran";
-              repo = "fisher";
-              rev = "2efd33ccd0777ece3f58895a093f32932bd377b6";
-              sha256 = "sha256-e8gIaVbuUzTwKtuMPNXBT5STeddYqQegduWBtURLT3M=";
-            };
-          }
           # guess
           {
             name = "autopair";
             src = autopair.src;
-          }
-          # adds support for fzf keybinds
-          {
-            name = "fzf.fish";
-            src = fzf-fish.src;
           }
           # text expansions such as .., !! and others
           {

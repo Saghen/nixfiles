@@ -42,5 +42,7 @@
   # Fish
   users.defaultUserShell = pkgs.fish;
   programs.fish.enable = true;
+  programs.fish.useBabelfish = true;
+  programs.command-not-found.enable = false;
 }
 

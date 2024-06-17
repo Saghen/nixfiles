@@ -39,11 +39,6 @@
             hardware.nixosModules.common-gpu-nvidia-nonprime
             hardware.nixosModules.common-pc-ssd
 
-            # provides an index of the nix packages so that things like command-not-found
-            # can query the index to find the package that provides a command
-            nix-index-database.nixosModules.nix-index
-            { programs.command-not-found.enable = false; }
-
             home-manager.nixosModules.home-manager
             {
               home-manager = {
