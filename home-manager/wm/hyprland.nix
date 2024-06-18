@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  home.packages = with pkgs; [ hyprshot ];
+  home.packages = with pkgs; [ hyprshot hyprpicker ];
 
   programs.foot = {
     enable = true;
@@ -12,7 +12,7 @@
     in {
       main = {
         font = "Iosevka Custom Nerd Font:size=14";
-        line-height = "24px";
+        line-height = "26px";
         underline-thickness = "1px";
         underline-offset = "2px";
         pad = "4x4";
@@ -71,7 +71,27 @@
     };
   };
 
-  programs.tofi.enable = true;
+  programs.tofi = {
+    enable = true;
+    settings = let colors = config.colors;
+    in {
+      font = "${pkgs.noto-fonts}/share/fonts/noto/NotoSans[wdth,wght].ttf";
+      font-size = 16;
+
+      width = 720;
+      height = 540;
+
+      outline-width = 0;
+      border-width = 1;
+      border-color = colors.primary;
+      background-color = colors.base;
+      text-color = colors.text;
+      prompt-color = colors.primary;
+      selection-color = colors.yellow;
+
+      fuzzy-match = true;
+    };
+  };
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -154,13 +174,15 @@
       debug = { disable_logs = false; };
 
       ## Binds
-      bind = let hyprshot = "${pkgs.hyprshot}/bin/hyprshot";
+      bind = let
+        hyprshot = "${pkgs.hyprshot}/bin/hyprshot";
+        swayosdClient = "${pkgs.swayosd}/bin/swayosd-client";
       in [
-        "$mod, Space, exec, tofi-drun --drun-launch=true --fuzzy-match=true"
+        # applications
+        "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, Return, exec, footclient"
-        "$mod, c, exec, footclient nvim"
+        "$mod, c, exec, footclient --app-id nvim --title nvim nvim"
         "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
-        # TODO: freeze not working
         ", Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot"
         "$mod, Print, exec, ${hyprshot} --freeze -m window -o ~/pictures/screenshots/hyprshot"
         "ALT, Print, exec, ${hyprshot} --freeze -m output -o ~/pictures/screenshots/hyprshot"
@@ -176,6 +198,22 @@
         "$mod + SHIFT, f, fullscreen"
         "$mod, s, swapactiveworkspaces"
         "$mod, d, centerwindow"
+
+        # special
+        ## swayosd
+        ", XF86AudioRaiseVolume, exec, ${swayosdClient} --output-volume raise"
+        ", XF86AudioLowerVolume, exec, ${swayosdClient} --output-volume lower"
+        ", XF86AudioMute, exec, ${swayosdClient} --output-volume mute-toggle"
+        ", XF86AudioMicMute, exec, ${swayosdClient} --input-volume mute-toggle"
+        ", XF86MonBrightnessUp, exec, ${swayosdClient} --brightness raise"
+        ", XF86MonBrightnessDown, exec, ${swayosdClient} --brightness lower"
+        ## media
+        ", XF86AudioPlay, exec, playerctl --player=spotify play-pause"
+        ", XF86AudioNext, exec, playerctl --player=spotify next"
+        ", XF86AudioPrev, exec, playerctl --player=spotify previous"
+        "CTRL, XF86AudioPlay, exec, playerctl --player=firefox play-pause"
+        "CTRL, XF86AudioNext, exec, playerctl --player=firefox next"
+        "CTRL, XF86AudioPrev, exec, playerctl --player=firefox previous"
 
         "$mod + ALT, n, exit"
       ] ++ (
@@ -197,8 +235,16 @@
 
       ## Rules
       windowrulev2 = [
-        "float,class:(foot)"
+        # Default all floating
+        "float,class:(.*)"
 
+        # Tiled
+        "tile,class:(firefox-aurora)"
+        "tile,class:(Spotify)"
+        "tile,class:(discord)"
+        "tile,class:(nvim)"
+
+        # Floating
         "float,class:(utility)"
         "float,class:(notification)"
         "float,class:(toolbar)"
@@ -218,6 +264,8 @@
       exec-once = [
         "[workspace 1 silent] firefox-developer-edition"
         "[workspace 7 silent] spotify"
+        "[workspace 7 silent] ${pkgs.gtk3}/bin/gtk-launch discord"
+        "${pkgs.swayosd}/bin/swayosd-server"
       ];
     };
   };
