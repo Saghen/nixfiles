@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  home.packages = with pkgs; [ hyprshot hyprpicker ];
+  home.packages = with pkgs; [ wl-clipboard hyprshot hyprpicker ];
 
   programs.foot = {
     enable = true;
@@ -101,8 +101,11 @@
     in {
       "$mod" = "SUPER";
 
-      monitor =
-        [ "DP-1, 2560x1440@144, 2560x0, 1" "DP-2, 2560x1440@144, 0x0, 1" ];
+      monitor = [
+        "DP-1, 2560x1440@144, 2560x0, 1"
+        "DP-2, 2560x1440@144, 0x0, 1"
+        "Unknown-1, disable"
+      ];
 
       workspace = [
         "1, monitor:DP-1"
@@ -182,7 +185,8 @@
         # applications
         "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, Return, exec, footclient"
-        "$mod, c, exec, footclient --app-id nvim --title nvim nvim"
+        # NOTE: specifying the window size avoids a flash of smaller window
+        "$mod, c, exec, footclient --window-size-pixels=2560x1440 --app-id nvim --title nvim nvim"
         "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
         ", Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot"
         "SHIFT, Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
@@ -241,14 +245,23 @@
       windowrulev2 = [
         # Default all floating
         "float,class:(.*)"
+        "float,title:(.*)"
+
+        # Firefox
+        "tile,class:(firefox-aurora)"
+        "float,class:(firefox-aurora),title:(Enter name of file to save to...)"
+        "size 1200 800,class(firefox-aurora),title:(Enter name of file to save to...)"
 
         # Tiled
-        "tile,class:(firefox-aurora)"
         "tile,class:(Spotify)"
         "tile,class:(discord)"
         "tile,class:(nvim)"
-        "tile,class:(steam)"
         "fullscreen,class:(gamescope)"
+
+        # Sizing
+        "size 900 1000,class:(org.gnome.SystemMonitor)"
+        "size 1200 800,class:(org.gnome.Nautilus)"
+        "size 1800 1200,class:(steam)"
 
         # Floating
         "float,class:(utility)"

@@ -12,6 +12,8 @@ rec {
     name = "Papirus-Dark";
     package = pkgs.papirus-icon-theme;
   };
+  # expected by many gtk apps
+  home.packages = with pkgs; [ gnome.adwaita-icon-theme ];
 
   # GTK Theme
   # https://github.com/catppuccin/gtk?tab=readme-ov-file#for-nix-users
