@@ -17,13 +17,13 @@
   hardware.steam-hardware.enable = true;
   programs.steam = {
     enable = true;
-    extraCompatPackages = [ pkgs.proton-ge-bin ];
+    extraPackages = with pkgs; [ gamemode gamescope mangohud ];
+    extraCompatPackages = with pkgs; [ proton-ge-bin ];
     localNetworkGameTransfers.openFirewall = true;
   };
-  # TODO: doesnt work on nvidia
   programs.gamescope = {
     enable = true;
-    capSysNice = true;
+    capSysNice = false; # doesn't work inside of steam
   };
   programs.gamemode = {
     enable = true;
