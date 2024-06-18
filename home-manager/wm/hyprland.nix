@@ -176,6 +176,7 @@
       ## Binds
       bind = let
         hyprshot = "${pkgs.hyprshot}/bin/hyprshot";
+        satty = "${pkgs.satty}/bin/satty";
         swayosdClient = "${pkgs.swayosd}/bin/swayosd-client";
       in [
         # applications
@@ -184,8 +185,11 @@
         "$mod, c, exec, footclient --app-id nvim --title nvim nvim"
         "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
         ", Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot"
+        "SHIFT, Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
         "$mod, Print, exec, ${hyprshot} --freeze -m window -o ~/pictures/screenshots/hyprshot"
+        "$mod + SHIFT, Print, exec, ${hyprshot} --freeze -m window -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
         "ALT, Print, exec, ${hyprshot} --freeze -m output -o ~/pictures/screenshots/hyprshot"
+        "ALT + SHIFT, Print, exec, ${hyprshot} --freeze -m output -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
 
         # window management
         "$mod, q, focusmonitor, +1"
@@ -243,6 +247,8 @@
         "tile,class:(Spotify)"
         "tile,class:(discord)"
         "tile,class:(nvim)"
+        "tile,class:(steam)"
+        "fullscreen,class:(gamescope)"
 
         # Floating
         "float,class:(utility)"
