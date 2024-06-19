@@ -1,6 +1,7 @@
-{ pkgs, config, ... }:
+{ lib, pkgs, config, ... }:
 
-{
+let monitors = config.monitors;
+in {
   home.packages = with pkgs; [ wl-clipboard hyprshot hyprpicker ];
 
   programs.foot = {
@@ -66,8 +67,7 @@
     enable = true;
     settings = {
       preload = [ "~/pictures/wallpaper.png" ];
-      wallpaper =
-        [ "DP-1,~/pictures/wallpaper.png" "DP-2,~/pictures/wallpaper.png" ];
+      wallpaper = map (m: "${m},~/pictures/wallpaper.png") monitors;
     };
   };
 
@@ -102,23 +102,17 @@
       "$mod" = "SUPER";
 
       monitor = [
-        "DP-1, 2560x1440@144, 2560x0, 1"
-        "DP-2, 2560x1440@144, 0x0, 1"
+        "${builtins.elemAt monitors 0}, 2560x1440@144, 2560x0, 1"
+        "${builtins.elemAt monitors 1}, 2560x1440@144, 0x0, 1"
         "Unknown-1, disable"
       ];
 
-      workspace = [
-        "1, monitor:DP-1"
-        "2, monitor:DP-1"
-        "3, monitor:DP-1"
-        "4, monitor:DP-1"
-        "5, monitor:DP-1"
-        "6, monitor:DP-1"
-        "7, monitor:DP-2"
-        "8, monitor:DP-2"
-        "9, monitor:DP-2"
-        "10, monitor:DP-2"
-      ];
+      # assign 6 workspaces to each monitor
+      workspace = builtins.genList (x:
+        let
+          ws = toString (x + 1);
+          monitor = builtins.elemAt monitors (x / 6);
+        in "${ws}, monitor:${monitor}") (builtins.length monitors * 6);
 
       env = [
         "XDG_CURRENT_DESKTOP,hyprland"
@@ -134,7 +128,6 @@
       ];
 
       ## Settings
-      animations = { enabled = false; };
       general = {
         gaps_out = 16;
         gaps_in = 8;
@@ -176,6 +169,9 @@
       };
       debug = { disable_logs = false; };
 
+      ## Animations
+      animation = [ "global,0" "workspaces,0" "border,1,1.5,default" ];
+
       ## Binds
       bind = let
         hyprshot = "${pkgs.hyprshot}/bin/hyprshot";
@@ -197,14 +193,15 @@
 
         # window management
         "$mod, q, focusmonitor, +1"
-        "$mod, r, cyclenext"
+        # TODO: figure out how to alterzindex since bringactivetotop is deprecated
+        "$mod, r, exec, hyprctl dispatch cyclenext && hyprctl dispatch bringactivetotop"
         "$mod + SHIFT, r, cyclenext, prev"
-        "$mod, a, movewindow, mon:l"
-        "$mod, w, closewindow, activewindow"
+        "$mod, a, movewindow, mon:+1"
+        "$mod, w, exec, hyprctl activewindow -j | jq '.fullscreen | not' -e && hyprctl dispatch closewindow activewindow"
         "$mod + ALT, w, killactive"
         "$mod, f, togglefloating"
         "$mod + SHIFT, f, fullscreen"
-        "$mod, s, swapactiveworkspaces"
+        "$mod, s, swapactiveworkspaces, ${lib.concatStringsSep " " monitors}"
         "$mod, d, centerwindow"
 
         # special
@@ -226,14 +223,22 @@
         "$mod + ALT, n, exit"
       ] ++ (
         # workspaces
-        # binds $mod + [alt +] {1..10} to [move to] workspace {1..10}
+        # binds $mod + [alt +] {1..6} to [move to] workspace {1..6}
+        # TODO: should handle mouse being on a different monitor while switching to an empty workspace
+        # breaking the focus. possible beacuse of the follow_mouse setting
         builtins.concatLists (builtins.genList (x:
           let
             ws = let c = (x + 1) / 10; in builtins.toString (x + 1 - (c * 10));
+            is_main_monitor =
+              "test $(hyprctl activeworkspace -j | jq '.monitorID') -eq 0";
+            get_workspace =
+              "${is_main_monitor} && echo ${toString (x + 1)} || echo ${
+                toString (x + 7)
+              }";
           in [
-            "$mod, ${ws}, workspace, ${toString (x + 1)}"
-            "$mod + ALT, ${ws}, movetoworkspace, ${toString (x + 1)}"
-          ]) 10));
+            "$mod, ${ws}, exec, hyprctl dispatch workspace $(${get_workspace})"
+            "$mod + ALT, ${ws}, exec, hyprctl dispatch movetoworkspace $(${get_workspace})"
+          ]) 6));
 
       bindm = [
         # mouse movements
@@ -261,7 +266,7 @@
         # Sizing
         "size 900 1000,class:(org.gnome.SystemMonitor)"
         "size 1200 800,class:(org.gnome.Nautilus)"
-        "size 1800 1200,class:(steam)"
+        "size 1800 1200,class:(steam),title:^(Steam)$"
 
         # Floating
         "float,class:(utility)"
