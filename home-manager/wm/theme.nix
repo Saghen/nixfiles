@@ -16,17 +16,15 @@ rec {
   home.packages = with pkgs; [ gnome.adwaita-icon-theme ];
 
   # GTK Theme
-  # https://github.com/catppuccin/gtk?tab=readme-ov-file#for-nix-users
   gtk.theme = {
-    name = "Catppuccin-Mocha-Standard-Blue-Dark";
-    package = pkgs.catppuccin-gtk.override {
-      accents = [ "blue" ];
-      size = "standard"; # "compact" or "standard"
-      tweaks = [ "rimless" ]; # "rimless" disables the 1px border around windows
-      variant = "mocha";
+    name = "Colloid-Teal-Dark-Catppuccin";
+    package = pkgs.colloid-gtk-theme.override {
+      colorVariants = [ "dark" ];
+      themeVariants = [ "teal" ];
+      sizeVariants = [ "standard" ];
+      tweaks = [ "catppuccin" "rimless" ];
     };
   };
-
   xdg.configFile = {
     "gtk-3.0/assets".source =
       "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-3.0/assets";
