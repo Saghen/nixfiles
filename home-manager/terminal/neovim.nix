@@ -90,6 +90,7 @@
 
     extraPackages = with pkgs; [
       tree-sitter
+      luarocks
 
       # for image.nvim
       imagemagick
