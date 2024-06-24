@@ -1,6 +1,9 @@
 { lib, pkgs, config, ... }:
 
-let monitors = config.monitors;
+let
+  monitors = config.monitors;
+  colors = config.colors;
+  convertHL = c: "0xff" + builtins.substring 1 6 c;
 in {
   home.packages = with pkgs; [ wl-clipboard hyprshot hyprpicker ];
 
@@ -71,6 +74,104 @@ in {
     };
   };
 
+  programs.hyprlock = {
+    enable = true;
+    # Workaround for lag https://github.com/hyprwm/hyprlock/issues/128
+    package = pkgs.hyprlock.overrideAttrs (old: {
+      version = "git";
+      src = pkgs.fetchFromGitHub {
+        owner = "hyprwm";
+        repo = "hyprlock";
+        rev = "2bce52f";
+        sha256 = "36qa6MOhCBd39YPC0FgapwGRHZXjstw8BQuKdFzwQ4k=";
+      };
+      patchPhase = ''
+        substituteInPlace src/core/hyprlock.cpp \
+        --replace "5000" "6"
+      '';
+    });
+    settings = {
+      background =
+        [{ path = "~/pictures/wallpapers/cyberpunk/skyline-catppuccin.png"; }];
+
+      general = {
+        disable_loading_bar = true;
+        ignore_empty_input = true;
+      };
+
+      # input
+      input-field = [{
+        size = "250, 40";
+        outline_thickness = 1;
+        dots_size = 0.2; # Scale of input-field height, 0.2 - 0.8
+        dots_spacing = 0.2; # Scale of dots' absolute size, 0.0 - 1.0
+        dots_center = true;
+        rounding = -1;
+        outer_color = "rgba(0, 0, 0, 0)";
+        inner_color = convertHL colors.base;
+        font_color = convertHL colors.text;
+        fail_color = convertHL colors.red;
+        check_color = convertHL colors.yellow;
+        fade_on_empty = false;
+        # font_family = "JetBrains Mono Nerd Font Mono"
+        # placeholder_text = ''
+        #   <i><span foreground="#${colors.subtext-0}">Input Password...</span></i>'';
+        hide_input = false;
+        position = "0, -120";
+        halign = "center";
+        valign = "center";
+      }];
+
+      label = [
+        # time
+        {
+          text = ''cmd[update:1000] echo "$(date +"%-I:%M%p")"'';
+          color = convertHL colors.text;
+          font_size = 120;
+          # font_family = "JetBrains Mono Nerd Font Mono ExtraBold";
+          position = "0, -300";
+          halign = "center";
+          valign = "top";
+        }
+        # user
+        {
+          text = "Hi there, ${config.home.username}";
+          color = convertHL colors.text;
+          font_size = 25;
+          # font_family = "JetBrains Mono Nerd Font Mono";
+          position = "0, -40";
+          halign = "center";
+          valign = "center";
+        }
+      ];
+    };
+  };
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        # avoid starting multiple hyprlock instances
+        lock_cmd = "${pkgs.procps}/bin/pidof hyprlock || hyprlock";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
+      };
+
+      listener = [
+        # turn screen off after 5 minutes
+        {
+          timeout = 300;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
+        # lock after 10 minutes
+        {
+          timeout = 600;
+          on-timeout = "${pkgs.systemd}/bin/loginctl lock-session";
+        }
+      ];
+    };
+  };
+
+  # TODO: switch to https://codeberg.org/dnkl/fuzzel ? for the application icons
   programs.tofi = {
     enable = true;
     settings = let colors = config.colors;
@@ -90,15 +191,13 @@ in {
       selection-color = colors.yellow;
 
       fuzzy-match = true;
+      drun-launch = true;
     };
   };
 
   wayland.windowManager.hyprland = {
     enable = true;
-    settings = let
-      colors = config.colors;
-      convert = c: "0xff" + builtins.substring 1 6 c;
-    in {
+    settings = {
       "$mod" = "SUPER";
 
       monitor = [
@@ -129,24 +228,21 @@ in {
 
       ## Settings
       general = {
-        gaps_out = 16;
+        gaps_out = 8;
         gaps_in = 8;
 
-        "col.inactive_border" = convert colors.base;
-        "col.active_border" = convert colors.primary;
-
-        no_cursor_warps = true;
-        default_cursor_monitor = "DP-1";
+        "col.inactive_border" = convertHL colors.base;
+        "col.active_border" = convertHL colors.primary;
       };
       dwindle = { no_gaps_when_only = 1; };
       decoration = { blur = { enabled = false; }; };
       cursor = {
-        # TODO: enable when upgrading to v0.41.0
-        # no_warps = true;
-        # default_monitor = "DP-1";
+        no_hardware_cursors = true;
+        no_warps = true;
+        default_monitor = "DP-1";
       };
       input = {
-        # cursor focus separate from keyboard focus
+        # 2 allows cursor focus separate from keyboard focus
         # to allow for scrolling without focusing
         follow_mouse = 2;
         float_switch_override_focus = 0;
@@ -156,7 +252,7 @@ in {
       };
       misc = {
         disable_hyprland_logo = true;
-        background_color = convert colors.crust;
+        background_color = convertHL colors.crust;
         force_default_wallpaper = 0;
 
         # TODO: doesn't work on nvidia
@@ -170,7 +266,7 @@ in {
       debug = { disable_logs = false; };
 
       ## Animations
-      animation = [ "global,0" "workspaces,0" "border,1,1.5,default" ];
+      animation = [ "global,0" ];
 
       ## Binds
       bind = let
@@ -182,7 +278,7 @@ in {
         "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, Return, exec, footclient"
         # NOTE: specifying the window size avoids a flash of smaller window
-        "$mod, c, exec, footclient --window-size-pixels=2560x1440 --app-id nvim --title nvim nvim"
+        "$mod, c, exec, footclient -o pad=0x0 --window-size-pixels=2560x1440 --app-id nvim --title nvim nvim"
         "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
         ", Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot"
         "SHIFT, Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
@@ -258,7 +354,7 @@ in {
         "size 1200 800,class(firefox-aurora),title:(Enter name of file to save to...)"
 
         # Tiled
-        "tile,class:(Spotify)"
+        "tile,class:(Spotify),title:(Spotify)" # must be specific, otherwise popups will tile
         "tile,class:(discord)"
         "tile,class:(nvim)"
         "fullscreen,class:(gamescope)"
