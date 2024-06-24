@@ -24,12 +24,9 @@
   };
 
   nixpkgs = {
-    overlays = [
-      inputs.neovim-nightly.overlays.default
-      inputs.nvidia-patch.overlays.default
-      inputs.fenix.overlays.default
-    ];
-    config = { allowUnfree = true; };
+    overlays =
+      [ inputs.nvidia-patch.overlays.default inputs.fenix.overlays.default ];
+    config.allowUnfree = true;
   };
 
   users.users = {
