@@ -20,6 +20,7 @@
     extraPackages = with pkgs; [ gamemode gamescope mangohud ];
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
     localNetworkGameTransfers.openFirewall = true;
+    protontricks.enable = true;
   };
   programs.gamescope = {
     enable = true;
@@ -39,7 +40,7 @@
       };
     };
   };
-  environment.systemPackages = with pkgs; [ protontricks mangohud ];
+  environment.systemPackages = with pkgs; [ mangohud ];
 
   # streaming
   services.sunshine = {

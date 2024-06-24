@@ -12,6 +12,7 @@
     # displayManager.gdm.enable = true;
   };
   programs.hyprland.enable = true;
+  security.pam.services.hyprlock = { }; # required to allow hyprlock to unlock
   services.displayManager = {
     defaultSession = "hyprland";
     # defaultSession = "none+bspwm";
