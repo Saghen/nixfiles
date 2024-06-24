@@ -14,6 +14,28 @@
           microphone = true;
           camera = true;
         };
+        settings = {
+          "layout.frame_rate" = 144;
+
+          "privacy.annotate_channels.strict_list.enabled" = true;
+          "privacy.donottrackheader.enabled" = true;
+          "privacy.fingerprintingProtection" = true;
+          "privacy.globalprivacycontrol.enabled" = true;
+          "privacy.query_stripping.enabled" = true;
+          "privacy.query_stripping.enabled.pbmode" = true;
+          "privacy.trackingprotection.enabled" = true;
+          "privacy.trackingprotection.emailtracking.enabled" = true;
+          "privacy.trackingprotection.socialtracking.enabled" = true;
+          "privacy.userContext.enabled" = true;
+          "privacy.userContext.ui.enabled" = true;
+
+          "media.ffmpeg.vaapi.enabled" = true;
+
+          # always ask for download location
+          "browser.download.useDownloadDir" = false;
+
+          "browser.contentblocking.category" = "strict";
+        };
         userContent = ''
           html {
             --bg-primary: ${config.colors.base};

@@ -70,10 +70,7 @@ let
           description =
             "Firefox preference (int, bool, string, and also attrs, list, float as a JSON string)";
         });
-        default = {
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          "permissions.default.desktop-notification" = 1;
-        };
+        default = { };
         example = literalExpression ''
           {
             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

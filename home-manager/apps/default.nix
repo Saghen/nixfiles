@@ -1,14 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  imports = [
-    ./firefox
-    ./thunderbird
-    ./discord.nix
-    ./spotify.nix
-    ./todoist.nix
-    ./video.nix
-  ];
+  imports = [ ./firefox ./thunderbird ./discord.nix ./spotify.nix ./video.nix ];
   config = {
     home.packages = with pkgs; [
       gnome.nautilus # File management
@@ -20,9 +13,12 @@
       helvum # GUI Audio routing: Control what apps get what audio
       mpv # Video player
       vlc # Video player
+      jellyfin-media-player # Jellyfin video player
       feh # Image viewer
       qimgv # Image viewer
       nomacs # Image viewer
+      lutris # Game manager
+      winetricks # Required by lutris
     ];
 
     xdg.configFile.qimgv-theme = let
