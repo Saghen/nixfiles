@@ -9,7 +9,6 @@ in {
     # gives a warning on first setup, but it seems to be fine and avoids
     # an issue with windowManagerPatch = true where the desktop entry doesn't exist
     # https://github.com/the-argus/spicetify-nix/issues/10
-    spotifyPackage = pkgs.spotifywm;
     theme = spicePkgs.themes.catppuccin;
     colorScheme = "mocha";
 

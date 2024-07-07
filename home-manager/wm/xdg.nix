@@ -19,8 +19,11 @@
 
     portal = {
       enable = true;
-      extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
-      config.common.default = "hyprland";
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-hyprland
+      ];
+      config.common.default = "*";
       xdgOpenUsePortal = false; # breaks it
     };
 
@@ -85,13 +88,13 @@
         "x-scheme-handler/unknown" = [ firefox ];
         "x-scheme-handler/webcal" = [ firefox ];
 
-        "audio" = [ vlc ];
-        "video" = [ mpv ];
-        "image" = [ qimgv ];
+        "audio/*" = [ vlc ];
+        "video/*" = [ mpv ];
+        "image/*" = [ qimgv ];
         "inode/directory" = [ files ];
 
         "application/json" = [ nvim ];
-        "text" = [ nvim ];
+        "text/*" = [ nvim ];
         "text/html" = [ firefox ];
       };
     };

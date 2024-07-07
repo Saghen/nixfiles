@@ -13,7 +13,7 @@ rec {
     package = pkgs.papirus-icon-theme;
   };
   # expected by many gtk apps
-  home.packages = with pkgs; [ gnome.adwaita-icon-theme ];
+  home.packages = with pkgs; [ adwaita-icon-theme ];
 
   # GTK Theme
   gtk.theme = {

@@ -171,6 +171,9 @@ in {
     };
   };
 
+  # Night light
+  services.gammarelay.enable = true;
+
   # TODO: switch to https://codeberg.org/dnkl/fuzzel ? for the application icons
   programs.tofi = {
     enable = true;
@@ -213,7 +216,11 @@ in {
           monitor = builtins.elemAt monitors (x / 6);
         in "${ws}, monitor:${monitor}") (builtins.length monitors * 6);
 
+      # TODO: doesnt apply to foot because it runs as a server
       env = [
+        "XDG_BACKEND,wayland"
+        "XDG_SESSION_TYPE,wayland"
+
         "XDG_CURRENT_DESKTOP,hyprland"
         "QT_QPA_PLATFORM,wayland"
         "MOZ_ENABLE_WAYLAND,1"
@@ -266,7 +273,7 @@ in {
       debug = { disable_logs = false; };
 
       ## Animations
-      animation = [ "global,0" ];
+      animation = [ "global,1,1,default," ];
 
       ## Binds
       bind = let
@@ -280,12 +287,12 @@ in {
         # NOTE: specifying the window size avoids a flash of smaller window
         "$mod, c, exec, footclient -o pad=0x0 --window-size-pixels=2560x1440 --app-id nvim --title nvim nvim"
         "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
-        ", Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot"
-        "SHIFT, Print, exec, ${hyprshot} --freeze -m region -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
-        "$mod, Print, exec, ${hyprshot} --freeze -m window -o ~/pictures/screenshots/hyprshot"
-        "$mod + SHIFT, Print, exec, ${hyprshot} --freeze -m window -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
-        "ALT, Print, exec, ${hyprshot} --freeze -m output -o ~/pictures/screenshots/hyprshot"
-        "ALT + SHIFT, Print, exec, ${hyprshot} --freeze -m output -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
+        ", Print, exec, ${hyprshot} -m region -o ~/pictures/screenshots/hyprshot"
+        "SHIFT, Print, exec, ${hyprshot} -m region -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
+        "$mod, Print, exec, ${hyprshot} -m window -o ~/pictures/screenshots/hyprshot"
+        "$mod + SHIFT, Print, exec, ${hyprshot} -m window -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
+        "ALT, Print, exec, ${hyprshot} -m output -o ~/pictures/screenshots/hyprshot"
+        "ALT + SHIFT, Print, exec, ${hyprshot} -m output -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
 
         # window management
         "$mod, q, focusmonitor, +1"
@@ -384,7 +391,7 @@ in {
       exec-once = [
         "[workspace 1 silent] firefox-developer-edition"
         "[workspace 7 silent] spotify"
-        "[workspace 7 silent] ${pkgs.gtk3}/bin/gtk-launch discord"
+        "[workspace 7 silent] vesktop"
         "${pkgs.swayosd}/bin/swayosd-server"
       ];
     };

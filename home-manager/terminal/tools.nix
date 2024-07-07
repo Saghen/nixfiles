@@ -1,8 +1,9 @@
-{ pkgs, krewfile, config, ... }:
+{ pkgs, config, ... }:
 
 {
   home.packages = with pkgs; [
     # tools
+    nh # nix helper
     procps # pkill watch top sysctl etc...
     tldr # cheatsheets
     thefuck # ...
@@ -22,6 +23,7 @@
     # google cloud sdk with GKE auth support
     (pkgs.google-cloud-sdk.withExtraComponents
       (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
+    nix-index # provides nix-locate
 
     # devops
     terraform # FIXME: stores credentials in plain text

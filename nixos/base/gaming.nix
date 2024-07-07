@@ -17,7 +17,7 @@
   hardware.steam-hardware.enable = true;
   programs.steam = {
     enable = true;
-    extraPackages = with pkgs; [ gamemode gamescope mangohud ];
+    extraPackages = with pkgs; [ mangohud ];
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
     localNetworkGameTransfers.openFirewall = true;
     protontricks.enable = true;

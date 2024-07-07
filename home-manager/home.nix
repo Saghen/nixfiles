@@ -3,6 +3,7 @@
 {
   imports = [ ./apps ./modules ./terminal ./wm ];
   config = {
+    sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     home = {
       username = "saghen";
       homeDirectory = "/home/${config.home.username}";
