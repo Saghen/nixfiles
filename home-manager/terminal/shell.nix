@@ -1,9 +1,9 @@
 { pkgs, ... }:
 
 {
-  # Fish enables this by default for autocomplete but it adds +4s to build
-  documentation.man.generateCaches = false;
   programs = {
+    # Fish enables this by default for autocomplete but it adds +4s to build
+    man.generateCaches = false;
     fish = {
       enable = true;
       functions = {
