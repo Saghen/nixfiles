@@ -1,7 +1,7 @@
 # Requires cloning nvim config manually
 # git clone https://github.com/saghen/nvim ~/.config/nvim
 
-{ pkgs, config, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   home = {
@@ -85,15 +85,20 @@
       require('config.lazy')
     '';
 
-    # for image.nvim
-    # extraLuaPackages = ps: with ps; [ magick ];
+    extraWrapperArgs = [
+      "--suffix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${lib.makeLibraryPath [ pkgs.libgit2 ]}"
+    ];
 
     extraPackages = with pkgs; [
       tree-sitter
-      luarocks
+      lua51Packages.luarocks
 
-      # for image.nvim
-      imagemagick
+      # required by fugit2
+      lua5_1
+      unzip
 
       ## LSPs, formatters, linters
       # fp

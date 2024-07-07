@@ -4,8 +4,9 @@
   imports = [ ./firefox ./thunderbird ./discord.nix ./spotify.nix ./video.nix ];
   config = {
     home.packages = with pkgs; [
-      gnome.nautilus # File management
-      gnome.gnome-system-monitor # System resource monitor
+      vesktop # Discord with screen share and audio
+      nautilus # File management
+      gnome-system-monitor # System resource monitor
       gparted # Disk management
       blueman # Bluetooth manager
       obsidian # Notes

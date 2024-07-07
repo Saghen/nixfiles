@@ -37,6 +37,11 @@
         kn = "kubens";
         kg = "kubectl get";
         kd = "kubectl describe";
+
+        jcu = "journalctl --user -xeu";
+        jc = "journalctl -xeu";
+
+        nrs = "nh os switch";
       };
       interactiveShellInit = ''
         # Use backward-kill-bigword to act like W in vim
