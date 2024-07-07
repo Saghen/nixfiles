@@ -41,5 +41,7 @@
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
   programs.command-not-found.enable = false;
+  # Fish enables this by default for autocomplete but it adds +15s to build
+  documentation.man.generateCaches = false;
 }
 
