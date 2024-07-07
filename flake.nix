@@ -17,9 +17,8 @@
     };
 
     spicetify-nix.url = "github:the-argus/spicetify-nix";
-
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
+    limbo = {
+      url = "github:saghen/limbo";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -30,31 +29,35 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, hardware, spicetify-nix
-    , nvidia-patch, nix-index-database, fenix, ... }: {
-      nixosConfigurations = {
-        nixos = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./nixos/configuration.nix
-            hardware.nixosModules.common-gpu-nvidia-nonprime
-            hardware.nixosModules.common-pc-ssd
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, hardware, ... }: {
+    nixosConfigurations = {
+      nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./nixos/configuration.nix
 
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useUserPackages = true;
-                useGlobalPkgs = true;
-                extraSpecialArgs = {
-                  inherit spicetify-nix;
-                  inherit fenix;
-                };
-                users.saghen = import ./home-manager/home.nix;
+          sops-nix.nixosModules.sops
+
+          hardware.nixosModules.common-gpu-nvidia-nonprime
+          hardware.nixosModules.common-pc-ssd
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useUserPackages = true;
+              useGlobalPkgs = true;
+              extraSpecialArgs = {
+                inherit (inputs) spicetify-nix;
+                inherit (inputs) fenix;
+                inherit (inputs) limbo;
               };
-            }
-          ];
-          specialArgs = { inherit inputs; };
-        };
+              sharedModules = [ sops-nix.homeManagerModules.sops ];
+              users.saghen = import ./home-manager/home.nix;
+            };
+          }
+        ];
+        specialArgs = { inherit inputs; };
       };
     };
+  };
 }

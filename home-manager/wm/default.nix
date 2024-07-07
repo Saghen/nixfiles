@@ -4,6 +4,7 @@
   imports = [
     ./bspwm.nix
     ./hyprland.nix
+    ./limbo.nix
     ./sxhkd
     ./services/dunst.nix
     ./services/flameshot.nix

@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  imports = [ ./colors ./firefox-nativefy ];
+  imports = [ ./colors.nix ./firefox-nativefy ./gammarelay.nix ];
 }
