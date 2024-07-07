@@ -8,6 +8,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix.url = "github:Mic92/sops-nix";
+
     hardware.url = "github:nixos/nixos-hardware";
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";

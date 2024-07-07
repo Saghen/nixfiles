@@ -1,0 +1,10 @@
+keys:
+  - &saghen 149EB53A65D1B6DE5831E3EE48B4568B9759823E
+  - &desktop age1qwt2ksr3xyfm59alud9pkmfucekjc7m60w8ye8lw8syxnx6a23hqdfhlhl
+creation_rules:
+  - path_regex: keys/sops/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - pgp:
+          - *saghen
+        age:
+          - *desktop
