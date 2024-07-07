@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
-{
+rec {
   # Backup game folders
   systemd.services.ludusavi = {
     description = "Backup game saves";
@@ -12,9 +12,11 @@
   };
   systemd.timers.ludusavi = {
     description = "Backup game saves";
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "daily";
-      Unit = "ludusavi.service";
+      # Timer will run immediately if system was off when it would typically run
+      Persistent = true;
     };
   };
   environment.etc.ludusavi = {
@@ -34,46 +36,55 @@
     '';
   };
 
-  services = {
-    # BTRFS snapshots to local storage
-    btrbk.instances = {
-      home = {
-        onCalendar = "daily";
-        settings = {
-          snapshot_preserve = "14d";
-          snapshot_preserve_min = "2d";
-          volume."/" = {
-            subvolume = "home";
-            # directory to store snapshots
-            # WARN: this directory must be created manually
-            snapshot_dir = "/snapshots/home";
-          };
+  # BTRFS snapshots to local storage
+  system.activationScripts.mkBtrbkHome = "mkdir -p /snapshots/home";
+  services.btrbk.instances = {
+    home = {
+      onCalendar = "daily";
+
+      settings = {
+        snapshot_preserve = "14d";
+        snapshot_preserve_min = "2d";
+        volume."/" = {
+          subvolume = "home";
+          snapshot_dir = "/snapshots/home";
         };
       };
     };
+  };
 
-    # Backup home directory to remote
-    restic.backups = {
-      home = {
-        timerConfig = { OnCalendar = "daily"; };
-        repositoryFile = "/etc/restic/super-fish-repository";
-        passwordFile = "/etc/restic/super-fish-password";
-        user = "saghen";
-        paths = [ "/home/saghen" ];
-        exclude = [
-          "/home/*/.cache"
-          "/home/*/downloads"
-          "/home/*/.local/share/Trash"
+  # Backup home directory to remote
+  sops.secrets."restic/super-fish/repository" = {
+    sopsFile = ../../keys/sops/restic.yaml;
+    mode = "0440";
+    owner = "root";
+    group = "root";
+  };
+  sops.secrets."restic/super-fish/password" =
+    sops.secrets."restic/super-fish/repository";
+  services.restic.backups = {
+    home = {
+      timerConfig = { OnCalendar = "daily"; };
+      repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
+      passwordFile = config.sops.secrets."restic/super-fish/password".path;
+      user = "root";
+      paths = [ "/home/saghen" ];
+      exclude = [
+        "/home/*/.cache"
+        "/home/*/.local"
+        "/home/*/downloads"
 
-          "/home/*/games/lutris"
-          "/home/*/games/steam"
-          "/home/*/.steam"
-          "/home/*/.local/share/Steam"
+        "/home/*/games/lutris"
+        "/home/*/games/steam"
+        "/home/*/games/mod-organizer-2"
+        "/home/*/.steam"
 
-          "/home/*/code/**/node_modules"
-          "/home/*/code/**/target"
-        ];
-      };
+        "/home/**/node_modules"
+        "/home/**/.venv"
+        "/home/*/code/**/target"
+        "/home/*/code/huggingface/tokenizers"
+        "/home/*/code/tmp"
+      ];
     };
   };
 }
