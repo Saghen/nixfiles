@@ -1,7 +1,11 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   boot = {
+    # 1000hz keyboard polling rate
+    # who knows if that actually does anything
+    kernelParams = [ "quiet" "usbhid.kbpoll=1" ];
+
     loader = {
       efi.canTouchEfiVariables = true;
       timeout = 5;
@@ -14,7 +18,6 @@
     initrd.systemd.network.wait-online.enable = false;
 
     # Loading animation and LUKS password prompt
-    kernelParams = [ "quiet" ];
     initrd.systemd.enable = true;
     plymouth = {
       enable = true;

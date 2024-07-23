@@ -30,8 +30,10 @@
   security.pam = {
     u2f = {
       enable = true;
-      cue = true;
-      authFile = "/etc/u2f-mappings";
+      settings = {
+        cue = true;
+        authFile = "/etc/u2f-mappings";
+      };
     };
     services = {
       login.u2fAuth = true;

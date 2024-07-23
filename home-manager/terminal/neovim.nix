@@ -101,6 +101,7 @@
       unzip
 
       ## LSPs, formatters, linters
+      efm-langserver
       # fp
       nodePackages.purescript-language-server
       haskell-language-server

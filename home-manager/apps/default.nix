@@ -20,6 +20,7 @@
       nomacs # Image viewer
       lutris # Game manager
       winetricks # Required by lutris
+      seabird # Kubernetes client
     ];
 
     xdg.configFile.qimgv-theme = let
