@@ -32,7 +32,7 @@
       enable = true;
       settings = {
         cue = true;
-        authFile = "/etc/u2f-mappings";
+        authfile = "/etc/u2f-mappings";
       };
     };
     services = {
