@@ -1,11 +1,16 @@
-{ ... }:
+{ lib, ... }:
 
 {
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  networking.networkmanager.enable = true; # Automatic networking confiugration
+  # Internet
+  networking.networkmanager.enable = true;
+  # Causes long boots and hangs on update
+  # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+  systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
   # VPNs
   services.tailscale = {
