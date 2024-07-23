@@ -31,6 +31,7 @@
     u2f = {
       enable = true;
       settings = {
+        pinverification = 1;
         cue = true;
         authfile = "/etc/u2f-mappings";
       };
