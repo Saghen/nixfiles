@@ -81,6 +81,8 @@
           "privacy.trackingprotection.socialtracking.enabled" = true;
           "privacy.userContext.enabled" = true;
           "privacy.userContext.ui.enabled" = true;
+          # https://news.ycombinator.com/item?id=40952330
+          "dom.private-attribution.submission.enabled" = false;
 
           "services.sync.prefs.sync-seen.browser.newtabpage.pinned" = true;
           "media.ffmpeg.vaapi.enabled" = true;
