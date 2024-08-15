@@ -41,4 +41,7 @@
     enable = true;
     xdgOpenUsePortal = false; # breaks it
   };
+
+  # required by various gtk apps, such as nautilus for detecting removable drives
+  services.gvfs.enable = true;
 }
