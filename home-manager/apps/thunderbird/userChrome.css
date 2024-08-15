@@ -1,20 +1,20 @@
 body {
   /* General */
-  /* --color-gray-05: #fafafa; */
-  /* --color-gray-10: #f4f4f5; */
-  /* --color-gray-20: #e4e4e7; */
-  /* --color-gray-30: #d4d4d8; */
-  /* --color-gray-40: #a1a1aa; */
-  /* --color-gray-50: #71717a; */
+  --color-gray-05: #fafafa;
+  --color-gray-10: #f4f4f5;
+  --color-gray-20: #e4e4e7;
+  --color-gray-30: #d4d4d8;
+  --color-gray-40: #a1a1aa;
+  --color-gray-50: #71717a;
   --color-gray-60: #45475a;
   --color-gray-70: #313244;
   --color-gray-80: #2c2c3f;
   --color-gray-90: #1e1e2e;
   --layout-background-0: #1e1e2e;
   --layout-background-1: #1e1e2e;
-  /* --layout-background-2: var(--color-gray-70); */
-  /* --layout-background-3: var(--color-gray-60); */
-  /* --layout-background-4: var(--color-gray-50); */
+  --layout-background-2: var(--color-gray-70);
+  --layout-background-3: var(--color-gray-60);
+  --layout-background-4: var(--color-gray-50);
   /* --layout-color-0: var(--color-white); */
   /* --layout-color-1: var(--color-gray-10); */
   /* --layout-color-2: var(--color-gray-30); */
@@ -30,13 +30,18 @@ body {
   --toolbar-field-border-color: #45475a;
 
   /* Sidebar */
+  --sidebar-background: #1e1e2e;
   --sidebar-background-color: #1e1e2e;
   --sidebar-border-color: transparent;
+  --foldertree-background: #1e1e2e;
   --splitter-color: #45475a;
 
   /* Messages list */
   --tree-view-bg: #1e1e2e;
   --toolbar-bgcolor: #1e1e2e;
+  --tree-pane-background: #1e1e2e;
+  --tree-card-background: #2c2c3f !important;
+  --tree-card-background-selected-current-unfocused: #45475a !important;
 }
 
 #messagePane {
@@ -47,6 +52,29 @@ body {
   background-color: var(--color-gray-90) !important;
 }
 
+#unifiedToolbarContainer {
+  display: none;
+}
+
 unified-toolbar {
+  border: none !important;
+}
+
+.searchBox,
+.themeableSearchBox {
+  background-color: var(--color-gray-80) !important;
   border-color: var(--color-gray-60) !important;
+}
+
+#tabs-toolbar {
+  background: var(--color-gray-90) !important;
+}
+
+#folderPaneSplitter {
+  padding: 2px;
+}
+
+#threadPane {
+  padding-left: 4px;
+  background-color: var(--color-gray-90);
 }
