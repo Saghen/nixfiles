@@ -22,7 +22,8 @@ rec {
       colorVariants = [ "dark" ];
       themeVariants = [ "teal" ];
       sizeVariants = [ "standard" ];
-      tweaks = [ "catppuccin" "rimless" ];
+      # "black" = mocha variant
+      tweaks = [ "catppuccin" "black" "rimless" ];
     };
   };
   xdg.configFile = {
@@ -39,6 +40,16 @@ rec {
       "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk.css";
     "gtk-4.0/gtk-dark.css".source =
       "${gtk.theme.package}/share/themes/${gtk.theme.name}/gtk-4.0/gtk-dark.css";
+  };
+
+  # Misc GTK configuration
+  gtk.gtk3.extraConfig = { gtk-application-prefer-dark-theme = true; };
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-theme = "Colloid-Teal-Dark-Catppuccin";
+      color-scheme = "prefer-dark";
+    };
+    "org/gtk/settings/file-chooser" = { sort-directories-first = true; };
   };
 
   # TODO: QT Theme

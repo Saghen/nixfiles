@@ -1,5 +1,6 @@
 { ... }:
 
 {
-  imports = [ ./emulator.nix ./shell.nix ./neovim.nix ./tools.nix ];
+  imports =
+    [ ./emulator.nix ./multiplexer.nix ./shell.nix ./neovim.nix ./tools.nix ];
 }

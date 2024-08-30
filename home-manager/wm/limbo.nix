@@ -21,7 +21,7 @@ in {
         };
         quickSettings = {
           tray = {
-            ignoredApps = [ ".spotify-wrapped" ];
+            ignoredApps = [ "spotify" ];
             appIconMappings = {
               sunshine = {
                 name = "inner-shadow-bottom-left";

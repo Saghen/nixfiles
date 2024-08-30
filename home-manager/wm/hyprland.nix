@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, inputs, ... }:
 
 let
   monitors = config.monitors;
@@ -26,16 +26,12 @@ in {
       main = {
         font = "Iosevka Custom Nerd Font:size=14";
         line-height = "26px";
-        underline-thickness = "1px";
-        underline-offset = "2px";
+        underline-thickness = "2px";
+        underline-offset = "5px";
         pad = "4x4";
-
         initial-window-size-pixels = "1400x840";
       };
-      cursor = {
-        unfocused-style = "hollow";
-        # color = "${convert colors.base} ${convert colors.text}";
-      };
+      cursor = { unfocused-style = "hollow"; };
       colors = {
         background = convert colors.base;
         foreground = convert colors.text;
@@ -83,78 +79,6 @@ in {
     };
   };
 
-  programs.hyprlock = {
-    enable = true;
-    # Workaround for lag https://github.com/hyprwm/hyprlock/issues/128
-    package = pkgs.hyprlock.overrideAttrs (old: {
-      version = "git";
-      src = pkgs.fetchFromGitHub {
-        owner = "hyprwm";
-        repo = "hyprlock";
-        rev = "2bce52f";
-        sha256 = "36qa6MOhCBd39YPC0FgapwGRHZXjstw8BQuKdFzwQ4k=";
-      };
-      patchPhase = ''
-        substituteInPlace src/core/hyprlock.cpp \
-        --replace "5000" "6"
-      '';
-    });
-    settings = {
-      background =
-        [{ path = "~/pictures/wallpapers/cyberpunk/skyline-catppuccin.png"; }];
-
-      general = {
-        disable_loading_bar = true;
-        ignore_empty_input = true;
-      };
-
-      # input
-      input-field = [{
-        size = "250, 40";
-        outline_thickness = 1;
-        dots_size = 0.2; # Scale of input-field height, 0.2 - 0.8
-        dots_spacing = 0.2; # Scale of dots' absolute size, 0.0 - 1.0
-        dots_center = true;
-        rounding = -1;
-        outer_color = "rgba(0, 0, 0, 0)";
-        inner_color = convertHL colors.base;
-        font_color = convertHL colors.text;
-        fail_color = convertHL colors.red;
-        check_color = convertHL colors.yellow;
-        fade_on_empty = false;
-        # font_family = "JetBrains Mono Nerd Font Mono"
-        # placeholder_text = ''
-        #   <i><span foreground="#${colors.subtext-0}">Input Password...</span></i>'';
-        hide_input = false;
-        position = "0, -120";
-        halign = "center";
-        valign = "center";
-      }];
-
-      label = [
-        # time
-        {
-          text = ''cmd[update:1000] echo "$(date +"%-I:%M%p")"'';
-          color = convertHL colors.text;
-          font_size = 120;
-          # font_family = "JetBrains Mono Nerd Font Mono ExtraBold";
-          position = "0, -300";
-          halign = "center";
-          valign = "top";
-        }
-        # user
-        {
-          text = "Hi there, ${config.home.username}";
-          color = convertHL colors.text;
-          font_size = 25;
-          # font_family = "JetBrains Mono Nerd Font Mono";
-          position = "0, -40";
-          halign = "center";
-          valign = "center";
-        }
-      ];
-    };
-  };
   services.hypridle = {
     enable = true;
     settings = {
@@ -232,13 +156,11 @@ in {
 
         "XDG_CURRENT_DESKTOP,hyprland"
         "QT_QPA_PLATFORM,wayland"
-        "MOZ_ENABLE_WAYLAND,1"
+        # TODO: enable after nightly starts working with it
+        "MOZ_ENABLE_WAYLAND,0"
 
         # Nvidia
         "LIBVA_DRIVER_NAME,nvidia"
-        "XDG_SESSION_TYPE,wayland"
-        # "GBM_BACKEND,nvidia-drm"
-        # "__GLX_VENDOR_LIBRARY_NAME,nvidia"
         "NVD_BACKEND,direct"
       ];
 
@@ -267,18 +189,26 @@ in {
         repeat_delay = 240;
       };
       misc = {
+        # focus when applications request it
+        focus_on_activate = true;
+
         disable_hyprland_logo = true;
         background_color = convertHL colors.crust;
         force_default_wallpaper = 0;
 
+        enable_swallow = true;
+        swallow_regex = "footclient";
+
+        # Whether mouse moving into a different monitor should focus it
+        mouse_move_focuses_monitor = false;
+        # WARN: buggy, starts rendering before your monitor displays a frame in order to lower latency
+        render_ahead_of_time = false;
+        render_ahead_safezone = 1;
+
         # TODO: doesn't work on nvidia
         # vrr = 1;
-        no_direct_scanout = false;
       };
-      opengl = {
-        # shouldn't be needed on 555
-        nvidia_anti_flicker = false;
-      };
+      render = { direct_scanout = true; };
       debug = { disable_logs = false; };
 
       ## Animations
@@ -286,22 +216,74 @@ in {
 
       ## Binds
       bind = let
-        hyprshot = "${pkgs.hyprshot}/bin/hyprshot";
+        wayfreeze =
+          "${inputs.wayfreeze.packages.${pkgs.system}.wayfreeze}/bin/wayfreeze";
+        wayshot = "${pkgs.wayshot}/bin/wayshot";
+        slurp = "${pkgs.slurp}/bin/slurp";
+        pkill = "${pkgs.procps}/bin/pkill";
+        wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
+        wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
         satty = "${pkgs.satty}/bin/satty";
+        jq = "${pkgs.jq}/bin/jq";
+
+        screenshotTmpl = args:
+          "${wayfreeze} --hide-cursor --after-freeze-cmd='"
+          + "${wayshot} ${args} --stdout | ${wl-copy}" # take screenshot and copy to clipboard
+          + " && ${wl-paste} > ~/pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png" # save to file
+          + " && cat < ~/pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png" # stdout filename for satty
+          + "; ${pkill} wayfreeze'"; # unfreeze
+
+        screenshotRegion = screenshotTmpl ''-s "$(${slurp})"'';
+
+        # never touch this...
+        # format from docs: https://github.com/emersion/slurp
+        windowSlurp = pkgs.writeShellScriptBin "window-slurp" ''
+          VISIBLE_WORKSPACES=$(hyprctl monitors -j | ${jq} -r 'map(.activeWorkspace.id) | tostring')
+          hyprctl clients -j | ${jq} "map(select([.workspace.id] | inside($VISIBLE_WORKSPACES))) | map(select(.hidden | not))" | ${jq} -r '.[] | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | ${slurp}
+        '';
+        screenshotWindow =
+          screenshotTmpl ''-s "$(${windowSlurp}/bin/window-slurp)"'';
+
+        monitorSlurp = pkgs.writeShellScriptBin "monitor-slurp" ''
+          hyprctl monitors -j | ${jq} -r '.[] | "\(.x),\(.y) \(.width)x\(.height)"' | ${slurp}
+        '';
+        screenshotMonitor =
+          screenshotTmpl ''-s "$(${monitorSlurp}/bin/monitor-slurp)"'';
+
+        subtext = builtins.substring 1 6 colors.subtext-1;
+        launchNeovimZellij = pkgs.writeShellScriptBin "launch-neovim-zellij" ''
+          WINDOW_ADDRESS=$(hyprctl clients -j | jq 'map(select(.class == "zellij-neovim")) | .[0].address' -r)
+          if [ "$WINDOW_ADDRESS" == "null" ]; then
+            footclient \
+              -o colors.foreground=${subtext} \
+              -o pad=0x0 \
+              --window-size-pixels=2560x1440 \
+              --app-id zellij-neovim \
+              --title zellij-neovim \
+              fish -c "zellij --session neovim --layout neovim || zellij attach neovim"
+          else
+            hyprctl dispatch focuswindow zellij-neovim
+          fi
+        '';
+
         swayosdClient = "${pkgs.swayosd}/bin/swayosd-client";
       in [
         # applications
         "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, Return, exec, footclient"
         # NOTE: specifying the window size avoids a flash of smaller window
-        "$mod, c, exec, footclient -o pad=0x0 --window-size-pixels=2560x1440 --app-id nvim --title nvim nvim"
+        # NOTE: specifying the foreground color sets the cursor color when the background/foreground are the same
+        "$mod, c, exec, ${launchNeovimZellij}/bin/launch-neovim-zellij"
+        "$mod + SHIFT, c, exec, footclient -o colors.foreground=${subtext} -o pad=0x0 --window-size-pixels=2560x1440 --app-id neovim --title neovim nvim"
         "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
-        ", Print, exec, ${hyprshot} -m region -o ~/pictures/screenshots/hyprshot"
-        "SHIFT, Print, exec, ${hyprshot} -m region -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
-        "$mod, Print, exec, ${hyprshot} -m window -o ~/pictures/screenshots/hyprshot"
-        "$mod + SHIFT, Print, exec, ${hyprshot} -m window -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
-        "ALT, Print, exec, ${hyprshot} -m output -o ~/pictures/screenshots/hyprshot"
-        "ALT + SHIFT, Print, exec, ${hyprshot} -m output -o ~/pictures/screenshots/hyprshot --raw | ${satty} --filename -"
+
+        # screenshots
+        ", Print, exec, ${screenshotRegion}"
+        "SHIFT, Print, exec, ${screenshotRegion} | ${satty} --early-exit --filename -"
+        "CTRL, Print, exec, ${screenshotWindow}"
+        "CTRL + SHIFT, Print, exec, ${screenshotWindow} | ${satty} --early-exit --filename -"
+        "ALT, Print, exec, ${screenshotMonitor}"
+        "ALT + SHIFT, Print, exec, ${screenshotMonitor} | ${satty} --early-exit --filename -"
 
         # window management
         "$mod, q, focusmonitor, +1"
@@ -309,15 +291,16 @@ in {
         "$mod, r, exec, hyprctl dispatch cyclenext && hyprctl dispatch bringactivetotop"
         "$mod + SHIFT, r, cyclenext, prev"
         "$mod, a, movewindow, mon:+1"
-        "$mod, w, exec, hyprctl activewindow -j | jq '.fullscreen | not' -e && hyprctl dispatch closewindow activewindow"
-        "$mod + ALT, w, killactive"
+        "$mod, w, exec, hyprctl activewindow -j | jq '.fullscreen == 0' -e && hyprctl dispatch closewindow activewindow"
+        "$mod + ALT, w, closewindow, activewindow"
+        "$mod + ALT + SHIFT, w, killactive"
         "$mod, f, togglefloating"
         "$mod + SHIFT, f, fullscreen"
         "$mod, s, swapactiveworkspaces, ${lib.concatStringsSep " " monitors}"
         "$mod, d, centerwindow"
 
         # special
-        ## swayosd
+        ## swayosd TODO: never tested
         ", XF86AudioRaiseVolume, exec, ${swayosdClient} --output-volume raise"
         ", XF86AudioLowerVolume, exec, ${swayosdClient} --output-volume lower"
         ", XF86AudioMute, exec, ${swayosdClient} --output-volume mute-toggle"
@@ -336,8 +319,6 @@ in {
       ] ++ (
         # workspaces
         # binds $mod + [alt +] {1..6} to [move to] workspace {1..6}
-        # TODO: should handle mouse being on a different monitor while switching to an empty workspace
-        # breaking the focus. possible beacuse of the follow_mouse setting
         builtins.concatLists (builtins.genList (x:
           let
             ws = let c = (x + 1) / 10; in builtins.toString (x + 1 - (c * 10));
@@ -367,13 +348,24 @@ in {
         # Firefox
         "tile,class:(firefox-aurora)"
         "float,class:(firefox-aurora),title:(Enter name of file to save to...)"
+        "float,class:(firefox-aurora),title:(File Upload)"
         "size 1200 800,class(firefox-aurora),title:(Enter name of file to save to...)"
+        "size 1200 800,class(firefox-aurora),title:(File Upload)"
+
+        # Fullscreen
+        "fullscreen,class:(steam_app_.+)"
+        "fullscreen,class:(tf_linux64)"
+        "fullscreen,class:(com.github.iwalton3.jellyfin-media-player)"
+        "fullscreen,class:(gamescope)"
 
         # Tiled
         "tile,class:(Spotify),title:(Spotify)" # must be specific, otherwise popups will tile
-        "tile,class:(discord)"
-        "tile,class:(nvim)"
-        "fullscreen,class:(gamescope)"
+        "workspace 7,class:(Spotify),title:(Spotify)"
+        "tile,class:(vesktop)"
+        "workspace 7,class:(vesktop)"
+        "tile,class:(neovim)"
+        "tile,class:(zellij-neovim)"
+        "tile,class:(thunderbird),title:(Mozilla Thunderbird)" # must be specific, otherwise popups will tile
 
         # Sizing
         "size 900 1000,class:(org.gnome.SystemMonitor)"
@@ -394,14 +386,21 @@ in {
         "float,class:(notification)"
         "float,class:(splash)"
         "float,class:(toolbar)"
+
+        # Disable animations
+        "noanim 1,class:(foot(client)?)"
       ];
 
       ## Autostart
       exec-once = [
-        "[workspace 1 silent] firefox-developer-edition"
+        "[workspace 1 silent] firefox-nightly"
         "[workspace 7 silent] spotify"
-        "[workspace 7 silent] vesktop"
+        # TODO: https://github.com/Vencord/Vesktop/issues/342
+        # needed for working drag and drop
+        "[workspace 7 silent] vesktop --ozone-platform=wayland --enable-features=UseOzonePlatform"
         "${pkgs.swayosd}/bin/swayosd-server"
+        # constantly set volume to 1 to counteract something adjusting it
+        "while true; do sleep 1 && ${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ 100%; done &"
       ];
     };
   };

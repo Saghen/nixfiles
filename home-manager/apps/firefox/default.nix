@@ -1,43 +1,18 @@
-{ pkgs, ... }:
+{ pkgs, firefox-nightly, ... }:
 
 {
   home = { sessionVariables = { BROWSER = "firefox-developer-edition"; }; };
 
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-devedition-bin;
+    package = firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin;
 
     profiles = {
-      # Must be named dev-edition-default see:
-      # https://github.com/nix-community/home-manager/issues/4703#issuescomment-2025005453
-      dev-edition-default = {
-        containersForce = true; # replace existing containers (recommended)
-        containers = {
-          personal = {
-            name = "personal";
-            id = 1;
-            icon = "fingerprint";
-            color = "blue";
-          };
-          huggingface = {
-            name = "huggingface";
-            id = 2;
-            icon = "gift";
-            color = "yellow";
-          };
-          liqwid = {
-            name = "liqwid";
-            id = 3;
-            icon = "briefcase";
-            color = "purple";
-          };
-          bank = {
-            name = "bank";
-            id = 4;
-            icon = "dollar";
-            color = "yellow";
-          };
-        };
+      saghen = {
+        isDefault = true;
+
+        userChrome = builtins.readFile ./userChrome.css;
+        userContent = builtins.readFile ./userContent.css;
 
         settings = {
           # required for userChrome.css and userContent.css
@@ -52,6 +27,7 @@
             false;
           "browser.newtabpage.activity-stream.showSponsored" = false;
           "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+          "full-screen-api.warning.timeout" = 0; # Disable fullscreen warning
 
           # always ask for download location
           "browser.download.useDownloadDir" = false;
@@ -67,8 +43,10 @@
           "devtools.toolbox.host" = "right";
 
           "layout.frame_rate" = 144;
+          "gfx.webrender.all" = true;
           "gfx.webrender.compositor" = true;
           "gfx.webrender.compositor.force-enabled" = true;
+          "gfx.vsync.force-disable-waitforvblank" = true;
 
           "privacy.annotate_channels.strict_list.enabled" = true;
           "privacy.donottrackheader.enabled" = true;
@@ -90,9 +68,6 @@
           "network.predictor.enabled" = true;
           "network.prefetch-next" = true;
         };
-
-        userChrome = builtins.readFile ./userChrome.css;
-        userContent = builtins.readFile ./userContent.css;
 
         search = {
           force = true;

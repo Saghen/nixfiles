@@ -123,9 +123,11 @@
           }
 
           /* Activity */
+          /*
           .theme-dark [class^="container"] {
             background-color: var(--bg-primary);
           }
+          */
           /*.theme-dark [class^="container"] {
             background-color: unset;
           }*/
@@ -136,10 +138,12 @@
             background-color: var(--bg-primary);
           }
 
+          /*
           .theme-dark [class^="footer"] {
             background-color: var(--bg-secondary);
             box-shadow: none;
           }
+          */
 
           /* Autocomplete */
 

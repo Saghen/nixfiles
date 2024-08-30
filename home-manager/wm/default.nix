@@ -5,6 +5,7 @@
     ./bspwm.nix
     ./hyprland.nix
     ./limbo.nix
+    ./polkit.nix
     ./sxhkd
     ./services/dunst.nix
     ./services/flameshot.nix
@@ -34,7 +35,7 @@
       };
     };
     systemd.user.timers.set-keyboard-rate = {
-      Unit = { Description = "Backup game saves"; };
+      Unit = { Description = "Set keyboard rate"; };
       Timer = {
         OnCalendar = "*:0/1"; # every minute
         Unit = "set-keyboard-rate.service";

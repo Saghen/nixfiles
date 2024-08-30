@@ -85,6 +85,7 @@
       require('config.lazy')
     '';
 
+    # for blink-tree
     extraWrapperArgs = [
       "--suffix"
       "LD_LIBRARY_PATH"
@@ -92,13 +93,10 @@
       "${lib.makeLibraryPath [ pkgs.libgit2 ]}"
     ];
 
+    extraLuaPackages = rocks: [ rocks.luarocks ];
+
     extraPackages = with pkgs; [
       tree-sitter
-      lua51Packages.luarocks
-
-      # required by fugit2
-      lua5_1
-      unzip
 
       ## LSPs, formatters, linters
       efm-langserver
@@ -113,6 +111,7 @@
       stylua
       # misc
       bash-language-server
+      dockerfile-language-server-nodejs
       # nix
       nil
       nixfmt-classic
@@ -121,17 +120,18 @@
       pyright
       ruff-lsp
       # rust
-      # NOTE: rust-analyzer is managed by rustup via: rustup component add rust-analyzer
+      # NOTE: rust-analyzer is managed by fenix
       graphviz # for crate graph visualization
       # terraform
       terraform-ls
       tflint
       # web
       prettierd
-      vscode-langservers-extracted # eslint, css, html, markdown, json
+      # vscode-langservers-extracted # eslint, css, html, markdown, json
       biome
       nodePackages.svelte-language-server
-      nodePackages.typescript-language-server
+      typescript
+      typescript-language-server
       # todo: vtsls
     ];
   };

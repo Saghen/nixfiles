@@ -8,20 +8,16 @@
 { pkgs, ... }:
 
 {
-  # todo: are the yubikey/yubico ones needed?
   environment.systemPackages = with pkgs; [
     yubikey-personalization
     yubikey-manager
     yubico-pam
   ];
+  # needed for ykman
+  services.pcscd.enable = true;
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   pinentryPackage = pkgs.pinentry-tty;
-  #   settings = { allow-loopback-pinentry = true; };
-  # };
   hardware.gpgSmartcards.enable = true;
 
   security.polkit.enable = true;
@@ -45,4 +41,9 @@
   # https://nixos.wiki/wiki/Yubikey#pam_u2f
   environment.etc."u2f-mappings".text =
     "saghen:DgBwRAkbzjUiiE6WikxyEadH/p1ze4p6w3/Wc0qQd7aI5qvQL9vn5joqOI/Gq1zPKf6P2Af3swf2cgG71WUriw==,DqEsqsA3Fnmc2EVm75neLy7PMLkN4bhgiFEp0OaqpNxqiEMMn7s4bWcrO4a6wsR7dVxK6cLDxNBzEJ+GvyHiVg==,es256,+presence:0mFOuATIQI9mpfkDuwQy1PEsYNFWgLzkDiZRxND4R1jWhq0AbkCtyoQN53oThRlvj/oChjrvrb3lQ6AJYvqDvA==,E2zkjzC0nd19Cix8uOeQ20zN1D9mJduG1c0JA04Dr/+OHw2TekZA4ZeNCjvkUY7Bj6oAy1ioNCIamXypxCQ4Aw==,es256,+presence";
+
+  # allow VIA to read keyboards
+  services.udev.extraRules = ''
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+  '';
 }

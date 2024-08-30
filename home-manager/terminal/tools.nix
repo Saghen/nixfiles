@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -6,7 +6,7 @@
     nh # nix helper
     procps # pkill watch top sysctl etc...
     tldr # cheatsheets
-    thefuck # ...
+    # thefuck # ...
     eza # better ls
     fd # better find
     sd # better sed
@@ -24,6 +24,7 @@
     (pkgs.google-cloud-sdk.withExtraComponents
       (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
     nix-index # provides nix-locate
+    inputs.wayfreeze.packages.${pkgs.system}.wayfreeze
 
     # devops
     terraform # FIXME: stores credentials in plain text
@@ -66,7 +67,7 @@
     state = "${home}/.local/state";
     # todo: find the UID of the user
     runtime = "/run/user/1000";
-  in rec {
+  in {
     CUDA_CACHE_PATH = "${cache}/nv";
     PNPM_HOME = "${data}/pnpm";
     NODE_REPL_HISTORY = "${data}/node_repl_history";
@@ -174,7 +175,7 @@
       userName = "Liam Dyer";
       signing = {
         signByDefault = true;
-        key = "85FB6947C8AA3EDF";
+        key = "A8F94F230A4470B1";
       };
       extraConfig = {
         core = { excludesfile = "~/.gitignore_global"; };

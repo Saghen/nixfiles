@@ -1,17 +1,17 @@
 body {
   /* General */
-  --color-gray-05: #fafafa;
-  --color-gray-10: #f4f4f5;
-  --color-gray-20: #e4e4e7;
-  --color-gray-30: #d4d4d8;
-  --color-gray-40: #a1a1aa;
-  --color-gray-50: #71717a;
+  --color-gray-05: #f0f4ff;
+  --color-gray-10: #f0f4ff;
+  --color-gray-20: #cdd6f4;
+  --color-gray-30: #bac2de;
+  --color-gray-40: #a6adc8;
+  --color-gray-50: #6c7086;
   --color-gray-60: #45475a;
   --color-gray-70: #313244;
   --color-gray-80: #2c2c3f;
   --color-gray-90: #1e1e2e;
-  --layout-background-0: #1e1e2e;
-  --layout-background-1: #1e1e2e;
+  --layout-background-0: var(--color-gray-90);
+  --layout-background-1: var(--color-gray-90);
   --layout-background-2: var(--color-gray-70);
   --layout-background-3: var(--color-gray-60);
   --layout-background-4: var(--color-gray-50);
@@ -24,24 +24,32 @@ body {
   /* --layout-border-2: var(--color-gray-50); */
 
   /* Top and bottom bars */
-  --lwt-accent-color: #1e1e2e;
-  --lwt-tabs-border-color: #45475a;
-  --toolbar-field-background-color: #2c2c3f;
-  --toolbar-field-border-color: #45475a;
+  --lwt-accent-color: var(--color-gray-90);
+  --lwt-tabs-border-color: var(--color-gray-60);
+  --toolbar-field-background-color: var(--color-gray-80);
+  --toolbar-field-border-color: var(--color-gray-60);
 
   /* Sidebar */
-  --sidebar-background: #1e1e2e;
-  --sidebar-background-color: #1e1e2e;
+  --sidebar-background: var(--color-gray-90);
+  --sidebar-background-color: var(--color-gray-90);
   --sidebar-border-color: transparent;
-  --foldertree-background: #1e1e2e;
-  --splitter-color: #45475a;
+  --foldertree-background: var(--color-gray-90);
+  --splitter-color: var(--color-gray-60);
 
   /* Messages list */
-  --tree-view-bg: #1e1e2e;
-  --toolbar-bgcolor: #1e1e2e;
-  --tree-pane-background: #1e1e2e;
-  --tree-card-background: #2c2c3f !important;
-  --tree-card-background-selected-current-unfocused: #45475a !important;
+  --tree-view-bg: var(--color-gray-90);
+  --toolbar-bgcolor: var(--color-gray-90);
+  --tree-pane-background: var(--color-gray-90);
+  --tree-card-background: var(--color-gray-80) !important;
+  --tree-card-background-selected-current-unfocused: var(
+    --color-gray-60
+  ) !important;
+
+  /* Lists */
+  --list-container-background-selected-current: var(--color-gray-70);
+  --list-container-border-selected-current: var(--color-gray-60);
+  --list-container-background-selected: var(--color-gray-70);
+  --list-container-border-selected: var(--color-gray-60);
 }
 
 #messagePane {
@@ -53,7 +61,7 @@ body {
 }
 
 #unifiedToolbarContainer {
-  display: none;
+  display: none !important;
 }
 
 unified-toolbar {

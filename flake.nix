@@ -16,11 +16,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    spicetify-nix.url = "github:the-argus/spicetify-nix";
+    firefox-nightly = {
+      url = "github:nix-community/flake-firefox-nightly";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     limbo = {
       url = "github:saghen/limbo";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wayfreeze.url = "github:jappie3/wayfreeze";
 
     # rust toolchain
     fenix = {
@@ -47,9 +52,11 @@
               useUserPackages = true;
               useGlobalPkgs = true;
               extraSpecialArgs = {
+                inputs = inputs;
                 inherit (inputs) spicetify-nix;
                 inherit (inputs) fenix;
                 inherit (inputs) limbo;
+                inherit (inputs) firefox-nightly;
               };
               sharedModules = [ sops-nix.homeManagerModules.sops ];
               users.saghen = import ./home-manager/home.nix;

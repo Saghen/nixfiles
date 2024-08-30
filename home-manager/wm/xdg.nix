@@ -28,7 +28,7 @@
     };
 
     mimeApps = let
-      firefox = "firefox-developer-edition.desktop";
+      firefox = "firefox-nightly.desktop";
       feh = "feh.desktop";
       nomacs = "nomacs.desktop";
       qimgv = "qimgv.desktop";

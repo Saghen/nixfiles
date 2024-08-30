@@ -71,13 +71,15 @@
       thunderbird.enable = true;
       address = "liam@super.fish";
       imap.host = "imap.purelymail.com";
+      imap.port = 993;
       realName = "Liam Dyer";
     };
     superlodon-super = {
       thunderbird.enable = true;
       address = "superlodon@super.fish";
       imap.host = "imap.purelymail.com";
-      realName = "Liam Dyer";
+      imap.port = 993;
+      realName = "Superlodon";
     };
   };
 }

@@ -21,6 +21,10 @@
     auto-optimise-store = true;
     # Some old nix commands don't use XDG dirs, this forces it
     use-xdg-base-directories = true;
+    # Cardano IOG cache
+    trusted-substituters = [ "https://cache.iog.io" ];
+    trusted-public-keys =
+      [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
   };
 
   nixpkgs = {
@@ -35,6 +39,13 @@
       extraGroups = [ "wheel" "docker" "networkmanager" ];
     };
   };
+
+  # Trim SSD (https://kokada.capivaras.dev/blog/an-unordered-list-of-hidden-gems-inside-nixos/)
+  services.fstrim.enable = true;
+  boot.initrd.luks.devices."luks-1f9e8a13-0706-49fa-b0d3-ef7cdfd17c16".allowDiscards =
+    true;
+  boot.initrd.luks.devices."luks-b003795a-f145-4b70-8bdb-79817697732b".allowDiscards =
+    true;
 
   # Fish
   users.defaultUserShell = pkgs.fish;

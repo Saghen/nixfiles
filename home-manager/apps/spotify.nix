@@ -1,14 +1,11 @@
-# https://github.com/the-argus/spicetify-nix
+# https://github.com/Gerg-L/spicetify-nix
 { pkgs, spicetify-nix, ... }:
-let spicePkgs = spicetify-nix.packages.${pkgs.system}.default;
+let spicePkgs = spicetify-nix.legacyPackages.${pkgs.system};
 in {
-  imports = [ spicetify-nix.homeManagerModule ];
+  imports = [ spicetify-nix.homeManagerModules.default ];
 
   programs.spicetify = {
     enable = true;
-    # gives a warning on first setup, but it seems to be fine and avoids
-    # an issue with windowManagerPatch = true where the desktop entry doesn't exist
-    # https://github.com/the-argus/spicetify-nix/issues/10
     theme = spicePkgs.themes.catppuccin;
     colorScheme = "mocha";
 

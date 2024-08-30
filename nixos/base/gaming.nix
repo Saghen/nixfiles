@@ -5,9 +5,10 @@
   # adds support for nvfbc hardware capture and higher nvenc limits
   nixpkgs.config.nvidia.acceptLicense = true;
   nixpkgs.overlays = [ inputs.nvidia-patch.overlays.default ];
-  hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc
-    (pkgs.nvidia-patch.patch-fbc
-      config.boot.kernelPackages.nvidiaPackages.beta);
+  # hardware.nvidia.package = pkgs.nvidia-patch.patch-nvenc
+  #   (pkgs.nvidia-patch.patch-fbc
+  #     config.boot.kernelPackages.nvidiaPackages.beta);
+  # hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
   hardware.nvidia.modesetting.enable = true;
 
   # controller support
