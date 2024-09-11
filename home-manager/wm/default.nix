@@ -2,15 +2,10 @@
 
 {
   imports = [
-    ./bspwm.nix
     ./hyprland.nix
     ./limbo.nix
-    ./polkit.nix
-    ./sxhkd
+    ./misc.nix
     ./services/dunst.nix
-    ./services/flameshot.nix
-    ./services/rofi
-    ./polybar
     ./theme.nix
     ./xdg.nix
   ];
