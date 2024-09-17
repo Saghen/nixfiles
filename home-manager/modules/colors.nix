@@ -19,7 +19,7 @@ in {
   options.monitors = lib.mkOption {
     type = lib.types.listOf lib.types.str;
     description = "List of monitor names";
-    default = [ "DP-1" "DP-2" ];
+    default = [ "DP-1" "DP-3" ];
   };
   # slightly modified catppuccin theme
   options.colors = builtins.mapAttrs mkColourOption rec {

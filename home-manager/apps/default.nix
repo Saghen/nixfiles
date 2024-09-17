@@ -21,6 +21,7 @@
       lutris # Game manager
       winetricks # Required by lutris
       seabird # Kubernetes client
+      obs-studio # Record
     ];
 
     xdg.configFile.qimgv-theme = let

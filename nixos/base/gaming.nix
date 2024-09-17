@@ -10,6 +10,7 @@
   #     config.boot.kernelPackages.nvidiaPackages.beta);
   # hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
   hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.open = true; # use open source driver
 
   # controller support
   hardware.xone.enable = true;

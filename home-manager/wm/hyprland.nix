@@ -7,6 +7,8 @@ let
 in {
   home.packages = with pkgs; [ wl-clipboard hyprshot hyprpicker ];
 
+  services.network-manager-applet.enable = true;
+
   programs.foot = {
     enable = true;
     package = pkgs.foot.overrideAttrs (old: {
@@ -399,7 +401,7 @@ in {
         "[workspace 7 silent] spotify"
         # TODO: https://github.com/Vencord/Vesktop/issues/342
         # needed for working drag and drop
-        "[workspace 7 silent] vesktop --ozone-platform=wayland --enable-features=UseOzonePlatform"
+        "[workspace 7 silent] vesktop"
         "${pkgs.swayosd}/bin/swayosd-server"
         # constantly set volume to 1 to counteract something adjusting it
         "while true; do sleep 1 && ${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ 100%; done &"
