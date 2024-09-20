@@ -184,6 +184,7 @@
           "ssh://git@hf.co" = { insteadOf = "https://huggingface.co"; };
         };
         init = { defaultBranch = "main"; };
+        pull = { rebase = true; };
       };
     };
 
