@@ -7,6 +7,7 @@ in {
     settings = {
       pane_frames = false;
       default_mode = "locked";
+      session_serialization = true;
 
       theme = "personal";
       themes = {
