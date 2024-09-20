@@ -304,7 +304,7 @@ in {
         "$mod, d, centerwindow"
 
         # special
-        ## swayosd TODO: never tested
+        ## swayosd  TODO: never tested
         ", XF86AudioRaiseVolume, exec, ${swayosdClient} --output-volume raise"
         ", XF86AudioLowerVolume, exec, ${swayosdClient} --output-volume lower"
         ", XF86AudioMute, exec, ${swayosdClient} --output-volume mute-toggle"
@@ -312,9 +312,9 @@ in {
         ", XF86MonBrightnessUp, exec, ${swayosdClient} --brightness raise"
         ", XF86MonBrightnessDown, exec, ${swayosdClient} --brightness lower"
         ## media
-        ", XF86AudioPlay, exec, playerctl --player=spotify play-pause"
-        ", XF86AudioNext, exec, playerctl --player=spotify next"
-        ", XF86AudioPrev, exec, playerctl --player=spotify previous"
+        ", XF86AudioPlay, exec, playerctl --player=spotify,tauon play-pause"
+        ", XF86AudioNext, exec, playerctl --player=spotify,tauon next"
+        ", XF86AudioPrev, exec, playerctl --player=spotify,tauon previous"
         "CTRL, XF86AudioPlay, exec, playerctl --player=firefox play-pause"
         "CTRL, XF86AudioNext, exec, playerctl --player=firefox next"
         "CTRL, XF86AudioPrev, exec, playerctl --player=firefox previous"
