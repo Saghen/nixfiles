@@ -25,6 +25,7 @@
       (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
     nix-index # provides nix-locate
     inputs.wayfreeze.packages.${pkgs.system}.wayfreeze
+    streamrip # qobuz/deezer downloader
 
     # devops
     terraform # FIXME: stores credentials in plain text
