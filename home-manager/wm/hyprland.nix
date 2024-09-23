@@ -11,15 +11,6 @@ in {
 
   programs.foot = {
     enable = true;
-    package = pkgs.foot.overrideAttrs (old: {
-      src = pkgs.fetchFromGitea {
-        domain = "codeberg.org";
-        owner = "dnkl";
-        repo = "foot";
-        rev = "45c7cd3f7472b11d50622b10867a329b4d8e2451";
-        hash = "sha256-yQA5A3IfpzaYdX+VrbgBDAp+wMPgV3sgcfAmLLpHqZQ=";
-      };
-    });
     server.enable = true; # better startup time, must use footclient
     settings = let
       colors = config.colors;
