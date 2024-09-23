@@ -5,9 +5,7 @@ let
   colors = config.colors;
   convertHL = c: "0xff" + builtins.substring 1 6 c;
 in {
-  home.packages = with pkgs; [ wl-clipboard hyprshot hyprpicker ];
-
-  services.network-manager-applet.enable = true;
+  home.packages = with pkgs; [ wl-clipboard ];
 
   programs.foot = {
     enable = true;
