@@ -22,7 +22,7 @@
       winetricks # Required by lutris
       seabird # Kubernetes client
       obs-studio # Record
-      tauon # Music player
+      (tauon.override { withDiscordRPC = true; }) # Music player
     ];
 
     xdg.configFile.qimgv-theme = let
