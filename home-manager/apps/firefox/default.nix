@@ -44,8 +44,6 @@
 
           "layout.frame_rate" = 144;
           "gfx.webrender.all" = true;
-          "gfx.webrender.compositor" = true;
-          "gfx.webrender.compositor.force-enabled" = true;
           "gfx.vsync.force-disable-waitforvblank" = true;
 
           "privacy.annotate_channels.strict_list.enabled" = true;

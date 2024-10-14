@@ -16,7 +16,7 @@ in {
     in {
       main = {
         font = "Iosevka Custom Nerd Font:size=14";
-        line-height = "26px";
+        line-height = "29px";
         underline-thickness = "2px";
         underline-offset = "5px";
         pad = "4x4";
@@ -144,11 +144,8 @@ in {
       env = [
         "XDG_BACKEND,wayland"
         "XDG_SESSION_TYPE,wayland"
-
         "XDG_CURRENT_DESKTOP,hyprland"
         "QT_QPA_PLATFORM,wayland"
-        # TODO: enable after nightly starts working with it
-        "MOZ_ENABLE_WAYLAND,0"
 
         # Nvidia
         "LIBVA_DRIVER_NAME,nvidia"
@@ -196,7 +193,7 @@ in {
         mouse_move_focuses_monitor = false;
         # WARN: buggy, starts rendering before your monitor displays a frame in order to lower latency
         render_ahead_of_time = false;
-        render_ahead_safezone = 1;
+        render_ahead_safezone = 2;
 
         # TODO: doesn't work on nvidia
         # vrr = 1;
@@ -339,17 +336,20 @@ in {
         "float,title:(.*)"
 
         # Firefox
-        "tile,class:(firefox-aurora)"
-        "float,class:(firefox-aurora),title:(Enter name of file to save to...)"
-        "float,class:(firefox-aurora),title:(File Upload)"
-        "size 1200 800,class(firefox-aurora),title:(Enter name of file to save to...)"
-        "size 1200 800,class(firefox-aurora),title:(File Upload)"
+        "tile,class:(firefox-nightly)"
+        "float,class:(firefox-nightly),title:(Enter name of file to save to...)"
+        "float,class:(firefox-nightly),title:(File Upload)"
+        "size 1200 800,class(firefox-nightly),title:(Enter name of file to save to...)"
+        "size 1200 800,class(firefox-nightly),title:(File Upload)"
 
         # Fullscreen
         "fullscreen,class:(steam_app_.+)"
+        "monitor ${builtins.elemAt monitors 0},class:(steam_app_.+)"
         "fullscreen,class:(tf_linux64)"
-        "fullscreen,class:(com.github.iwalton3.jellyfin-media-player)"
+        "monitor ${builtins.elemAt monitors 0},class:(tf_linux64)"
         "fullscreen,class:(gamescope)"
+        "monitor ${builtins.elemAt monitors 0},class:(gamescope)"
+        "fullscreen,class:(com.github.iwalton3.jellyfin-media-player)"
 
         # Tiled
         "tile,class:(Spotify),title:(Spotify)" # must be specific, otherwise popups will tile
@@ -364,6 +364,7 @@ in {
         "size 900 1000,class:(org.gnome.SystemMonitor)"
         "size 1200 800,class:(org.gnome.Nautilus)"
         "size 1800 1200,class:(steam),title:^(Steam)$"
+        "minsize 640 480,class:(qimgv)"
 
         # Floating
         "float,class:(utility)"

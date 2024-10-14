@@ -197,5 +197,28 @@
 
     # z for jumping between directories
     zoxide.enable = true;
+
+    # get dat metadata for music
+    beets = {
+      enable = true;
+      settings = {
+        plugins = [
+          "lyrics"
+          "replaygain"
+          "scrub"
+          "lastgenre"
+          "fetchart"
+          "duplicates"
+          "chroma"
+        ];
+        replaygain.backend = "gstreamer";
+        duplicates = {
+          checksum = "fpcalc -plain {file}";
+          # prefer files in full albums vs singles, but sometimes this doesn't work
+          # and you need to reconcile manually
+          tiebreak.items = [ "tracktotal" ];
+        };
+      };
+    };
   };
 }

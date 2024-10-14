@@ -127,11 +127,15 @@
       tflint
       # web
       prettierd
-      # vscode-langservers-extracted # eslint, css, html, markdown, json
+      vscode-langservers-extracted # eslint, css, html, markdown, json
       biome
       nodePackages.svelte-language-server
       typescript
       typescript-language-server
+      # for deving blink.cmp
+      gleam
+      llvmPackages_19.clang-tools
+      clojure-lsp
       # todo: vtsls
     ];
   };
