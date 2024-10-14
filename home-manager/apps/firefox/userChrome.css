@@ -415,6 +415,10 @@
   pointer-events: none;
 }
 
+#nav-bar-customization-target {
+  flex-direction: row-reverse;
+}
+
 #nav-bar:not([urlbar-exceeds-toolbar-bounds]) #urlbar-container {
   pointer-events: none;
   opacity: 0;
