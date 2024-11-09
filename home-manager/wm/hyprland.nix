@@ -174,8 +174,9 @@ in {
         follow_mouse = 2;
         float_switch_override_focus = 0;
 
-        kb_options = "caps:super";
+        touchpad = { natural_scroll = true; };
 
+        kb_options = "caps:super";
         repeat_rate = 40;
         repeat_delay = 240;
       };

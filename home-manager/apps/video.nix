@@ -1,14 +1,17 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ vlc ];
+  home.packages = with pkgs; [ mpv vlc jellyfin-mpv-shim ];
 
-  programs.mpv = {
-    enable = true;
-    config = {
-      profile = "gpu-hq";
-      cache = "yes";
-      demuxer-max-bytes = "5000000KiB"; # 5GB
-    };
+  xdg.configFile.mpv = {
+    target = "jellyfin-mpv-shim/mpv.conf";
+    text = ''
+      profile=high-quality
+      vo=gpu-next
+      cache=yes
+      cache-secs=3600
+      cache-on-disk=yes
+      demuxer-max-bytes=5000000KiB
+    '';
   };
 }

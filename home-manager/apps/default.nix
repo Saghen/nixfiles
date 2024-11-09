@@ -23,6 +23,7 @@
       seabird # Kubernetes client
       obs-studio # Record
       (tauon.override { withDiscordRPC = true; }) # Music player
+      jellyfin-media-player # Media player
     ];
 
     xdg.configFile.qimgv-theme = let

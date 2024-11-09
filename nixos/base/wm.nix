@@ -1,9 +1,13 @@
 { pkgs, ... }:
 
 {
+  services.libinput.touchpad.naturalScrolling = true;
   services.xserver = {
     # enable = true;
     xkb.layout = "us";
+    xkb.options = "caps:super";
+
+    videoDrivers = [ "nvidia" ];
 
     autoRepeatDelay = 240;
     autoRepeatInterval = 40;
@@ -28,7 +32,7 @@
         qtgraphicaleffects = pkgs.libsForQt5.qt5.qtgraphicaleffects;
         themeConfig = {
           General = {
-            background = toString ./wallpaper.jpg;
+            background = toString ./wallpaper.png;
             backgroundMode = "fill";
             passwordFontSize = "24";
             usersFontSize = "16";
