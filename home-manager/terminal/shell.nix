@@ -1,6 +1,11 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
+  sops.secrets.env = {
+    sopsFile = ../../keys/sops/env.yaml;
+    path = "${config.xdg.configHome}/fish/custom-env";
+  };
+
   programs = {
     # Fish enables this by default for autocomplete but it adds +4s to build
     man.generateCaches = false;
@@ -43,6 +48,10 @@
 
         nrs = "nh os switch";
       };
+      # Load secret env vars
+      shellInit = ''
+        source "${config.sops.secrets.env.path}"
+      '';
       interactiveShellInit = ''
         # Use backward-kill-bigword to act like W in vim
         bind \b backward-kill-word
@@ -51,6 +60,9 @@
         # for krew
         # TODO: should be a better way?
         set -gx PATH $PATH $KREW_ROOT/bin
+
+        # use fish for nix shells
+        ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
       '';
       plugins = with pkgs;
         with fishPlugins; [

@@ -22,9 +22,13 @@
     # Some old nix commands don't use XDG dirs, this forces it
     use-xdg-base-directories = true;
     # Cardano IOG cache
-    trusted-substituters = [ "https://cache.iog.io" ];
-    trusted-public-keys =
-      [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
+    trusted-substituters =
+      [ "https://cache.iog.io" "https://devenv.cachix.org" ];
+    trusted-public-keys = [
+      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+    ];
+    trusted-users = [ "root" "saghen" ];
   };
 
   nixpkgs = {

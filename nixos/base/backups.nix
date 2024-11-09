@@ -39,18 +39,18 @@ rec {
   # BTRFS snapshots to local storage
   system.activationScripts.mkBtrbkHome = "mkdir -p /snapshots/home";
   services.btrbk.instances = {
-    home = {
-      onCalendar = "daily";
-
-      settings = {
-        snapshot_preserve = "14d";
-        snapshot_preserve_min = "2d";
-        volume."/" = {
-          subvolume = "home";
-          snapshot_dir = "/snapshots/home";
-        };
-      };
-    };
+    # home = {
+    #   onCalendar = "daily";
+    #
+    #   settings = {
+    #     snapshot_preserve = "14d";
+    #     snapshot_preserve_min = "2d";
+    #     volume."/" = {
+    #       subvolume = "home";
+    #       snapshot_dir = "/snapshots/home";
+    #     };
+    #   };
+    # };
   };
 
   # Backup home directory to remote
@@ -67,12 +67,16 @@ rec {
       timerConfig = { OnCalendar = "daily"; };
       repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
       passwordFile = config.sops.secrets."restic/super-fish/password".path;
+      initialize = true;
       user = "root";
       paths = [ "/home/saghen" ];
       exclude = [
         "/home/*/.cache"
         "/home/*/.local"
         "/home/*/downloads"
+
+        "/home/*/beets"
+        "/home/*/Music"
 
         "/home/*/games/lutris"
         "/home/*/games/steam"
@@ -84,6 +88,7 @@ rec {
         "/home/*/code/**/target"
         "/home/*/code/huggingface/tokenizers"
         "/home/*/code/tmp"
+        "/home/*/code/superfishial/readarr-dump"
       ];
     };
   };

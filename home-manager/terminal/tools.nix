@@ -155,6 +155,12 @@
           identityFile = "~/.ssh/id_github";
           identitiesOnly = true;
         };
+        factorio = {
+          hostname = "178.156.133.223";
+          user = "root";
+          identityFile = "/etc/ssh/ssh_host_ed25519_key";
+          identitiesOnly = true;
+        };
       };
     };
 

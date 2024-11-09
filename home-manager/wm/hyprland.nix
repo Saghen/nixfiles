@@ -156,6 +156,7 @@ in {
       general = {
         gaps_out = 8;
         gaps_in = 8;
+        allow_tearing = true;
 
         "col.inactive_border" = convertHL colors.base;
         "col.active_border" = convertHL colors.primary;
@@ -195,11 +196,11 @@ in {
         render_ahead_of_time = false;
         render_ahead_safezone = 2;
 
-        # TODO: doesn't work on nvidia
-        # vrr = 1;
+        # TODO: doesn't work on nvidia with multiple monitors
+        vrr = 1;
       };
       render = { direct_scanout = true; };
-      debug = { disable_logs = false; };
+      # debug = { disable_logs = false; };
 
       ## Animations
       animation = [ "global,1,1,default," ];
@@ -365,6 +366,9 @@ in {
         "size 1200 800,class:(org.gnome.Nautilus)"
         "size 1800 1200,class:(steam),title:^(Steam)$"
         "minsize 640 480,class:(qimgv)"
+
+        # Tearing
+        "immediate,class:(.*)"
 
         # Floating
         "float,class:(utility)"

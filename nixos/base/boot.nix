@@ -1,10 +1,12 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   boot = {
     # 1000hz keyboard polling rate
     # who knows if that actually does anything
     kernelParams = [ "quiet" "usbhid.kbpoll=1" ];
+    # use latest kernel
+    kernelPackages = pkgs.linuxPackages_latest;
 
     loader = {
       efi.canTouchEfiVariables = true;
@@ -29,7 +31,7 @@
     };
 
     # zfs 
-    supportedFilesystems = [ "zfs" ]; # does this need to be on boot though?
+    # supportedFilesystems = [ "zfs" ]; # does this need to be on boot though?
     # zfs.extraPools = [ "storage" ];
   };
   # (part of zfs) enable again if devices aren't detected

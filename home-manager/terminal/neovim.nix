@@ -4,12 +4,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home = {
-    sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    };
-  };
+  home.sessionVariables.VISUAL = "nvim";
 
   programs.neovim = {
     enable = true;
@@ -109,6 +104,8 @@
       # lua
       lua-language-server
       stylua
+      # go
+      gopls
       # misc
       bash-language-server
       dockerfile-language-server-nodejs
@@ -136,6 +133,9 @@
       gleam
       llvmPackages_19.clang-tools
       clojure-lsp
+      dart
+      roslyn-ls
+      ols
       # todo: vtsls
     ];
   };

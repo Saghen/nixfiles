@@ -9,6 +9,8 @@ in {
       default_mode = "locked";
       session_serialization = false;
 
+      keybinds = { _props = { clear-defaults = true; }; };
+
       theme = "personal";
       themes = {
         personal = {
