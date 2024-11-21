@@ -88,10 +88,12 @@
       "${lib.makeLibraryPath [ pkgs.libgit2 ]}"
     ];
 
-    extraLuaPackages = rocks: [ rocks.luarocks ];
-
     extraPackages = with pkgs; [
       tree-sitter
+
+      # Luarocks
+      lua51Packages.luarocks
+      lua51Packages.lua
 
       ## LSPs, formatters, linters
       efm-langserver
@@ -114,8 +116,7 @@
       nixfmt-classic
       # python
       black
-      pyright
-      ruff-lsp
+      basedpyright
       # rust
       # NOTE: rust-analyzer is managed by fenix
       graphviz # for crate graph visualization
@@ -136,7 +137,7 @@
       dart
       roslyn-ls
       ols
-      # todo: vtsls
+      vtsls
     ];
   };
 }
