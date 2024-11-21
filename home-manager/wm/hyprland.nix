@@ -138,7 +138,8 @@ in {
         let
           ws = toString (x + 1);
           monitor = builtins.elemAt monitors (x / 6);
-        in "${ws}, monitor:${monitor}") (builtins.length monitors * 6);
+        in "${ws}, monitor:${monitor}") (builtins.length monitors * 6)
+        ++ [ "w[tv1], gapsout:0, gapsin:0" "f[1], gapsout:0, gapsin:0" ];
 
       # TODO: doesnt apply to foot because it runs as a server
       env = [
@@ -161,7 +162,6 @@ in {
         "col.inactive_border" = convertHL colors.base;
         "col.active_border" = convertHL colors.primary;
       };
-      dwindle = { no_gaps_when_only = 1; };
       decoration = { blur = { enabled = false; }; };
       cursor = {
         no_hardware_cursors = true;
@@ -333,6 +333,10 @@ in {
 
       ## Rules
       windowrulev2 = [
+        # Hide border on single window in workspace
+        "bordersize 0, floating:0, onworkspace:w[tv1]"
+        "bordersize 0, floating:0, onworkspace:f[1]"
+
         # Default all floating
         "float,class:(.*)"
         "float,title:(.*)"
