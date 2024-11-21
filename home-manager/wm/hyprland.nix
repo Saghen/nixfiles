@@ -252,7 +252,7 @@ in {
               --window-size-pixels=2560x1440 \
               --app-id zellij-neovim \
               --title zellij-neovim \
-              fish -c "zellij --session neovim --layout neovim || zellij attach neovim"
+              fish -c "zellij --session neovim --new-session-with-layout neovim || zellij attach neovim"
           else
             hyprctl dispatch focuswindow zellij-neovim
           fi
