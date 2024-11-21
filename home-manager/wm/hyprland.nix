@@ -139,6 +139,7 @@ in {
           ws = toString (x + 1);
           monitor = builtins.elemAt monitors (x / 6);
         in "${ws}, monitor:${monitor}") (builtins.length monitors * 6)
+        # Hide gaps on single window in workspace
         ++ [ "w[tv1], gapsout:0, gapsin:0" "f[1], gapsout:0, gapsin:0" ];
 
       # TODO: doesnt apply to foot because it runs as a server
