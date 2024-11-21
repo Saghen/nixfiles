@@ -6,6 +6,9 @@
     path = "${config.xdg.configHome}/fish/custom-env";
   };
 
+  # for krew
+  home.sessionPath = [ "${config.home.sessionVariables.KREW_ROOT}/bin" ];
+
   programs = {
     # Fish enables this by default for autocomplete but it adds +4s to build
     man.generateCaches = false;
@@ -56,10 +59,6 @@
         # Use backward-kill-bigword to act like W in vim
         bind \b backward-kill-word
         bind \t complete-and-search
-
-        # for krew
-        # TODO: should be a better way?
-        set -gx PATH $PATH $KREW_ROOT/bin
 
         # use fish for nix shells
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
