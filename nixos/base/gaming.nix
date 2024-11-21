@@ -7,9 +7,9 @@
   nixpkgs.overlays = [ inputs.nvidia-patch.overlays.default ];
   hardware.graphics.enable = true;
   hardware.nvidia = {
-    open = false;
-    package = pkgs.nvidia-patch.patch-nvenc (pkgs.nvidia-patch.patch-fbc
-      config.boot.kernelPackages.nvidiaPackages.beta);
+    open = true;
+    # package = pkgs.nvidia-patch.patch-nvenc (pkgs.nvidia-patch.patch-fbc
+    #   config.boot.kernelPackages.nvidiaPackages.beta);
 
     # required
     modesetting.enable = true;
