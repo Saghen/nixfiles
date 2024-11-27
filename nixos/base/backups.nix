@@ -14,7 +14,7 @@ rec {
     description = "Backup game saves";
     wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "daily";
+      OnCalendar = "*-*-* 3:00:00"; # every day at 3am
       # Timer will run immediately if system was off when it would typically run
       Persistent = true;
     };
@@ -64,7 +64,7 @@ rec {
     sops.secrets."restic/super-fish/repository";
   services.restic.backups = {
     home = {
-      timerConfig = { OnCalendar = "daily"; };
+      timerConfig = { OnCalendar = "*-*-* 4:00:00"; }; # every day at 4am
       repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
       passwordFile = config.sops.secrets."restic/super-fish/password".path;
       initialize = true;
