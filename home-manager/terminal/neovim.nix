@@ -129,15 +129,15 @@
       biome
       nodePackages.svelte-language-server
       typescript
-      typescript-language-server
-      # for deving blink.cmp
-      gleam
-      llvmPackages_19.clang-tools
-      clojure-lsp
-      dart
-      roslyn-ls
-      ols
       vtsls
+
+      # for deving blink.cmp
+      # gleam
+      # llvmPackages_19.clang-tools
+      # clojure-lsp
+      # dart
+      # roslyn-ls
+      # ols
     ];
   };
 }
