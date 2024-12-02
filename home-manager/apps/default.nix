@@ -26,6 +26,9 @@
       jellyfin-media-player # Media player
     ];
 
+    # google drive lite
+    services.syncthing.enable = true;
+
     xdg.configFile.qimgv-theme = let
       toINI = pkgs.lib.generators.toINI { };
       colors = config.colors;
