@@ -111,6 +111,7 @@
       # misc
       bash-language-server
       dockerfile-language-server-nodejs
+      ts_query_ls
       # nix
       nil
       nixfmt-classic
@@ -141,4 +142,3 @@
     ];
   };
 }
-
