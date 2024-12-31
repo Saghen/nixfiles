@@ -198,6 +198,8 @@ in {
         render_ahead_of_time = false;
         render_ahead_safezone = 2;
 
+        disable_xdg_env_checks = true;
+
         # TODO: doesn't work on nvidia with multiple monitors
         vrr = 1;
       };
