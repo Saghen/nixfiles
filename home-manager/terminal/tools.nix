@@ -206,7 +206,7 @@
 
     # get dat metadata for music
     beets = {
-      enable = true;
+      enable = false;
       settings = {
         plugins = [
           "lyrics"
