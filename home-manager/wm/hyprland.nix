@@ -353,11 +353,11 @@ in {
 
         # Fullscreen
         "fullscreen,class:(steam_app_.+)"
-        "monitor ${builtins.elemAt monitors 0},class:(steam_app_.+)"
+        "workspace 3,class:(steam_app_.+)"
         "fullscreen,class:(tf_linux64)"
-        "monitor ${builtins.elemAt monitors 0},class:(tf_linux64)"
+        "workspace 3,class:(tf_linux64)"
         "fullscreen,class:(gamescope)"
-        "monitor ${builtins.elemAt monitors 0},class:(gamescope)"
+        "workspace 3,class:(gamescope)"
         "fullscreen,class:(com.github.iwalton3.jellyfin-media-player)"
 
         # Tiled
