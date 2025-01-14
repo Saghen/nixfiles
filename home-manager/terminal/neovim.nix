@@ -143,13 +143,14 @@
   };
 
   # Persistent rust analyzer
-  systemd.user.services.ra-multiplex = {
-    Unit = { Description = "Persistent rust analyzer"; };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.ra-multiplex}/bin/ra-multiplex server";
-      Restart = "on-failure";
-      RestartSec = 1;
-    };
-  };
+  # systemd.user.services.ra-multiplex = {
+  #   Unit = { Description = "Persistent rust analyzer"; };
+  #   Service = {
+  #     Type = "simple";
+  #     ExecStart = "${pkgs.ra-multiplex}/bin/ra-multiplex server";
+  #     Restart = "on-failure";
+  #     RestartSec = 1;
+  #   };
+  # };
+  # TODO: uses its own rust analyzer which causes a full rebuild constantly
 }
