@@ -55,6 +55,7 @@
       "rustc"
       "rustfmt"
     ])
+    cargo-wizard # subcommand for configuring projects for best performance
     rust-analyzer-nightly
     pkg-config
   ];
