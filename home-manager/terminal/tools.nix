@@ -1,6 +1,9 @@
 { pkgs, config, inputs, ... }:
 
 {
+  # rust packages
+  home.sessionPath = [ "$HOME/.config/cargo/bin" ];
+
   home.packages = with pkgs; [
     # tools
     nh # nix helper
@@ -26,6 +29,8 @@
     nix-index # provides nix-locate
     inputs.wayfreeze.packages.${pkgs.system}.wayfreeze
     streamrip # qobuz/deezer downloader
+
+    claude-code # AI coding
 
     # devops
     terraform # FIXME: stores credentials in plain text

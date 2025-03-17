@@ -6,7 +6,7 @@
     # who knows if that actually does anything
     kernelParams = [ "quiet" "usbhid.kbpoll=1" ];
     # use latest kernel
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_11;
+    kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
 
     loader = {
       efi.canTouchEfiVariables = true;

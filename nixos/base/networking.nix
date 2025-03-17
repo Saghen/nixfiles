@@ -20,5 +20,5 @@
     enable = true;
     openFirewall = true;
   };
-  services.mullvad-vpn.enable = true;
+  services.mullvad-vpn.enable = false;
 }

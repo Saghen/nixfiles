@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, ... }:
 
 {
   # use the beta nvidia driver and
@@ -7,7 +7,8 @@
   nixpkgs.overlays = [ inputs.nvidia-patch.overlays.default ];
   hardware.graphics.enable = true;
   hardware.nvidia = {
-    open = true;
+    open = false;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
     # package = pkgs.nvidia-patch.patch-nvenc (pkgs.nvidia-patch.patch-fbc
     #   config.boot.kernelPackages.nvidiaPackages.beta);
 
@@ -67,7 +68,7 @@
 
   # streaming
   services.sunshine = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     capSysAdmin = true;
     package = pkgs.sunshine.override ({ cudaSupport = true; });

@@ -12,8 +12,8 @@
   config = rec {
     home = {
       sessionVariables = {
-        DISPLAY1 = "DP-0";
-        DISPLAY2 = "DP-2";
+        DISPLAY1 = "DP-1";
+        DISPLAY2 = "DP-3";
       };
       packages = with pkgs; [ xorg.xrandr xclip feh ];
     };

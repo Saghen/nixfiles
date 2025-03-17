@@ -7,61 +7,6 @@ let
 in {
   home.packages = with pkgs; [ wl-clipboard ];
 
-  programs.foot = {
-    enable = true;
-    server.enable = true; # better startup time, must use footclient
-    settings = let
-      colors = config.colors;
-      convert = c: builtins.substring 1 6 c;
-    in {
-      main = {
-        font = "Iosevka Custom Nerd Font:size=14";
-        line-height = "29px";
-        underline-thickness = "2px";
-        underline-offset = "5px";
-        pad = "4x4";
-        initial-window-size-pixels = "1400x840";
-      };
-      cursor = { unfocused-style = "hollow"; };
-      colors = {
-        background = convert colors.base;
-        foreground = convert colors.text;
-
-        # black
-        bright0 = convert colors.surface-1;
-        regular0 = convert colors.surface-2;
-
-        # red
-        bright1 = convert colors.red;
-        regular1 = convert colors.red;
-
-        # green
-        bright2 = convert colors.green;
-        regular2 = convert colors.green;
-
-        # yellow
-        bright3 = convert colors.yellow;
-        regular3 = convert colors.yellow;
-
-        # blue
-        bright4 = convert colors.blue;
-        regular4 = convert colors.blue;
-
-        # magenta
-        bright5 = convert colors.pink;
-        regular5 = convert colors.pink;
-
-        # cyan
-        bright6 = convert colors.teal;
-        regular6 = convert colors.teal;
-
-        # white
-        bright7 = convert colors.subtext-1;
-        regular7 = convert colors.subtext-0;
-      };
-    };
-  };
-
   services.hyprpaper = {
     enable = true;
     settings = {
@@ -71,7 +16,7 @@ in {
   };
 
   services.hypridle = {
-    enable = true;
+    enable = true; # TODO: breaks VRR
     settings = {
       general = {
         # avoid starting multiple hyprlock instances
@@ -128,10 +73,12 @@ in {
       "$mod" = "SUPER";
 
       monitor = [
-        "${builtins.elemAt monitors 0}, 2560x1440@144, 2560x0, 1"
-        "${builtins.elemAt monitors 1}, 2560x1440@144, 0x0, 1"
+        # TODO: 10 bit breaks wayfreeze and screen sharing
+        "${builtins.elemAt monitors 0}, 3840x2160@240, 3840x0, 1"
+        "${builtins.elemAt monitors 1}, 3840x2160@240, 0x0, 1"
         "Unknown-1, disable"
       ];
+      xwayland = { force_zero_scaling = true; };
 
       # assign 6 workspaces to each monitor
       workspace = builtins.genList (x:
@@ -148,6 +95,14 @@ in {
         "XDG_SESSION_TYPE,wayland"
         "XDG_CURRENT_DESKTOP,hyprland"
         "QT_QPA_PLATFORM,wayland"
+
+        # scaling
+        "GDK_SCALE,1.25"
+        "QT_SCALE_FACTOR,1.25" # todo: does this do anything?
+        "STEAM_FORCE_DESKTOPUI_SCALING,1.25" # todo: is this needed?
+
+        # enable wayland in all apps
+        # "NIXOS_OZONE_WL,1"
 
         # Nvidia
         "LIBVA_DRIVER_NAME,nvidia"
@@ -168,6 +123,8 @@ in {
         no_hardware_cursors = true;
         no_warps = true;
         default_monitor = "DP-1";
+        # set the minimum refresh rate of the monitor to prevent flicker
+        min_refresh_rate = 48;
       };
       input = {
         # 2 allows cursor focus separate from keyboard focus
@@ -185,6 +142,9 @@ in {
         # focus when applications request it
         focus_on_activate = true;
 
+        # causes background apps to run at 60fps, primarily for elden ring
+        render_unfocused_fps = 60;
+
         disable_hyprland_logo = true;
         background_color = convertHL colors.crust;
         force_default_wallpaper = 0;
@@ -200,8 +160,8 @@ in {
 
         disable_xdg_env_checks = true;
 
-        # TODO: doesn't work on nvidia with multiple monitors
-        vrr = 1;
+        # Reduces latency by showing frames as they come in, and eliminates tearing
+        vrr = 0;
       };
       render = { direct_scanout = true; };
       # debug = { disable_logs = false; };
@@ -221,6 +181,7 @@ in {
         satty = "${pkgs.satty}/bin/satty";
         jq = "${pkgs.jq}/bin/jq";
 
+        # https://github.com/Jappie3/wayfreeze/issues/14
         screenshotTmpl = args:
           "${wayfreeze} --hide-cursor --after-freeze-cmd='"
           + "${wayshot} ${args} --stdout | ${wl-copy}" # take screenshot and copy to clipboard
@@ -252,7 +213,7 @@ in {
             footclient \
               -o colors.foreground=${subtext} \
               -o pad=0x0 \
-              --window-size-pixels=2560x1440 \
+              --window-size-pixels=3840x2160 \
               --app-id zellij-neovim \
               --title zellij-neovim \
               fish -c "zellij --session neovim --new-session-with-layout neovim || zellij attach neovim"
@@ -293,6 +254,11 @@ in {
         "$mod + SHIFT, f, fullscreen"
         "$mod, s, swapactiveworkspaces, ${lib.concatStringsSep " " monitors}"
         "$mod, d, centerwindow"
+
+        # bar
+        "$mod, b, exec, systemctl --user restart limbo"
+        "$mod + SHIFT, b, exec, systemctl --user stop limbo"
+        "$mod + ALT, b, exec, systemctl --user start limbo"
 
         # special
         ## swayosd  TODO: never tested
@@ -351,13 +317,16 @@ in {
         "size 1200 800,class(firefox-nightly),title:(Enter name of file to save to...)"
         "size 1200 800,class(firefox-nightly),title:(File Upload)"
 
-        # Fullscreen
-        "fullscreen,class:(steam_app_.+)"
-        "workspace 3,class:(steam_app_.+)"
-        "fullscreen,class:(tf_linux64)"
-        "workspace 3,class:(tf_linux64)"
-        "fullscreen,class:(gamescope)"
-        "workspace 3,class:(gamescope)"
+        # Games: fullscreen, workspace 3, always focused for workspace, ignore activate
+        "fullscreen,class:(steam_app_.+|tf_linux64|gamescope)"
+        "workspace 3,class:(steam_app_.+|tf_linux64|gamescope)"
+        "renderunfocused,class:(steam_app_.+|tf_linux64|gamescope)"
+        # Shouldn't be needed with VRR
+        "immediate,class:(steam_app_.+|tf_linux64|gamescope)"
+        # TODO: Can't click out of the game window onto the other monitor
+        # "stayfocused,class:(steam_app_.+|tf_linux64|gamescope)"
+
+        # Jellyfin
         "fullscreen,class:(com.github.iwalton3.jellyfin-media-player)"
 
         # Tiled
@@ -374,9 +343,6 @@ in {
         "size 1200 800,class:(org.gnome.Nautilus)"
         "size 1800 1200,class:(steam),title:^(Steam)$"
         "minsize 640 480,class:(qimgv)"
-
-        # Tearing
-        "immediate,class:(.*)"
 
         # Floating
         "float,class:(utility)"

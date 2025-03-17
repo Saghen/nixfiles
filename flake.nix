@@ -27,6 +27,8 @@
     };
     wayfreeze.url = "github:jappie3/wayfreeze";
 
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
     # rust toolchain
     fenix = {
       url = "github:nix-community/fenix";

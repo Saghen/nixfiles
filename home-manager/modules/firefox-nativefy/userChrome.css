@@ -111,6 +111,7 @@
 
 /* make the top bar position absolute */
 #navigator-toolbox {
+  z-index: 1000 !important;
   position: absolute;
   width: 380px;
   margin-top: 0 !important;

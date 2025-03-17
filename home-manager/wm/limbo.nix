@@ -6,6 +6,7 @@ in {
 
   services.limbo = {
     enable = true;
+    scaling = 1.25;
     settings = {
       general = {
         lon = -79.38;

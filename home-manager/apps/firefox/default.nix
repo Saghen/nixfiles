@@ -27,7 +27,12 @@
             false;
           "browser.newtabpage.activity-stream.showSponsored" = false;
           "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
-          "full-screen-api.warning.timeout" = 0; # Disable fullscreen warning
+          "full-screen-api.warning.timeout" = -1; # Disable fullscreen warning
+
+          "middlemouse.paste" = false;
+
+          # fractional scaling
+          "layout.css.devPixelsPerPx" = 1.25;
 
           # always ask for download location
           "browser.download.useDownloadDir" = false;
