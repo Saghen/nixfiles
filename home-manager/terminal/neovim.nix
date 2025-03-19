@@ -1,15 +1,15 @@
 # Requires cloning nvim config manually
 # git clone https://github.com/saghen/nvim ~/.config/nvim
 
-{ pkgs, lib, config, ... }:
+{ inputs, pkgs, lib, config, ... }:
 
 {
   home.sessionVariables.VISUAL = "nvim";
 
   programs.neovim = {
     enable = true;
-
     defaultEditor = true;
+    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
 
     extraLuaConfig = ''
       -- required for smart-open.nvim
