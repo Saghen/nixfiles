@@ -10,8 +10,8 @@
       convert = c: builtins.substring 1 6 c;
     in {
       main = {
-        font = "Iosevka Custom Nerd Font:size=18";
-        line-height = "38px";
+        font = "Iosevka Custom Nerd Font:size=16";
+        line-height = "34px";
         underline-thickness = "2px";
         underline-offset = "5px";
         pad = "4x4";

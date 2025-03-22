@@ -283,6 +283,7 @@ in {
         builtins.concatLists (builtins.genList (x:
           let
             ws = let c = (x + 1) / 10; in builtins.toString (x + 1 - (c * 10));
+            # TODO: changes depending on monitor order
             is_main_monitor =
               "test $(hyprctl activeworkspace -j | jq '.monitorID') -eq 0";
             get_workspace =

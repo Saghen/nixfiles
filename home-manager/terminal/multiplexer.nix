@@ -4,6 +4,7 @@ let colors = config.colors;
 in {
   programs.zellij = {
     enable = true;
+    enableFishIntegration = false;
     settings = {
       pane_frames = false;
       default_mode = "locked";
