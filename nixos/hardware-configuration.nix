@@ -7,16 +7,16 @@
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules =
-    [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "thunderbolt" ];
+    [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   # Boot
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/A4CE-53EE";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/A4CE-53EE";
+    fsType = "vfat";
+  };
 
   # Root
   boot.initrd.luks.devices."luks-3ea45185-1664-42c7-af17-2061fdaad3cf".device =
@@ -24,16 +24,17 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/296702af-bfd2-4f9b-b7bf-c15d4cfdf98a";
     fsType = "f2fs";
+    options = [ "noatime" ];
   };
 
   # Swap
   # NOTE: NixOS setup doesn't insert this luks device by default which leads to long boot times
   # while it waits for the disk to appear.
   # You can get the UUID of the swap partition by running `lsblk -f` and looking for the UUID
-  boot.initrd.luks.devices."luks-786cbc52-d2b8-4b5e-8038-8d47e636e088".device = "/dev/disk/by-uuid/786cbc52-d2b8-4b5e-8038-8d47e636e088";
+  boot.initrd.luks.devices."luks-786cbc52-d2b8-4b5e-8038-8d47e636e088".device =
+    "/dev/disk/by-uuid/786cbc52-d2b8-4b5e-8038-8d47e636e088";
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/7f6f8f5d-4436-4063-9e17-b3cc94602745"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/7f6f8f5d-4436-4063-9e17-b3cc94602745"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

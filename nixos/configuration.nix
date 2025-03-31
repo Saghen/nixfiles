@@ -53,9 +53,9 @@
 
   # Trim SSD (https://kokada.capivaras.dev/blog/an-unordered-list-of-hidden-gems-inside-nixos/)
   services.fstrim.enable = true;
-  boot.initrd.luks.devices."luks-786cbc52-d2b8-4b5e-8038-8d47e636e088".allowDiscards =
-    true;
   boot.initrd.luks.devices."luks-3ea45185-1664-42c7-af17-2061fdaad3cf".allowDiscards =
+    true;
+  boot.initrd.luks.devices."luks-786cbc52-d2b8-4b5e-8038-8d47e636e088".allowDiscards =
     true;
 
   # Fish

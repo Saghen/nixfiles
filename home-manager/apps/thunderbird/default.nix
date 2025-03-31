@@ -21,6 +21,9 @@
 
           "layout.frame_rate" = 144;
 
+          # fractional scaling
+          "layout.css.devPixelsPerPx" = 1.25;
+
           "privacy.annotate_channels.strict_list.enabled" = true;
           "privacy.donottrackheader.enabled" = true;
           "privacy.fingerprintingProtection" = true;
@@ -58,12 +61,6 @@
     liamcdyer = {
       thunderbird.enable = true;
       address = "liamcdyer@gmail.com";
-      flavor = "gmail.com";
-      realName = "Liam Dyer";
-    };
-    liqwid = {
-      thunderbird.enable = true;
-      address = "liam@liqwid.finance";
       flavor = "gmail.com";
       realName = "Liam Dyer";
     };
