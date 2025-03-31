@@ -29,10 +29,6 @@
       '';
       theme = "breeze";
     };
-
-    # zfs 
-    # supportedFilesystems = [ "zfs" ]; # does this need to be on boot though?
-    # zfs.extraPools = [ "storage" ];
   };
   # (part of zfs) enable again if devices aren't detected
   systemd.services.systemd-udev-settle.enable = lib.mkForce false;
