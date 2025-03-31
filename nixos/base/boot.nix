@@ -4,9 +4,10 @@
   boot = {
     # 1000hz keyboard polling rate
     # who knows if that actually does anything
-    kernelParams = [ "quiet" "usbhid.kbpoll=1" ];
+    # disable usb autosuspend because it breaks Grace SDAC
+    kernelParams = [ "quiet" "usbhid.kbpoll=1" "usbcore.autosuspend=-1" ];
     # use latest kernel
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
+    kernelPackages = pkgs.linuxKernel.packages.linux_6_14;
 
     loader = {
       efi.canTouchEfiVariables = true;
@@ -16,7 +17,6 @@
 
     # Disable waiting for network because it takes 10s and we don't need it
     # https://askubuntu.com/questions/1018576/what-does-networkmanager-wait-online-service-do
-    # FIXME: doesnt work??
     initrd.systemd.network.wait-online.enable = false;
 
     # Loading animation and LUKS password prompt

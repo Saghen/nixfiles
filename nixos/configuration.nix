@@ -1,3 +1,6 @@
+# TODO: build for march=native
+# https://github.com/Liqwid-Labs/tap/pull/391
+
 { inputs, pkgs, ... }:
 
 {
@@ -24,6 +27,8 @@
     auto-optimise-store = true;
     # Some old nix commands don't use XDG dirs, this forces it
     use-xdg-base-directories = true;
+    # Number of parallel downloads
+    max-substitution-jobs = 32;
     # Cardano IOG cache, devenv and community cachix
     trusted-substituters = [
       "https://cache.iog.io"

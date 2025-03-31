@@ -9,6 +9,7 @@ in {
       pane_frames = false;
       default_mode = "locked";
       session_serialization = false;
+      show_startup_tips = false;
 
       keybinds = { _props = { clear-defaults = true; }; };
 

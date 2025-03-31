@@ -106,12 +106,14 @@
       # lua
       lua-language-server
       stylua
+      inputs.emmylua-analyzer.packages.${pkgs.system}.default
       # go
       gopls
       # misc
       bash-language-server
       dockerfile-language-server-nodejs
       ts_query_ls
+      postgres-lsp
       # nix
       nil
       nixfmt-classic

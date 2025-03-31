@@ -38,21 +38,39 @@
         };
         userContent = ''
           html {
-            --bg-primary: ${config.colors.base};
-            --bg-secondary: ${config.colors.core};
-            --bg-tertiary: ${config.colors.surface-0};
+            --bg-darker: #11111b;
+            --bg-primary: #1e1e2e;
+            --bg-secondary: #2c2c3f;
+            --bg-tertiary: #313244;
 
             --primary: #5f8cfb;
             --primary-rgb: 95, 140, 251;
             --secondary: #89b4fa;
           }
 
-          .theme-dark {
-            --background-tertiary: var(--bg-primary) !important;
+          .theme-dark, .theme-darker, .visual-refresh.theme-darker, .visual-refresh .theme-darker  {
+            --background-primary: var(--bg-primary) !important;
             --background-secondary: var(--bg-primary) !important;
             --background-secondary-alt: var(--bg-primary) !important;
+            --background-tertiary: var(--bg-primary) !important;
+
+            --background-base-lowest: var(--bg-primary) !important;
+            --background-base-lower: var(--bg-primary) !important;
+            --background-base-low: var(--bg-secondary) !important;
+
+            --background-surface-high: var(--bg-secondary) !important;
+
+            --bg-base-primary: var(--bg-primary) !important;
+            --bg-base-secondary: var(--bg-primary) !important;
+            --bg-base-tertiary: var(--bg-darker) !important;
+
+            --border-subtle: var(--bg-secondary);
+            --border-normal: var(--bg-secondary);
+            
+
+            --chat-background-default: var(--bg-secondary) !important;
+
             --background-message-hover: var(--bg-primary) !important;
-            --background-primary: var(--bg-primary) !important;
             --background-accent: var(--bg-tertiary) !important;
             --background-floating: var(--bg-tertiary) !important;
             --background-modifier-selected: var(--bg-secondary) !important;
@@ -65,7 +83,7 @@
             --bg-overlay-hover: var(--bg-secondary) !important;
           }
 
-          .theme-dark {
+          .theme-dark, .theme-darker, .visual-refresh.theme-darker, .visual-refresh .theme-darker {
             --font-display: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 
             --brand-experiment: var(--primary);

@@ -77,7 +77,7 @@
           default = "Kagi";
           order = [
             "Kagi"
-            "DuckDuckGo"
+            "ddg"
             "NixOS Wiki"
             "Nix Packages"
             "Nix Options"
@@ -97,7 +97,7 @@
                   type = "application/x-suggestions+json";
                 }
               ];
-              iconUpdateURL = "https://assets.kagi.com/v2/favicon-32x32.png";
+              icon = "https://assets.kagi.com/v2/favicon-32x32.png";
               updateInterval = updateInterval;
               definedAliases = [ "@kagi" "@k" ];
             };
@@ -105,7 +105,7 @@
               urls = [{
                 template = "https://nixos.wiki/index.php?search={searchTerms}";
               }];
-              iconUpdateURL = "https://nixos.wiki/favicon.png";
+              icon = "https://nixos.wiki/favicon.png";
               updateInterval = updateInterval;
               definedAliases = [ "nw" ];
             };
@@ -170,7 +170,7 @@
                 template =
                   "https://home-manager-options.extranix.com/?query={searchTerms}";
               }];
-              iconUpdateURL =
+              icon =
                 "https://home-manager-options.extranix.com/images/favicon.png";
               updateInterval = updateInterval;
               definedAliases = [ "hm" ];
@@ -178,7 +178,7 @@
             "NPM" = {
               urls =
                 [{ template = "https://www.npmjs.com/package/{searchTerms}"; }];
-              iconUpdateURL =
+              icon =
                 "https://static-production.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png";
               updateInterval = updateInterval;
               definedAliases = [ "npm" ];

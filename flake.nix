@@ -34,6 +34,11 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    emmylua-analyzer = {
+      url = "github:saghen/emmylua-analyzer-rust/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, hardware, ... }: {
