@@ -63,29 +63,35 @@
         # use fish for nix shells
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
       '';
-      plugins = with pkgs;
-        with fishPlugins; [
-          # guess
-          {
-            name = "autopair";
-            src = autopair.src;
-          }
-          # text expansions such as .., !! and others
-          {
-            name = "puffer";
-            src = puffer.src;
-          }
-          # adds kubectl abbretions
-          {
-            name = "kubectl";
-            src = fetchFromGitHub {
-              owner = "blackjid";
-              repo = "plugin-kubectl";
-              rev = "f3cc9003077a3e2b5f45e3988817a78e959d4131";
-              sha256 = "017nnk56j3llk39d48isyzs4mf7nbd00jywz00g9bprm6d5xa700";
-            };
-          }
-        ];
+      plugins = let
+        kubectl-aliases-src = pkgs.fetchFromGitHub {
+          owner = "ahmetb";
+          repo = "kubectl-aliases";
+          rev = "1c2ce7099a00ed08833cc911ddc1467b1b3fa887";
+          sha256 = "wzvo18cwIYzpld1Ubw/vCX5s04DkpgZbKPkZUkVcNXw=";
+        };
+
+        kubectl-aliases = pkgs.runCommand "kubectl-aliases" { } ''
+          mkdir -p $out
+          cp ${kubectl-aliases-src}/.kubectl_aliases.fish $out/init.fish
+        '';
+      in with pkgs;
+      with fishPlugins; [
+        {
+          name = "autopair";
+          src = autopair.src;
+        }
+        # text expansions such as .., !! and others
+        {
+          name = "puffer";
+          src = puffer.src;
+        }
+        # adds kubectl abbretions
+        {
+          name = "kubectl";
+          src = kubectl-aliases;
+        }
+      ];
     };
 
     # sqlite history
