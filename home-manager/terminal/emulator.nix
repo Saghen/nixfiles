@@ -11,7 +11,7 @@
     in {
       main = {
         font = "Iosevka Custom Nerd Font:size=17";
-        line-height = "36px";
+        line-height = "37px";
         underline-thickness = "2px";
         underline-offset = "5px";
         pad = "4x4";
