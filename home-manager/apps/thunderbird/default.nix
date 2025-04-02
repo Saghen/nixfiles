@@ -71,6 +71,13 @@
       imap.port = 993;
       realName = "Liam Dyer";
     };
+    liam-bind = {
+      thunderbird.enable = true;
+      address = "liam@bind.sh";
+      imap.host = "imap.purelymail.com";
+      imap.port = 993;
+      realName = "Liam Dyer";
+    };
     superlodon-super = {
       thunderbird.enable = true;
       address = "superlodon@super.fish";
