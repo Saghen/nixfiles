@@ -6,6 +6,11 @@
 {
   home.sessionVariables.VISUAL = "nvim";
 
+  sops.secrets.neovim = {
+    sopsFile = ../../keys/sops/neovim.yaml;
+    path = "${config.xdg.configHome}/nvim/lua/secrets.lua";
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -76,6 +81,9 @@
         cyan = "${config.colors.cyan}",
       }
 
+      local success = pcall(require, 'secrets')
+      if not success then vim.notify('secrets.lua not found', vim.log.levels.ERROR) end
+
       -- bootstrap lazy.nvim, lazyvim and my plugins
       require('config.lazy')
     '';
@@ -94,6 +102,10 @@
       # Luarocks
       lua51Packages.luarocks
       lua51Packages.lua
+
+      # Voice recording for gp.nvim
+      alsa-utils # for arecord
+      (sox.override({enableLame = true;}))
 
       ## LSPs, formatters, linters
       efm-langserver
@@ -125,6 +137,7 @@
       graphviz # for crate graph visualization
       # terraform
       terraform-ls
+      terraform # required by lsp for formatting
       tflint
       # web
       prettierd
@@ -143,16 +156,4 @@
       # ols
     ];
   };
-
-  # Persistent rust analyzer
-  # systemd.user.services.ra-multiplex = {
-  #   Unit = { Description = "Persistent rust analyzer"; };
-  #   Service = {
-  #     Type = "simple";
-  #     ExecStart = "${pkgs.ra-multiplex}/bin/ra-multiplex server";
-  #     Restart = "on-failure";
-  #     RestartSec = 1;
-  #   };
-  # };
-  # TODO: uses its own rust analyzer which causes a full rebuild constantly
 }

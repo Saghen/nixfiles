@@ -1,5 +1,4 @@
 # TODO: build for march=native
-# https://github.com/Liqwid-Labs/tap/pull/391
 
 { inputs, pkgs, ... }:
 
@@ -45,7 +44,7 @@
 
   nixpkgs = {
     overlays =
-      [ inputs.nvidia-patch.overlays.default inputs.fenix.overlays.default ];
+      [ inputs.nvidia-patch.overlays.default inputs.fenix.overlays.default inputs.lux.overlays.default ];
     config.allowUnfree = true;
   };
 

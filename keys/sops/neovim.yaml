@@ -1,9 +1,5 @@
-env: ENC[AES256_GCM,data:Pl1sjCi3ow2WvV0QpQCUf+5MT5zcSviosLGX/+QvlDgPIqP1xilRQyVGP1RweIWCDrnFqKcr4Gm00tvrHGwiHs7E6OJpZv+v2j7pvTgLSE+q0lW6rftPRsGUx8CJiLAKvoPMOpnncPnMo9DiScJhTqKpdB0T0IIC/ERWZDXUz3KOrvIHETd/swJci9OgXk8BqBIVqT25vgP9PP7AK3MsyNXalm5+RFKIadwKIySCfJUSyW7p1verc1M9,iv:JqT1No0CowFqzf2P51dAW+7qUGBC3n9redkJ7m/yM7w=,tag:VmzYApkDcxzE+dpiltBlNg==,type:str]
+neovim: ENC[AES256_GCM,data:MVQmMw4geuS8nhLMFmv6VdpwIj0vsT4mmBwteWD3+rCG4rvfia18/kmLL2hnBbY4KyzOFPYzKc1xb7QTYi82sNUNWPKKCKcbCr3zIQUpKDJqztkxXn25dZ5REqgnhN5tLsddNd2MPbWPnf8/9QbTs0kc97EbnhTlESG+WQhBggPKMOau19tl96DvV91maQ50Cvze7nBNuL0QF275f7wDccOUrW/mFFWFuLw+w+0psgnY3wNNxM8wwP3QKSZViM2N/HIj5lNCD/kIhsaej51uov3MPw1BhYK3TujKgZAbADlDADzZTKvUnqQ3z3e1vQkn01oW/e1Y7pKrAnYGVfu19lETQCIX3ZzXhC8Z0gTrwwDrD7MnG082ZhMvXo8WEBYCBsV7xiP8ORJ9wWPtxd6wRGFkvLGbrQ96o8RIPRxBEGthuIohKTind1HcqggNFuvDRSf5IcbD5FFzGLH0bgV3U+fFJMPk3ai8ElCg7/PNTtXoDwuQcWAP1el9S4gv4vIOhvsjm0FPBuZ6BB0rz0Y1Hg1DU/fMQQL/tOzoeH/HZdnKfQqLmLQGj8MRwT1wfw==,iv:WMriHwf31erR6KKZb6odtRYKQJsxmj/N+3LNJaibPMc=,tag:5FehYmvscR9HEn22Q8JX4Q==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age1qwt2ksr3xyfm59alud9pkmfucekjc7m60w8ye8lw8syxnx6a23hqdfhlhl
           enc: |
@@ -14,8 +10,8 @@ sops:
             b05Jc2VWZm5wcXdDSlhHcHRxY2lOMTgKT/SEompcd5t9a5uUGeiS5RQ+g7FoNjA5
             qgH0avHZEHcNfKI9HZ8a7KTWF0sJvCAJNRNt6E8g7ypE2/A1G6zGbw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-28T14:42:22Z"
-    mac: ENC[AES256_GCM,data:rGgsoPOz0iVWQy3WNEmTf52udGYCyOT1txLFmXLD2bIznSAduZEaXIsTqC4ch1A0daTT5bZ1hhZjmDhnJzkbMJ5ZSIsI9koMkWN1b+DMFV9DzwqkMAWvceHzqlbQ4AGs4VoOkFo1LoxrORctYl1pXfiEp+WGG5wsun9e9l1XaL8=,iv:aslNHJyhtEs/eAYdaESxm9DbyKNnEAfAssYu+6AkWmk=,tag:MxKh814hUgENtPUsI/lq1Q==,type:str]
+    lastmodified: "2025-04-24T19:05:35Z"
+    mac: ENC[AES256_GCM,data:v9nm4QiA7EH1a2xAQ7IVBImie0R+nhgD5Ab6ShGRfUO/slfcfJJ/Xyp7XKJwps3XOjv/Be+FsIXbprYAAZ/efhV5KlMSMWHezQFe56lwL/MrU0sbfAA8/smGa+2FMjEWE2fvbr6SZKvFS3Dc2Vjlc85/Tf4Ul+F0Q2UuIqmWt2A=,iv:ShKHfgKK/SLvWfaX7Y2uRPy8TgduFZWeJdFnsqQNh0U=,tag:C323KQmsXgRH9c96ZuwY3w==,type:str]
     pgp:
         - created_at: "2024-10-28T14:26:36Z"
           enc: |-
@@ -38,4 +34,4 @@ sops:
             -----END PGP MESSAGE-----
           fp: 149EB53A65D1B6DE5831E3EE48B4568B9759823E
     unencrypted_suffix: _unencrypted
-    version: 3.9.1
+    version: 3.10.1

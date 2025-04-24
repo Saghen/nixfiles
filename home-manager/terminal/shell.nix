@@ -1,11 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  sops.secrets.env = {
-    sopsFile = ../../keys/sops/env.yaml;
-    path = "${config.xdg.configHome}/fish/custom-env";
-  };
-
   # for krew
   home.sessionPath = [ "${config.home.sessionVariables.KREW_ROOT}/bin" ];
 
@@ -40,21 +35,56 @@
         cd = "z";
         n = "nvim";
         e = "exit";
-        # kubectl plugin covers most except these ones
-        kx = "kubectx";
-        kn = "kubens";
-        kg = "kubectl get";
-        kd = "kubectl describe";
 
         jcu = "journalctl --user -xeu";
         jc = "journalctl -xeu";
 
         nrs = "nh os switch";
+
+        # kubectl
+        k = "kubectl";
+        kx = "kubectx";
+        kn = "kubens";
+        kg = "kubectl get";
+        kd = "kubectl describe";
+        kdel = "kubectl delete";
+
+        kgp = "kubectl get pod";
+        kgpw = "kubectl get pod -w";
+        kgpy = "kubectl get pod -o yaml";
+        kdp = "kubectl describe pod";
+        kdelp = "kubectl delete pod";
+
+        kgs = "kubectl get services";
+        kgsy = "kubectl get services -o yaml";
+        kds = "kubectl describe service";
+        kdels = "kubectl delete service";
+
+        kgr = "kubectl get replicaset";
+        kgry = "kubectl get replicaset -o yaml";
+        kdr = "kubectl describe replicaset";
+        kdelr = "kubectl delete replicaset";
+
+        kgd = "kubectl get deployment";
+        kgdy = "kubectl get deployment -o yaml";
+        kdd = "kubectl describe deployment";
+        kdeld = "kubectl delete deployment";
+
+        kgss = "kubectl get statefulset";
+        kgssy = "kubectl get statefulset -o yaml";
+        kdss = "kubectl describe statefulset";
+        kdelss = "kubectl delete statefulset";
+
+        kgcm = "kubectl get configmap";
+        kgcmy = "kubectl get configmap -o yaml";
+        kdcm = "kubectl describe configmap";
+        kdelcm = "kubectl delete configmap";
+
+        kl = "kubectl logs";
+        klf = "kubectl logs -f";
+        klc = "kubectl logs --container";
+        klfc = "kubectl logs -f --container";
       };
-      # Load secret env vars
-      shellInit = ''
-        source "${config.sops.secrets.env.path}"
-      '';
       interactiveShellInit = ''
         # Use backward-kill-bigword to act like W in vim
         bind \b backward-kill-word
@@ -63,20 +93,7 @@
         # use fish for nix shells
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
       '';
-      plugins = let
-        kubectl-aliases-src = pkgs.fetchFromGitHub {
-          owner = "ahmetb";
-          repo = "kubectl-aliases";
-          rev = "1c2ce7099a00ed08833cc911ddc1467b1b3fa887";
-          sha256 = "wzvo18cwIYzpld1Ubw/vCX5s04DkpgZbKPkZUkVcNXw=";
-        };
-
-        kubectl-aliases = pkgs.runCommand "kubectl-aliases" { } ''
-          mkdir -p $out
-          cp ${kubectl-aliases-src}/.kubectl_aliases.fish $out/init.fish
-        '';
-      in with pkgs;
-      with fishPlugins; [
+      plugins = with pkgs.fishPlugins; [
         {
           name = "autopair";
           src = autopair.src;
@@ -85,11 +102,6 @@
         {
           name = "puffer";
           src = puffer.src;
-        }
-        # adds kubectl abbretions
-        {
-          name = "kubectl";
-          src = kubectl-aliases;
         }
       ];
     };

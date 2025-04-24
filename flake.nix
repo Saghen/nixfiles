@@ -29,6 +29,8 @@
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
+    lux.url = "github:nvim-neorocks/lux";
+
     # rust toolchain
     fenix = {
       url = "github:nix-community/fenix";

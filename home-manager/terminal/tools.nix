@@ -27,8 +27,6 @@
     (pkgs.google-cloud-sdk.withExtraComponents
       (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
     nix-index # provides nix-locate
-    inputs.wayfreeze.packages.${pkgs.system}.wayfreeze
-    streamrip # qobuz/deezer downloader
 
     claude-code # AI coding
 
@@ -46,13 +44,13 @@
     # languages
     go
     python3
-    poetry
     bun
     deno
     nodejs_22
     corepack_22
     gcc
     gnumake
+    lux-cli
     (fenix.complete.withComponents [
       "cargo"
       "clippy"
@@ -88,8 +86,8 @@
     XCOMPOSECACHE = "${cache}/X11/xcompose";
     KUBECONFIG = "${cfg}/kube/config";
     KREW_ROOT = "${data}/krew";
-    PYTHONSTARTUP = "${cfg}/python/pythonrc";
     DOCKER_CONFIG = "${cfg}/docker";
+    PYTHON_HISTORY = "${state}/python/history";
     HISTFILE = "${state}/bash/history";
   };
   xdg.configFile = {
@@ -98,37 +96,6 @@
       text = ''
         [net]
         git-fetch-with-cli = true
-      '';
-    };
-    pythonrc = {
-      target = "python/pythonrc";
-      text = ''
-        def is_vanilla() -> bool:
-          import sys
-          return not hasattr(__builtins__, '__IPYTHON__') and 'bpython' not in sys.argv[0]
-
-        def setup_history():
-            import os
-            import atexit
-            import readline
-            from pathlib import Path
-
-            if state_home := os.environ.get('XDG_STATE_HOME'):
-                state_home = Path(state_home)
-            else:
-                state_home = Path.home() / '.local' / 'state'
-
-            history: Path = state_home / 'python_history'
-
-            if not history.exists():
-                history.touch()
-
-            readline.read_history_file(str(history))
-            atexit.register(readline.write_history_file, str(history))
-
-
-        if is_vanilla():
-            setup_history()
       '';
     };
   };

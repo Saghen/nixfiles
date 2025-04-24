@@ -1,12 +1,10 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   boot = {
     # 1000hz keyboard polling rate
     # who knows if that actually does anything
-    # disable usb autosuspend because it breaks Grace SDAC
-    kernelParams = [ "quiet" "usbhid.kbpoll=1" "usbcore.autosuspend=-1" ];
-    # use latest kernel
+    kernelParams = [ "quiet" "usbhid.kbpoll=1" ];
     kernelPackages = pkgs.linuxKernel.packages.linux_6_14;
 
     loader = {
@@ -30,6 +28,4 @@
       theme = "breeze";
     };
   };
-  # (part of zfs) enable again if devices aren't detected
-  systemd.services.systemd-udev-settle.enable = lib.mkForce false;
 }
