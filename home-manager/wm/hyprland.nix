@@ -149,7 +149,7 @@ in {
         background_color = convertHL colors.crust;
         force_default_wallpaper = 0;
 
-        enable_swallow = true;
+        enable_swallow = false; # naive implementation works poorly
         swallow_regex = "footclient";
 
         # Whether mouse moving into a different monitor should focus it
@@ -225,7 +225,9 @@ in {
         swayosdClient = "${pkgs.swayosd}/bin/swayosd-client";
       in [
         # applications
-        "$mod, Space, exec, tofi-drun --drun-launch=true"
+        # TODO: wgpu selects non existent igpu by default
+        # https://github.com/iced-rs/iced/issues/2810
+        "$mod, Space, exec, fish -c \"WGPU_POWER_PREF='high' centerpiece\""
         "$mod, Return, exec, footclient"
         # NOTE: specifying the window size avoids a flash of smaller window
         # NOTE: specifying the foreground color sets the cursor color when the background/foreground are the same
@@ -269,9 +271,9 @@ in {
         ", XF86MonBrightnessUp, exec, ${swayosdClient} --brightness raise"
         ", XF86MonBrightnessDown, exec, ${swayosdClient} --brightness lower"
         ## media
-        ", XF86AudioPlay, exec, playerctl --player=spotify,tauon play-pause"
-        ", XF86AudioNext, exec, playerctl --player=spotify,tauon next"
-        ", XF86AudioPrev, exec, playerctl --player=spotify,tauon previous"
+        ", XF86AudioPlay, exec, playerctl --player=spotify play-pause"
+        ", XF86AudioNext, exec, playerctl --player=spotify next"
+        ", XF86AudioPrev, exec, playerctl --player=spotify previous"
         "CTRL, XF86AudioPlay, exec, playerctl --player=firefox play-pause"
         "CTRL, XF86AudioNext, exec, playerctl --player=firefox next"
         "CTRL, XF86AudioPrev, exec, playerctl --player=firefox previous"

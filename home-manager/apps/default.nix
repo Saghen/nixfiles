@@ -22,7 +22,6 @@
       winetricks # Required by lutris
       seabird # Kubernetes client
       obs-studio # Record
-      (tauon.override { withDiscordRPC = true; }) # Music player
       jellyfin-media-player # Media player
     ];
 

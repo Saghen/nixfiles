@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./centerpiece.nix
     ./hyprland.nix
     ./limbo.nix
     ./misc.nix
