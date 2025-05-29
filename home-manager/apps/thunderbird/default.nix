@@ -7,6 +7,7 @@
     profiles = {
       saghen = {
         isDefault = true;
+        accountsOrder = ["super" "bind" "saghendev" "liamcdyer" "liqwid" "superlodon"];
         settings = {
           # required for userChrome.css and userContent.css
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
@@ -51,9 +52,25 @@
   };
 
   accounts.email.accounts = {
-    saghendev = {
+    super = {
       thunderbird.enable = true;
       primary = true;
+      address = "liam@super.fish";
+      userName = "liam@super.fish";
+      imap.host = "imap.purelymail.com";
+      imap.port = 993;
+      realName = "Liam Dyer";
+    };
+    bind = {
+      thunderbird.enable = true;
+      address = "liam@bind.sh";
+      userName = "liam@bind.sh";
+      imap.host = "imap.purelymail.com";
+      imap.port = 993;
+      realName = "Liam Dyer";
+    };
+    saghendev = {
+      thunderbird.enable = true;
       address = "saghendev@gmail.com";
       flavor = "gmail.com";
       realName = "Liam Dyer";
@@ -64,23 +81,16 @@
       flavor = "gmail.com";
       realName = "Liam Dyer";
     };
-    liam-super = {
+    liqwid = {
       thunderbird.enable = true;
-      address = "liam@super.fish";
-      imap.host = "imap.purelymail.com";
-      imap.port = 993;
+      address = "liam@liqwid.finance";
+      flavor = "gmail.com";
       realName = "Liam Dyer";
     };
-    liam-bind = {
-      thunderbird.enable = true;
-      address = "liam@bind.sh";
-      imap.host = "imap.purelymail.com";
-      imap.port = 993;
-      realName = "Liam Dyer";
-    };
-    superlodon-super = {
+    superlodon = {
       thunderbird.enable = true;
       address = "superlodon@super.fish";
+      userName = "superlodon@super.fish";
       imap.host = "imap.purelymail.com";
       imap.port = 993;
       realName = "Superlodon";
