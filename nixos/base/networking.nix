@@ -19,6 +19,7 @@
   services.tailscale = {
     enable = true;
     openFirewall = true;
+    extraSetFlags = [ "--ssh" ];
   };
   services.mullvad-vpn.enable = true;
 }

@@ -1,9 +1,12 @@
 { lib, pkgs, config, inputs, ... }:
 
 let
-  monitors = config.monitors;
+  monitors = config.machine.monitors;
   colors = config.colors;
   convertHL = c: "0xff" + builtins.substring 1 6 c;
+
+  gameWorkspace = toString (if builtins.length monitors > 1 then 3 else 5);
+  mediaWorkspace = toString (if builtins.length monitors > 1 then 7 else 4);
 in {
   home.packages = with pkgs; [ wl-clipboard ];
 
@@ -97,14 +100,13 @@ in {
         "QT_QPA_PLATFORM,wayland"
 
         # scaling
-        "GDK_SCALE,1.25"
-        "QT_SCALE_FACTOR,1.25" # todo: does this do anything?
-        "STEAM_FORCE_DESKTOPUI_SCALING,1.25" # todo: is this needed?
+        "GDK_SCALE,${toString config.machine.scalingFactor}"
+        "QT_SCALE_FACTOR,${toString config.machine.scalingFactor}" # todo: does this do anything?
+        "STEAM_FORCE_DESKTOPUI_SCALING,${toString config.machine.scalingFactor}" # todo: is this needed?
 
         # enable wayland in all apps
         # "NIXOS_OZONE_WL,1"
-
-        # Nvidia
+      ] ++ lib.optionals (config.machine.nvidia) [
         "LIBVA_DRIVER_NAME,nvidia"
         "NVD_BACKEND,direct"
       ];
@@ -122,7 +124,7 @@ in {
       cursor = {
         no_hardware_cursors = true;
         no_warps = true;
-        default_monitor = "DP-1";
+        default_monitor = builtins.elemAt monitors 0;
         # set the minimum refresh rate of the monitor to prevent flicker
         min_refresh_rate = 48;
       };
@@ -322,7 +324,7 @@ in {
 
         # Games: fullscreen, workspace 3, always focused for workspace, ignore activate
         "fullscreen,class:(steam_app_.+|tf_linux64|gamescope)"
-        "workspace 3,class:(steam_app_.+|tf_linux64|gamescope)"
+        "workspace ${gameWorkspace},class:(steam_app_.+|tf_linux64|gamescope)"
         "renderunfocused,class:(steam_app_.+|tf_linux64|gamescope)"
         # Shouldn't be needed with VRR
         "immediate,class:(steam_app_.+|tf_linux64|gamescope)"
@@ -334,9 +336,9 @@ in {
 
         # Tiled
         "tile,class:(Spotify),title:(Spotify)" # must be specific, otherwise popups will tile
-        "workspace 7,class:(Spotify),title:(Spotify)"
+        "workspace ${mediaWorkspace},class:(Spotify),title:(Spotify)"
         "tile,class:(vesktop)"
-        "workspace 7,class:(vesktop)"
+        "workspace ${mediaWorkspace},class:(vesktop)"
         "tile,class:(neovim)"
         "tile,class:(zellij-neovim)"
         "tile,class:(thunderbird),title:(Mozilla Thunderbird)" # must be specific, otherwise popups will tile
@@ -369,10 +371,10 @@ in {
       ## Autostart
       exec-once = [
         "[workspace 1 silent] firefox-nightly"
-        "[workspace 7 silent] spotify"
+        "[workspace ${mediaWorkspace} silent] spotify"
         # TODO: https://github.com/Vencord/Vesktop/issues/342
         # needed for working drag and drop
-        "[workspace 7 silent] vesktop"
+        "[workspace ${mediaWorkspace} silent] vesktop"
         "${pkgs.swayosd}/bin/swayosd-server"
         # constantly set volume to 1 to counteract something adjusting it
         "while true; do sleep 1 && ${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ 100%; done &"

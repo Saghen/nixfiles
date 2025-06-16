@@ -3,12 +3,14 @@
 { inputs, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ./base ./fonts ];
+  imports = [
+    ./hardware-configuration.nix
+    ./base
+    ./fonts
+    ../modules/machine.nix
+  ];
 
   system.stateVersion = "24.05";
-
-  networking.hostName = "nixos";
-  networking.hostId = "968d12a1";
 
   # Set your time zone.
   time.timeZone = "America/Toronto";
@@ -43,8 +45,7 @@
   };
 
   nixpkgs = {
-    overlays =
-      [ inputs.nvidia-patch.overlays.default inputs.fenix.overlays.default inputs.lux.overlays.default ];
+    overlays = [ inputs.fenix.overlays.default ];
     config.allowUnfree = true;
   };
 
@@ -56,11 +57,8 @@
   };
 
   # Trim SSD (https://kokada.capivaras.dev/blog/an-unordered-list-of-hidden-gems-inside-nixos/)
+  # Make sure to enable boot.initrd.luks.devices.*.allowDiscards
   services.fstrim.enable = true;
-  boot.initrd.luks.devices."luks-3ea45185-1664-42c7-af17-2061fdaad3cf".allowDiscards =
-    true;
-  boot.initrd.luks.devices."luks-786cbc52-d2b8-4b5e-8038-8d47e636e088".allowDiscards =
-    true;
 
   # Fish
   users.defaultUserShell = pkgs.fish;

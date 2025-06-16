@@ -1,6 +1,5 @@
-# TODO: rename since we include general info such as monitors
 # A theme format for use in desktop applications and editors
-{ lib, config, pkgs, ... }:
+{ lib, ... }:
 let
   colour = lib.mkOptionType {
     name = "colour";
@@ -16,11 +15,6 @@ let
       inherit default;
     });
 in {
-  options.monitors = lib.mkOption {
-    type = lib.types.listOf lib.types.str;
-    description = "List of monitor names";
-    default = [ "DP-4" "DP-6" ];
-  };
   # slightly modified catppuccin theme
   options.colors = builtins.mapAttrs mkColourOption rec {
     crust = "#11111b";

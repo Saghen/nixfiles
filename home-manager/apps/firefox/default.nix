@@ -1,4 +1,4 @@
-{ pkgs, firefox-nightly, ... }:
+{ config, pkgs, firefox-nightly, ... }:
 
 {
   home = { sessionVariables = { BROWSER = "firefox-developer-edition"; }; };
@@ -32,7 +32,7 @@
           "middlemouse.paste" = false;
 
           # fractional scaling
-          "layout.css.devPixelsPerPx" = 1.25;
+          "layout.css.devPixelsPerPx" = config.machine.scalingFactor;
 
           # always ask for download location
           "browser.download.useDownloadDir" = false;

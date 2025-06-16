@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   programs.thunderbird = {
@@ -23,7 +23,7 @@
           "layout.frame_rate" = 144;
 
           # fractional scaling
-          "layout.css.devPixelsPerPx" = 1.25;
+          "layout.css.devPixelsPerPx" = config.machine.scalingFactor;
 
           "privacy.annotate_channels.strict_list.enabled" = true;
           "privacy.donottrackheader.enabled" = true;

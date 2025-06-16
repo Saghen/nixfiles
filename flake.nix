@@ -30,8 +30,6 @@
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
-    lux.url = "github:nvim-neorocks/lux";
-
     # rust toolchain
     fenix = {
       url = "github:nix-community/fenix";
@@ -44,37 +42,40 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, hardware, ... }: {
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./nixos/configuration.nix
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, hardware, ... }: 
+  let
+    mkSystem = hostname: nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./nixos/configuration.nix
+        ./machines/${hostname}/nixos.nix
+        ./machines/${hostname}/machine.nix
+        sops-nix.nixosModules.sops
 
-          sops-nix.nixosModules.sops
-
-          hardware.nixosModules.common-gpu-nvidia-nonprime
-          hardware.nixosModules.common-pc-ssd
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useUserPackages = true;
-              useGlobalPkgs = true;
-              extraSpecialArgs = {
-                inputs = inputs;
-                inherit (inputs) spicetify-nix;
-                inherit (inputs) fenix;
-                inherit (inputs) limbo;
-                inherit (inputs) firefox-nightly;
-              };
-              sharedModules = [ sops-nix.homeManagerModules.sops ];
-              users.saghen = import ./home-manager/home.nix;
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useUserPackages = true;
+            useGlobalPkgs = true;
+            extraSpecialArgs = {
+              inputs = inputs;
+              inherit (inputs) spicetify-nix;
+              inherit (inputs) fenix;
+              inherit (inputs) limbo;
+              inherit (inputs) firefox-nightly;
             };
-          }
-        ];
-        specialArgs = { inherit inputs; };
-      };
+            sharedModules = [ sops-nix.homeManagerModules.sops ./machines/${hostname}/machine.nix ];
+            users.saghen = import ./home-manager/home.nix;
+          };
+        }
+      ];
+      specialArgs = { inherit inputs; };
+    };
+  in
+  {
+    nixosConfigurations = {
+      desktop = mkSystem "desktop";
+      laptop = mkSystem "laptop";
     };
   };
 }

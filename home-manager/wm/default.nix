@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, lib, ... }:
 
 {
   imports = [
@@ -11,31 +11,13 @@
     ./xdg.nix
   ];
   config = rec {
-    home = {
-      sessionVariables = {
-        DISPLAY1 = "DP-1";
-        DISPLAY2 = "DP-3";
-      };
-      packages = with pkgs; [ xorg.xrandr xclip feh ];
-    };
+    # Generate a set of DISPLAY1, DISPLAY2, ... based on monitors list
+    home.sessionVariables = builtins.listToAttrs (
+      lib.imap1 (i: monitor: {
+        name = "DISPLAY${toString i}";
+        value = monitor;
+      }) config.machine.monitors
+    );
     systemd.user.sessionVariables = home.sessionVariables;
-
-    systemd.user.services.set-keyboard-rate = {
-      Unit = {
-        Description = "Set keyboard rate";
-        After = [ "xorg.target" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.xorg.xset}/bin/xset r rate 240 40";
-      };
-    };
-    systemd.user.timers.set-keyboard-rate = {
-      Unit = { Description = "Set keyboard rate"; };
-      Timer = {
-        OnCalendar = "*:0/1"; # every minute
-        Unit = "set-keyboard-rate.service";
-      };
-    };
   };
 }

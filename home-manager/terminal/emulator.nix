@@ -10,8 +10,8 @@
       convert = c: builtins.substring 1 6 c;
     in {
       main = {
-        font = "Iosevka Custom Nerd Font:size=17";
-        line-height = "37px";
+        font = "Iosevka Custom Nerd Font:size=${toString (builtins.floor (14 * config.machine.scalingFactor))}";
+        line-height = "${toString (builtins.floor (30 * config.machine.scalingFactor))}px";
         underline-thickness = "2px";
         underline-offset = "5px";
         pad = "4x4";

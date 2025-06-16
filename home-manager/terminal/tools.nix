@@ -45,12 +45,10 @@
     go
     python3
     bun
-    deno
-    nodejs_22
-    corepack_22
+    nodejs_24
+    corepack_24
     gcc
     gnumake
-    lux-cli
     (fenix.complete.withComponents [
       "cargo"
       "clippy"
@@ -105,7 +103,7 @@
 
     gpg-agent = {
       enable = true;
-      pinentryPackage = pkgs.pinentry-tty;
+      pinentry.package = pkgs.pinentry-tty;
       extraConfig = ''
         allow-loopback-pinentry
       '';

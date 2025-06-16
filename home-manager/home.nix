@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  imports = [ ./apps ./modules ./terminal ./wm ];
+  imports = [ ./apps ./modules ./terminal ./wm ../modules/machine.nix ];
   config = {
     sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     home = {
