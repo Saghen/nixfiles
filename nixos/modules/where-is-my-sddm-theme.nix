@@ -1,11 +1,16 @@
 # Modified from nixpkgs to use the qt5 version
-
-{ lib, formats, stdenvNoCC, fetchFromGitHub, qtgraphicaleffects
-, themeConfig ? null }:
-
-let user-cfg = (formats.ini { }).generate "theme.conf.user" themeConfig;
-
-in stdenvNoCC.mkDerivation rec {
+{
+  lib,
+  formats,
+  stdenvNoCC,
+  fetchFromGitHub,
+  qtgraphicaleffects,
+  themeConfig ? null,
+}:
+let
+  user-cfg = (formats.ini { }).generate "theme.conf.user" themeConfig;
+in
+stdenvNoCC.mkDerivation rec {
   pname = "where-is-my-sddm-theme";
   version = "1.9.1-qt5";
 
@@ -21,7 +26,8 @@ in stdenvNoCC.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/sddm/themes/
     cp -r where_is_my_sddm_theme_qt5/ $out/share/sddm/themes/where_is_my_sddm_theme
-  '' + lib.optionalString (lib.isAttrs themeConfig) ''
+  ''
+  + lib.optionalString (lib.isAttrs themeConfig) ''
     ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme/theme.conf.user
   '';
 

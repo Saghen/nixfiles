@@ -17,7 +17,7 @@
     };
 
     firefox-nightly = {
-      url = "github:nix-community/flake-firefox-nightly";
+      url = "github:K900/flake-firefox-nightly/vendor-package-expression";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
@@ -42,40 +42,53 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, hardware, ... }: 
-  let
-    mkSystem = hostname: nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./nixos/configuration.nix
-        ./machines/${hostname}/nixos.nix
-        ./machines/${hostname}/machine.nix
-        sops-nix.nixosModules.sops
+  outputs =
+    inputs@{
+      nixpkgs,
+      home-manager,
+      sops-nix,
+      hardware,
+      ...
+    }:
+    let
+      mkSystem =
+        hostname:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./nixos/configuration.nix
+            ./machines/${hostname}/nixos.nix
+            ./machines/${hostname}/machine.nix
+            sops-nix.nixosModules.sops
 
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useUserPackages = true;
-            useGlobalPkgs = true;
-            extraSpecialArgs = {
-              inputs = inputs;
-              inherit (inputs) spicetify-nix;
-              inherit (inputs) fenix;
-              inherit (inputs) limbo;
-              inherit (inputs) firefox-nightly;
-            };
-            sharedModules = [ sops-nix.homeManagerModules.sops ./machines/${hostname}/machine.nix ];
-            users.saghen = import ./home-manager/home.nix;
-          };
-        }
-      ];
-      specialArgs = { inherit inputs; };
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useUserPackages = true;
+                useGlobalPkgs = true;
+                extraSpecialArgs = {
+                  inputs = inputs;
+                  inherit (inputs) alejandra;
+                  inherit (inputs) spicetify-nix;
+                  inherit (inputs) fenix;
+                  inherit (inputs) limbo;
+                  inherit (inputs) firefox-nightly;
+                };
+                sharedModules = [
+                  sops-nix.homeManagerModules.sops
+                  ./machines/${hostname}/machine.nix
+                ];
+                users.saghen = import ./home-manager/home.nix;
+              };
+            }
+          ];
+          specialArgs = { inherit inputs; };
+        };
+    in
+    {
+      nixosConfigurations = {
+        desktop = mkSystem "desktop";
+        laptop = mkSystem "laptop";
+      };
     };
-  in
-  {
-    nixosConfigurations = {
-      desktop = mkSystem "desktop";
-      laptop = mkSystem "laptop";
-    };
-  };
 }

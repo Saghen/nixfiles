@@ -1,5 +1,8 @@
-{ pkgs, config, inputs, ... }:
-
+{
+  pkgs,
+  config,
+  ...
+}:
 {
   # rust packages
   home.sessionPath = [ "$HOME/.config/cargo/bin" ];
@@ -62,32 +65,34 @@
   ];
 
   # Move a bunch of random dirs to XDG dirs
-  home.sessionVariables = let
-    home = "/home/${config.home.username}";
-    cache = "${home}/.cache";
-    cfg = "${home}/.config";
-    data = "${home}/.local/share";
-    state = "${home}/.local/state";
-    # todo: find the UID of the user
-    runtime = "/run/user/1000";
-  in {
-    CUDA_CACHE_PATH = "${cache}/nv";
-    PNPM_HOME = "${data}/pnpm";
-    NODE_REPL_HISTORY = "${data}/node_repl_history";
-    NPM_CONFIG_PREFIX = "${data}/npm";
-    NPM_CONFIG_CACHE = "${cache}/npm";
-    NPM_CONFIG_TMP = "${runtime}/npm";
-    CARGO_HOME = "${cfg}/cargo";
-    RUSTUP_HOME = "${data}/rust";
-    GOPATH = "${data}/go";
-    W3M_DIR = "${data}/w3m";
-    XCOMPOSECACHE = "${cache}/X11/xcompose";
-    KUBECONFIG = "${cfg}/kube/config";
-    KREW_ROOT = "${data}/krew";
-    DOCKER_CONFIG = "${cfg}/docker";
-    PYTHON_HISTORY = "${state}/python/history";
-    HISTFILE = "${state}/bash/history";
-  };
+  home.sessionVariables =
+    let
+      home = "/home/${config.home.username}";
+      cache = "${home}/.cache";
+      cfg = "${home}/.config";
+      data = "${home}/.local/share";
+      state = "${home}/.local/state";
+      # todo: find the UID of the user
+      runtime = "/run/user/1000";
+    in
+    {
+      CUDA_CACHE_PATH = "${cache}/nv";
+      PNPM_HOME = "${data}/pnpm";
+      NODE_REPL_HISTORY = "${data}/node_repl_history";
+      NPM_CONFIG_PREFIX = "${data}/npm";
+      NPM_CONFIG_CACHE = "${cache}/npm";
+      NPM_CONFIG_TMP = "${runtime}/npm";
+      CARGO_HOME = "${cfg}/cargo";
+      RUSTUP_HOME = "${data}/rust";
+      GOPATH = "${data}/go";
+      W3M_DIR = "${data}/w3m";
+      XCOMPOSECACHE = "${cache}/X11/xcompose";
+      KUBECONFIG = "${cfg}/kube/config";
+      KREW_ROOT = "${data}/krew";
+      DOCKER_CONFIG = "${cfg}/docker";
+      PYTHON_HISTORY = "${state}/python/history";
+      HISTFILE = "${state}/bash/history";
+    };
   xdg.configFile = {
     cargo = {
       target = "cargo/config.toml";
@@ -132,18 +137,23 @@
           identityFile = "/etc/ssh/ssh_host_ed25519_key";
           identitiesOnly = true;
         };
+        otoro.forwardAgent = true;
       };
     };
 
     gpg = {
       enable = true;
-      settings = { pinentry-mode = "loopback"; };
+      settings = {
+        pinentry-mode = "loopback";
+      };
     };
 
     # cat with syntax highlighting
     bat = {
       enable = true;
-      config = { theme = "base16"; };
+      config = {
+        theme = "base16";
+      };
     };
 
     git = {
@@ -156,20 +166,34 @@
         key = "A8F94F230A4470B1";
       };
       extraConfig = {
-        core = { excludesfile = "~/.gitignore_global"; };
-        url = {
-          "ssh://git@github.com" = { insteadOf = "https://github.com"; };
-          "ssh://git@hf.co" = { insteadOf = "https://huggingface.co"; };
+        core = {
+          excludesfile = "~/.gitignore_global";
         };
-        init = { defaultBranch = "main"; };
-        pull = { rebase = true; };
+        url = {
+          "ssh://git@github.com" = {
+            insteadOf = "https://github.com";
+          };
+          "ssh://git@hf.co" = {
+            insteadOf = "https://huggingface.co";
+          };
+        };
+        init = {
+          defaultBranch = "main";
+        };
+        pull = {
+          rebase = true;
+        };
       };
     };
 
     # better grep
     ripgrep = {
       enable = true;
-      arguments = [ "--smart-case" "--colors" "match:fg:magenta" ];
+      arguments = [
+        "--smart-case"
+        "--colors"
+        "match:fg:magenta"
+      ];
     };
 
     # z for jumping between directories

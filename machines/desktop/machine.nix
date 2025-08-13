@@ -1,17 +1,24 @@
 { ... }:
-
 {
   config = {
-   machine = {
+    machine = {
       scalingFactor = 1.25;
-      monitors = [ "DP-4" "DP-6" ];
+      monitors = [
+        "DP-4"
+        "DP-6"
+      ];
+      refreshRate = 240;
+      resolution = "3840x2160";
       nvidia = true;
 
       disks = {
         boot = {
           diskUuid = "A4CE-53EE";
           type = "vfat";
-          options = [ "fmask=0077" "dmask=0077" ];
+          options = [
+            "fmask=0077"
+            "dmask=0077"
+          ];
         };
         root = {
           luksUuid = "3ea45185-1664-42c7-af17-2061fdaad3cf";

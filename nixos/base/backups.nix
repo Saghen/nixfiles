@@ -1,13 +1,15 @@
-{ pkgs, config, ... }:
-
+{
+  pkgs,
+  config,
+  ...
+}:
 rec {
   # Backup game folders
   systemd.services.ludusavi = {
     description = "Backup game saves";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart =
-        "${pkgs.ludusavi}/bin/ludusavi --config /etc/ludusavi backup --force";
+      ExecStart = "${pkgs.ludusavi}/bin/ludusavi --config /etc/ludusavi backup --force";
     };
   };
   systemd.timers.ludusavi = {
@@ -60,11 +62,12 @@ rec {
     owner = "root";
     group = "root";
   };
-  sops.secrets."restic/super-fish/password" =
-    sops.secrets."restic/super-fish/repository";
+  sops.secrets."restic/super-fish/password" = sops.secrets."restic/super-fish/repository";
   services.restic.backups = {
     home = {
-      timerConfig = { OnCalendar = "*-*-* 4:00:00"; }; # every day at 4am
+      timerConfig = {
+        OnCalendar = "*-*-* 4:00:00";
+      }; # every day at 4am
       repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
       passwordFile = config.sops.secrets."restic/super-fish/password".path;
       initialize = true;

@@ -1,5 +1,4 @@
 { inputs, ... }:
-
 {
   # hardware-specific modules
   # TODO: use framework specific module

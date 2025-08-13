@@ -1,5 +1,8 @@
-{ config, lib, ... }:
-
+{
+  config,
+  lib,
+  ...
+}:
 {
   imports = [
     ./centerpiece.nix

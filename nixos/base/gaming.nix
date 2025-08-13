@@ -1,10 +1,11 @@
-{ pkgs, inputs, config, ... }:
-
+{ pkgs, ... }:
 {
   # controller support
   hardware.xone.enable = true;
 
   # games
+  environment.systemPackages = with pkgs; [ mangohud ];
+
   hardware.steam-hardware.enable = true;
   programs.steam = {
     enable = true;
@@ -39,14 +40,13 @@
       };
     };
   };
-  environment.systemPackages = with pkgs; [ mangohud ];
 
   # streaming
   services.sunshine = {
     enable = false;
     openFirewall = true;
     capSysAdmin = true;
-    package = pkgs.sunshine.override ({ cudaSupport = true; });
+    package = pkgs.sunshine.override { cudaSupport = true; };
 
     settings = {
       min_log_level = "debug";
@@ -64,17 +64,21 @@
     };
 
     applications = {
-      env = { PATH = "$(PATH):$(HOME)/.local/bin"; };
-      apps = [{
-        name = "Steam";
-        output = "";
-        cmd = "";
-        exclude-global-prep-cmd = "false";
-        elevated = "false";
-        auto-detach = "true";
-        image-path = "steam.png";
-        detached = [ "setsid steam steam://open/bigpicture" ];
-      }];
+      env = {
+        PATH = "$(PATH):$(HOME)/.local/bin";
+      };
+      apps = [
+        {
+          name = "Steam";
+          output = "";
+          cmd = "";
+          exclude-global-prep-cmd = "false";
+          elevated = "false";
+          auto-detach = "true";
+          image-path = "steam.png";
+          detached = [ "setsid steam steam://open/bigpicture" ];
+        }
+      ];
     };
   };
 }

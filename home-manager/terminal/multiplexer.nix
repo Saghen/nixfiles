@@ -1,7 +1,8 @@
 { config, ... }:
-
-let colors = config.colors;
-in {
+let
+  colors = config.colors;
+in
+{
   programs.zellij = {
     enable = true;
     enableFishIntegration = false;
@@ -11,7 +12,19 @@ in {
       session_serialization = false;
       show_startup_tips = false;
 
-      keybinds = { _props = { clear-defaults = true; }; };
+      keybinds = {
+        _props = {
+          clear-defaults = true;
+        };
+        # doesn't matter what this is,
+        # we just need some key so that config validation passes
+        normal = {
+          bind = {
+            _args = [ "left" ];
+            MoveFocus = [ "left" ];
+          };
+        };
+      };
 
       theme = "personal";
       themes = {
@@ -40,4 +53,3 @@ in {
       }
     }'';
 }
-

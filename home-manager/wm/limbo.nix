@@ -1,7 +1,12 @@
-{ config, limbo, ... }:
-
-let colors = config.colors;
-in {
+{
+  config,
+  limbo,
+  ...
+}:
+let
+  colors = config.colors;
+in
+{
   imports = [ limbo.homeManagerModules.default ];
 
   services.limbo = {
@@ -11,12 +16,13 @@ in {
         lon = -79.38;
         lat = 43.65;
       };
-      theme = { font = "IBM Plex Mono"; };
+      theme = {
+        font = "IBM Plex Mono";
+      };
       bar = {
         notifications = {
           weather = {
-            onPrimaryClick =
-              "xdg-open https://merrysky.net/forecast/Toronto/CA";
+            onPrimaryClick = "xdg-open https://merrysky.net/forecast/Toronto/CA";
           };
         };
         quickSettings = {
@@ -56,12 +62,17 @@ in {
         sysmon = {
           onPrimaryClick = "gnome-system-monitor";
           temp = {
-            path =
-              "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp3_input";
+            path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp3_input";
           };
         };
         twitch = {
-          channels = [ "simply" "tarik" "jerma985" "clintstevens" "liam" ];
+          channels = [
+            "simply"
+            "tarik"
+            "jerma985"
+            "clintstevens"
+            "liam"
+          ];
         };
       };
     };

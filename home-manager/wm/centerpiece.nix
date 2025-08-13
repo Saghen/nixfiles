@@ -1,7 +1,12 @@
-{ config, inputs, ... }:
-
-let colors = config.colors;
-in {
+{
+  config,
+  inputs,
+  ...
+}:
+let
+  colors = config.colors;
+in
+{
   # TODO: using pkgs.system here causes infinite recursion
   imports = [ inputs.centerpiece.hmModules."x86_64-linux".default ];
 

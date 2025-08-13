@@ -1,7 +1,16 @@
-{ pkgs, config, ... }:
-
 {
-  imports = [ ./firefox ./thunderbird ./discord.nix ./spotify.nix ./video.nix ];
+  pkgs,
+  config,
+  ...
+}:
+{
+  imports = [
+    ./firefox
+    ./thunderbird
+    ./discord.nix
+    ./spotify.nix
+    ./video.nix
+  ];
   config = {
     home.packages = with pkgs; [
       vesktop # Discord with screen share and audio
@@ -28,27 +37,29 @@
     # google drive lite
     services.syncthing.enable = true;
 
-    xdg.configFile.qimgv-theme = let
-      toINI = pkgs.lib.generators.toINI { };
-      colors = config.colors;
-    in {
-      target = "qimgv/theme.conf";
-      text = toINI {
-        Colors = {
-          accent = colors.primary;
-          background = colors.base;
-          background_fullscreen = colors.base;
-          folderview = colors.base;
-          folderview_topbar = colors.mantle;
-          icons = colors.subtext-2;
-          overlay = colors.core;
-          overlay_text = colors.text;
-          scrollbar = colors.surface-0;
-          text = colors.text;
-          widget = colors.core;
-          widget_border = colors.surface-0;
+    xdg.configFile.qimgv-theme =
+      let
+        toINI = pkgs.lib.generators.toINI { };
+        colors = config.colors;
+      in
+      {
+        target = "qimgv/theme.conf";
+        text = toINI {
+          Colors = {
+            accent = colors.primary;
+            background = colors.base;
+            background_fullscreen = colors.base;
+            folderview = colors.base;
+            folderview_topbar = colors.mantle;
+            icons = colors.subtext-2;
+            overlay = colors.core;
+            overlay_text = colors.text;
+            scrollbar = colors.surface-0;
+            text = colors.text;
+            widget = colors.core;
+            widget_border = colors.surface-0;
+          };
         };
       };
-    };
   };
 }

@@ -1,7 +1,10 @@
 { pkgs, ... }:
-
 {
-  home.packages = with pkgs; [ mpv vlc jellyfin-mpv-shim ];
+  home.packages = with pkgs; [
+    mpv
+    vlc
+    jellyfin-mpv-shim
+  ];
 
   xdg.configFile.mpv = {
     target = "jellyfin-mpv-shim/mpv.conf";

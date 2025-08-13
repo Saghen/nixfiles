@@ -1,5 +1,7 @@
-{ lib, stdenvNoCC }:
-
+{
+  lib,
+  stdenvNoCC,
+}:
 stdenvNoCC.mkDerivation {
   pname = "feather";
   version = "2024-04-19";

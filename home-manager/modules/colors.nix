@@ -4,17 +4,18 @@ let
   colour = lib.mkOptionType {
     name = "colour";
     description = "hex colour";
-    check = s:
-      lib.types.str.check s && builtins.match "#[0-9a-fA-F]{6}" s != null;
+    check = s: lib.types.str.check s && builtins.match "#[0-9a-fA-F]{6}" s != null;
   };
 
-  mkColourOption = name: default:
+  mkColourOption =
+    name: default:
     (lib.mkOption {
       type = colour;
       description = "The colour value for the name '${name}'.";
       inherit default;
     });
-in {
+in
+{
   # slightly modified catppuccin theme
   options.colors = builtins.mapAttrs mkColourOption rec {
     crust = "#11111b";

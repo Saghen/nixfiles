@@ -1,5 +1,10 @@
-{ lib, pkgs, config, inputs, ... }:
-
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 let
   monitors = config.machine.monitors;
   colors = config.colors;
@@ -7,7 +12,8 @@ let
 
   gameWorkspace = toString (if builtins.length monitors > 1 then 3 else 5);
   mediaWorkspace = toString (if builtins.length monitors > 1 then 7 else 4);
-in {
+in
+{
   home.packages = with pkgs; [ wl-clipboard ];
 
   services.hyprpaper = {
@@ -49,25 +55,28 @@ in {
   # TODO: switch to https://codeberg.org/dnkl/fuzzel ? for the application icons
   programs.tofi = {
     enable = true;
-    settings = let colors = config.colors;
-    in {
-      font = "${pkgs.noto-fonts}/share/fonts/noto/NotoSans[wdth,wght].ttf";
-      font-size = 16;
+    settings =
+      let
+        colors = config.colors;
+      in
+      {
+        font = "${pkgs.noto-fonts}/share/fonts/noto/NotoSans[wdth,wght].ttf";
+        font-size = 16;
 
-      width = 720;
-      height = 540;
+        width = 720;
+        height = 540;
 
-      outline-width = 0;
-      border-width = 1;
-      border-color = colors.primary;
-      background-color = colors.base;
-      text-color = colors.text;
-      prompt-color = colors.primary;
-      selection-color = colors.yellow;
+        outline-width = 0;
+        border-width = 1;
+        border-color = colors.primary;
+        background-color = colors.base;
+        text-color = colors.text;
+        prompt-color = colors.primary;
+        selection-color = colors.yellow;
 
-      fuzzy-match = true;
-      drun-launch = true;
-    };
+        fuzzy-match = true;
+        drun-launch = true;
+      };
   };
 
   wayland.windowManager.hyprland = {
@@ -81,16 +90,25 @@ in {
         "${builtins.elemAt monitors 1}, 3840x2160@240, 0x0, 1"
         "Unknown-1, disable"
       ];
-      xwayland = { force_zero_scaling = true; };
+      xwayland = {
+        force_zero_scaling = true;
+      };
 
       # assign 6 workspaces to each monitor
-      workspace = builtins.genList (x:
-        let
-          ws = toString (x + 1);
-          monitor = builtins.elemAt monitors (x / 6);
-        in "${ws}, monitor:${monitor}") (builtins.length monitors * 6)
+      workspace =
+        builtins.genList (
+          x:
+          let
+            ws = toString (x + 1);
+            monitor = builtins.elemAt monitors (x / 6);
+          in
+          "${ws}, monitor:${monitor}"
+        ) (builtins.length monitors * 6)
         # Hide gaps on single window in workspace
-        ++ [ "w[tv1], gapsout:0, gapsin:0" "f[1], gapsout:0, gapsin:0" ];
+        ++ [
+          "w[tv1], gapsout:0, gapsin:0"
+          "f[1], gapsout:0, gapsin:0"
+        ];
 
       # TODO: doesnt apply to foot because it runs as a server
       env = [
@@ -106,7 +124,8 @@ in {
 
         # enable wayland in all apps
         # "NIXOS_OZONE_WL,1"
-      ] ++ lib.optionals (config.machine.nvidia) [
+      ]
+      ++ lib.optionals (config.machine.nvidia) [
         "LIBVA_DRIVER_NAME,nvidia"
         "NVD_BACKEND,direct"
       ];
@@ -120,7 +139,11 @@ in {
         "col.inactive_border" = convertHL colors.base;
         "col.active_border" = convertHL colors.primary;
       };
-      decoration = { blur = { enabled = false; }; };
+      decoration = {
+        blur = {
+          enabled = false;
+        };
+      };
       cursor = {
         no_hardware_cursors = true;
         no_warps = true;
@@ -134,7 +157,9 @@ in {
         follow_mouse = 2;
         float_switch_override_focus = 0;
 
-        touchpad = { natural_scroll = true; };
+        touchpad = {
+          natural_scroll = true;
+        };
 
         kb_options = "caps:super";
         repeat_rate = 40;
@@ -156,148 +181,154 @@ in {
 
         # Whether mouse moving into a different monitor should focus it
         mouse_move_focuses_monitor = false;
-        # WARN: buggy, starts rendering before your monitor displays a frame in order to lower latency
-        render_ahead_of_time = false;
-        render_ahead_safezone = 2;
 
         disable_xdg_env_checks = true;
 
         # Reduces latency by showing frames as they come in, and eliminates tearing
         vrr = 0;
       };
-      render = { direct_scanout = true; };
+      render = {
+        direct_scanout = true;
+      };
       # debug = { disable_logs = false; };
 
       ## Animations
       animation = [ "global,1,1,default," ];
 
       ## Binds
-      bind = let
-        wayfreeze =
-          "${inputs.wayfreeze.packages.${pkgs.system}.wayfreeze}/bin/wayfreeze";
-        wayshot = "${pkgs.wayshot}/bin/wayshot";
-        slurp = "${pkgs.slurp}/bin/slurp";
-        pkill = "${pkgs.procps}/bin/pkill";
-        wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
-        wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
-        satty = "${pkgs.satty}/bin/satty";
-        jq = "${pkgs.jq}/bin/jq";
+      bind =
+        let
+          wayfreeze = "${inputs.wayfreeze.packages.${pkgs.system}.wayfreeze}/bin/wayfreeze";
+          wayshot = "${pkgs.wayshot}/bin/wayshot";
+          slurp = "${pkgs.slurp}/bin/slurp";
+          pkill = "${pkgs.procps}/bin/pkill";
+          wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
+          wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
+          satty = "${pkgs.satty}/bin/satty";
+          jq = "${pkgs.jq}/bin/jq";
 
-        # https://github.com/Jappie3/wayfreeze/issues/14
-        screenshotTmpl = args:
-          "${wayfreeze} --hide-cursor --after-freeze-cmd='"
-          + "${wayshot} ${args} --stdout | ${wl-copy}" # take screenshot and copy to clipboard
-          + " && ${wl-paste} > ~/pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png" # save to file
-          + " && cat < ~/pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png" # stdout filename for satty
-          + "; ${pkill} wayfreeze'"; # unfreeze
+          # https://github.com/Jappie3/wayfreeze/issues/14
+          screenshotTmpl =
+            args:
+            "${wayfreeze} --hide-cursor --after-freeze-cmd='"
+            + "${wayshot} ${args} --stdout | ${wl-copy}" # take screenshot and copy to clipboard
+            + " && ${wl-paste} > ~/pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png" # save to file
+            + " && cat < ~/pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png" # stdout filename for satty
+            + "; ${pkill} wayfreeze'"; # unfreeze
 
-        screenshotRegion = screenshotTmpl ''-s "$(${slurp})"'';
+          screenshotRegion = screenshotTmpl ''-s "$(${slurp})"'';
 
-        # never touch this...
-        # format from docs: https://github.com/emersion/slurp
-        windowSlurp = pkgs.writeShellScriptBin "window-slurp" ''
-          VISIBLE_WORKSPACES=$(hyprctl monitors -j | ${jq} -r 'map(.activeWorkspace.id) | tostring')
-          hyprctl clients -j | ${jq} "map(select([.workspace.id] | inside($VISIBLE_WORKSPACES))) | map(select(.hidden | not))" | ${jq} -r '.[] | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | ${slurp}
-        '';
-        screenshotWindow =
-          screenshotTmpl ''-s "$(${windowSlurp}/bin/window-slurp)"'';
+          # never touch this...
+          # format from docs: https://github.com/emersion/slurp
+          windowSlurp = pkgs.writeShellScriptBin "window-slurp" ''
+            VISIBLE_WORKSPACES=$(hyprctl monitors -j | ${jq} -r 'map(.activeWorkspace.id) | tostring')
+            hyprctl clients -j | ${jq} "map(select([.workspace.id] | inside($VISIBLE_WORKSPACES))) | map(select(.hidden | not))" | ${jq} -r '.[] | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | ${slurp}
+          '';
+          screenshotWindow = screenshotTmpl ''-s "$(${windowSlurp}/bin/window-slurp)"'';
 
-        monitorSlurp = pkgs.writeShellScriptBin "monitor-slurp" ''
-          hyprctl monitors -j | ${jq} -r '.[] | "\(.x),\(.y) \(.width)x\(.height)"' | ${slurp}
-        '';
-        screenshotMonitor =
-          screenshotTmpl ''-s "$(${monitorSlurp}/bin/monitor-slurp)"'';
+          monitorSlurp = pkgs.writeShellScriptBin "monitor-slurp" ''
+            hyprctl monitors -j | ${jq} -r '.[] | "\(.x),\(.y) \(.width)x\(.height)"' | ${slurp}
+          '';
+          screenshotMonitor = screenshotTmpl ''-s "$(${monitorSlurp}/bin/monitor-slurp)"'';
 
-        subtext = builtins.substring 1 6 colors.subtext-1;
-        launchNeovimZellij = pkgs.writeShellScriptBin "launch-neovim-zellij" ''
-          WINDOW_ADDRESS=$(hyprctl clients -j | jq 'map(select(.class == "zellij-neovim")) | .[0].address' -r)
-          if [ "$WINDOW_ADDRESS" == "null" ]; then
-            footclient \
-              -o colors.foreground=${subtext} \
-              -o pad=0x0 \
-              --window-size-pixels=3840x2160 \
-              --app-id zellij-neovim \
-              --title zellij-neovim \
-              fish -c "zellij --session neovim --new-session-with-layout neovim || zellij attach neovim"
-          else
-            hyprctl dispatch focuswindow zellij-neovim
-          fi
-        '';
+          subtext = builtins.substring 1 6 colors.subtext-1;
+          launchNeovimZellij = pkgs.writeShellScriptBin "launch-neovim-zellij" ''
+            WINDOW_ADDRESS=$(hyprctl clients -j | jq 'map(select(.class == "zellij-neovim")) | .[0].address' -r)
+            if [ "$WINDOW_ADDRESS" == "null" ]; then
+              footclient \
+                -o colors.foreground=${subtext} \
+                -o pad=0x0 \
+                --window-size-pixels=3840x2160 \
+                --app-id zellij-neovim \
+                --title zellij-neovim \
+                fish -c "zellij --session neovim --new-session-with-layout neovim || zellij attach neovim"
+            else
+              hyprctl dispatch focuswindow zellij-neovim
+            fi
+          '';
 
-        swayosdClient = "${pkgs.swayosd}/bin/swayosd-client";
-      in [
-        # applications
-        # TODO: wgpu selects non existent igpu by default
-        # https://github.com/iced-rs/iced/issues/2810
-        "$mod, Space, exec, fish -c \"WGPU_POWER_PREF='high' centerpiece\""
-        "$mod, Return, exec, footclient"
-        # NOTE: specifying the window size avoids a flash of smaller window
-        # NOTE: specifying the foreground color sets the cursor color when the background/foreground are the same
-        "$mod, c, exec, ${launchNeovimZellij}/bin/launch-neovim-zellij"
-        "$mod + SHIFT, c, exec, footclient -o colors.foreground=${subtext} -o pad=0x0 --window-size-pixels=2560x1440 --app-id neovim --title neovim nvim"
-        "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
+          swayosdClient = "${pkgs.swayosd}/bin/swayosd-client";
+        in
+        [
+          # applications
+          # TODO: wgpu selects non existent igpu by default
+          # https://github.com/iced-rs/iced/issues/2810
+          "$mod, Space, exec, fish -c \"WGPU_POWER_PREF='high' centerpiece\""
+          "$mod, Return, exec, footclient"
+          # NOTE: specifying the window size avoids a flash of smaller window
+          # NOTE: specifying the foreground color sets the cursor color when the background/foreground are the same
+          "$mod, c, exec, ${launchNeovimZellij}/bin/launch-neovim-zellij"
+          "$mod + SHIFT, c, exec, footclient -o colors.foreground=${subtext} -o pad=0x0 --window-size-pixels=2560x1440 --app-id neovim --title neovim nvim"
+          "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
 
-        # screenshots
-        ", Print, exec, ${screenshotRegion}"
-        "SHIFT, Print, exec, ${screenshotRegion} | ${satty} --early-exit --filename -"
-        "CTRL, Print, exec, ${screenshotWindow}"
-        "CTRL + SHIFT, Print, exec, ${screenshotWindow} | ${satty} --early-exit --filename -"
-        "ALT, Print, exec, ${screenshotMonitor}"
-        "ALT + SHIFT, Print, exec, ${screenshotMonitor} | ${satty} --early-exit --filename -"
+          # screenshots
+          ", Print, exec, ${screenshotRegion}"
+          "SHIFT, Print, exec, ${screenshotRegion} | ${satty} --early-exit --filename -"
+          "CTRL, Print, exec, ${screenshotWindow}"
+          "CTRL + SHIFT, Print, exec, ${screenshotWindow} | ${satty} --early-exit --filename -"
+          "ALT, Print, exec, ${screenshotMonitor}"
+          "ALT + SHIFT, Print, exec, ${screenshotMonitor} | ${satty} --early-exit --filename -"
 
-        # window management
-        "$mod, q, focusmonitor, +1"
-        # TODO: figure out how to alterzindex since bringactivetotop is deprecated
-        "$mod, r, exec, hyprctl dispatch cyclenext && hyprctl dispatch bringactivetotop"
-        "$mod + SHIFT, r, cyclenext, prev"
-        "$mod, a, movewindow, mon:+1"
-        "$mod, w, exec, hyprctl activewindow -j | jq '.fullscreen == 0' -e && hyprctl dispatch closewindow activewindow"
-        "$mod + ALT, w, closewindow, activewindow"
-        "$mod + ALT + SHIFT, w, killactive"
-        "$mod, f, togglefloating"
-        "$mod + SHIFT, f, fullscreen"
-        "$mod, s, swapactiveworkspaces, ${lib.concatStringsSep " " monitors}"
-        "$mod, d, centerwindow"
+          # window management
+          "$mod, q, focusmonitor, +1"
+          # TODO: figure out how to alterzindex since bringactivetotop is deprecated
+          "$mod, r, exec, hyprctl dispatch cyclenext && hyprctl dispatch bringactivetotop"
+          "$mod + SHIFT, r, cyclenext, prev"
+          "$mod, a, movewindow, mon:+1"
+          "$mod, w, exec, hyprctl activewindow -j | jq '.fullscreen == 0' -e && hyprctl dispatch closewindow activewindow"
+          "$mod + ALT, w, closewindow, activewindow"
+          "$mod + ALT + SHIFT, w, killactive"
+          "$mod, f, togglefloating"
+          "$mod + SHIFT, f, fullscreen"
+          "$mod, s, swapactiveworkspaces, ${lib.concatStringsSep " " monitors}"
+          "$mod, d, centerwindow"
 
-        # bar
-        "$mod, b, exec, systemctl --user restart limbo"
-        "$mod + SHIFT, b, exec, systemctl --user stop limbo"
-        "$mod + ALT, b, exec, systemctl --user start limbo"
+          # bar
+          "$mod, b, exec, systemctl --user restart limbo"
+          "$mod + SHIFT, b, exec, systemctl --user stop limbo"
+          "$mod + ALT, b, exec, systemctl --user start limbo"
 
-        # special
-        ## swayosd  TODO: never tested
-        ", XF86AudioRaiseVolume, exec, ${swayosdClient} --output-volume raise"
-        ", XF86AudioLowerVolume, exec, ${swayosdClient} --output-volume lower"
-        ", XF86AudioMute, exec, ${swayosdClient} --output-volume mute-toggle"
-        ", XF86AudioMicMute, exec, ${swayosdClient} --input-volume mute-toggle"
-        ", XF86MonBrightnessUp, exec, ${swayosdClient} --brightness raise"
-        ", XF86MonBrightnessDown, exec, ${swayosdClient} --brightness lower"
-        ## media
-        ", XF86AudioPlay, exec, playerctl --player=spotify play-pause"
-        ", XF86AudioNext, exec, playerctl --player=spotify next"
-        ", XF86AudioPrev, exec, playerctl --player=spotify previous"
-        "CTRL, XF86AudioPlay, exec, playerctl --player=firefox play-pause"
-        "CTRL, XF86AudioNext, exec, playerctl --player=firefox next"
-        "CTRL, XF86AudioPrev, exec, playerctl --player=firefox previous"
+          # special
+          ## swayosd  TODO: never tested
+          ", XF86AudioRaiseVolume, exec, ${swayosdClient} --output-volume raise"
+          ", XF86AudioLowerVolume, exec, ${swayosdClient} --output-volume lower"
+          ", XF86AudioMute, exec, ${swayosdClient} --output-volume mute-toggle"
+          ", XF86AudioMicMute, exec, ${swayosdClient} --input-volume mute-toggle"
+          ", XF86MonBrightnessUp, exec, ${swayosdClient} --brightness raise"
+          ", XF86MonBrightnessDown, exec, ${swayosdClient} --brightness lower"
+          ## media
+          ", XF86AudioPlay, exec, playerctl --player=spotify play-pause"
+          ", XF86AudioNext, exec, playerctl --player=spotify next"
+          ", XF86AudioPrev, exec, playerctl --player=spotify previous"
+          "CTRL, XF86AudioPlay, exec, playerctl --player=firefox play-pause"
+          "CTRL, XF86AudioNext, exec, playerctl --player=firefox next"
+          "CTRL, XF86AudioPrev, exec, playerctl --player=firefox previous"
 
-        "$mod + ALT, n, exit"
-      ] ++ (
-        # workspaces
-        # binds $mod + [alt +] {1..6} to [move to] workspace {1..6}
-        builtins.concatLists (builtins.genList (x:
-          let
-            ws = let c = (x + 1) / 10; in builtins.toString (x + 1 - (c * 10));
-            # TODO: changes depending on monitor order
-            is_main_monitor =
-              "test $(hyprctl activeworkspace -j | jq '.monitorID') -eq 0";
-            get_workspace =
-              "${is_main_monitor} && echo ${toString (x + 1)} || echo ${
-                toString (x + 7)
-              }";
-          in [
-            "$mod, ${ws}, exec, hyprctl dispatch workspace $(${get_workspace})"
-            "$mod + ALT, ${ws}, exec, hyprctl dispatch movetoworkspace $(${get_workspace})"
-          ]) 6));
+          "$mod + ALT, n, exit"
+        ]
+        ++ (
+          # workspaces
+          # binds $mod + [alt +] {1..6} to [move to] workspace {1..6}
+          builtins.concatLists (
+            builtins.genList (
+              x:
+              let
+                ws =
+                  let
+                    c = (x + 1) / 10;
+                  in
+                  builtins.toString (x + 1 - (c * 10));
+                # TODO: changes depending on monitor order
+                is_main_monitor = "test $(hyprctl activeworkspace -j | jq '.monitorID') -eq 0";
+                get_workspace = "${is_main_monitor} && echo ${toString (x + 1)} || echo ${toString (x + 7)}";
+              in
+              [
+                "$mod, ${ws}, exec, hyprctl dispatch workspace $(${get_workspace})"
+                "$mod + ALT, ${ws}, exec, hyprctl dispatch movetoworkspace $(${get_workspace})"
+              ]
+            ) 6
+          )
+        );
 
       bindm = [
         # mouse movements

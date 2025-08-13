@@ -1,22 +1,20 @@
 { lib, ... }:
-
 with lib;
-
 let
   bootDevice = {
     diskUuid = mkOption {
       type = types.str;
       description = "Device path (lsblk -f)";
     };
-    
+
     type = mkOption {
       type = types.str;
       description = "Filesystem type (e.g., ext4, btrfs)";
     };
-    
+
     options = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Mount options";
     };
   };
@@ -26,20 +24,20 @@ let
       type = types.str;
       description = "LUKS device name (lsblk -f | grep crypto_LUKS)";
     };
-    
+
     diskUuid = mkOption {
       type = types.str;
       description = "Device path after unlocking (lsblk -f, unlock with cryptsetup luksOpen /dev/nvme...)";
     };
-    
+
     type = mkOption {
       type = types.str;
       description = "Filesystem type (e.g., f2fs, btrfs)";
     };
-    
+
     options = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Mount options";
     };
 
@@ -49,7 +47,8 @@ let
       description = "Trim filesystem";
     };
   };
-in {
+in
+{
   options.machine = {
     scalingFactor = lib.mkOption {
       type = lib.types.float;
@@ -60,7 +59,22 @@ in {
     monitors = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = "List of monitor names";
-      default = [ "DP-4" "DP-6" ];
+      default = [
+        "DP-4"
+        "DP-6"
+      ];
+    };
+
+    refreshRate = lib.mkOption {
+      type = lib.types.int;
+      default = 60;
+      description = "Refresh rate of monitors";
+    };
+
+    resolution = lib.mkOption {
+      type = lib.types.str;
+      default = "1920x1080";
+      description = "Resolution of monitors";
     };
 
     optimizePower = lib.mkOption {

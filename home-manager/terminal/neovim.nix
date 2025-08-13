@@ -1,10 +1,15 @@
 # Requires cloning nvim config manually
 # git clone https://github.com/saghen/nvim ~/.config/nvim
-
-{ inputs, pkgs, lib, config, ... }:
-
+{
+  inputs,
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   home.sessionVariables.VISUAL = "nvim";
+  home.sessionVariables.PAGER = "nvim +Man!";
 
   sops.secrets.neovim = {
     sopsFile = ../../keys/sops/neovim.yaml;
@@ -106,7 +111,7 @@
 
       # Voice recording for gp.nvim
       alsa-utils # for arecord
-      (sox.override({enableLame = true;}))
+      (sox.override { enableLame = true; })
 
       ## LSPs, formatters, linters
       efm-langserver
@@ -129,7 +134,7 @@
       postgres-lsp
       # nix
       nil
-      nixfmt-classic
+      nixfmt
       # python
       black
       basedpyright

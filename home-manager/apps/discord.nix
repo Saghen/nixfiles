@@ -1,5 +1,4 @@
 { config, ... }:
-
 # TODO: finish theming this, need hex -> rgb func
 {
   programs.firefoxNativefy = {
@@ -66,7 +65,7 @@
 
             --border-subtle: var(--bg-secondary);
             --border-normal: var(--bg-secondary);
-            
+
 
             --chat-background-default: var(--bg-secondary) !important;
 

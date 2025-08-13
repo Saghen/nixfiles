@@ -1,12 +1,10 @@
-# btrfs over 2 disks with RAID 0
 # systemd-boot, unencrypted /boot
-# systemd-cryptenroll - yubikey FIDO2 luks unlock: https://askubuntu.com/questions/1118814/yubikey-on-multiple-luks-drives
 # passwordless sudo with yubikey
-
-# (for V2) secure boot via https://github.com/nix-community/lanzaboote
-
+#
+# (for V2)
+# systemd-cryptenroll - yubikey FIDO2 luks unlock: https://askubuntu.com/questions/1118814/yubikey-on-multiple-luks-drives
+# secure boot via https://github.com/nix-community/lanzaboote
 { pkgs, ... }:
-
 {
   environment.systemPackages = with pkgs; [
     yubikey-personalization
@@ -40,7 +38,7 @@
   # Public keys of Yubikeys. Generated via:
   # https://nixos.wiki/wiki/Yubikey#pam_u2f
   environment.etc."u2f-mappings".text =
-    "saghen:DgBwRAkbzjUiiE6WikxyEadH/p1ze4p6w3/Wc0qQd7aI5qvQL9vn5joqOI/Gq1zPKf6P2Af3swf2cgG71WUriw==,DqEsqsA3Fnmc2EVm75neLy7PMLkN4bhgiFEp0OaqpNxqiEMMn7s4bWcrO4a6wsR7dVxK6cLDxNBzEJ+GvyHiVg==,es256,+presence:0mFOuATIQI9mpfkDuwQy1PEsYNFWgLzkDiZRxND4R1jWhq0AbkCtyoQN53oThRlvj/oChjrvrb3lQ6AJYvqDvA==,E2zkjzC0nd19Cix8uOeQ20zN1D9mJduG1c0JA04Dr/+OHw2TekZA4ZeNCjvkUY7Bj6oAy1ioNCIamXypxCQ4Aw==,es256,+presence";
+    "saghen:2L3NN8wV0iB2yyPHiGL7OlWqKStZHGhNSC8Q1xhnucTRtgbScnXeGxGgyrT+6DQp3NUKajN10nazfVZ+LfIiSA==,3WyoccWHmErO8M2+dKF4NxGqfq71VIyNQcmBlgmImGCFjhkjbj4DNIS2GvSWzCf7ywQPRcDtsmycq16PRa1HtQ==,es256,+presence";
 
   # allow VIA to read keyboards
   services.udev.extraRules = ''

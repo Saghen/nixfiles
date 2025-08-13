@@ -4,9 +4,10 @@
 # docker run --rm -v $(pwd)/dist/IosevkaCustom:/in:Z -v $(pwd)/dist/IosevkaCustom500:/out:Z -e 'PN=16' nerdfonts/patcher --adjust-line-height --complete --xavgcharwidth 500
 # TODO: Not sure that the xavgcharwidth did anything
 # NOTE: Edit PN to adjust parallelization
-
-{ lib, stdenvNoCC }:
-
+{
+  lib,
+  stdenvNoCC,
+}:
 stdenvNoCC.mkDerivation {
   pname = "iosevka-nerd";
   version = "2024-04-19";

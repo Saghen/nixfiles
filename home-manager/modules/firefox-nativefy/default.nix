@@ -1,8 +1,21 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   inherit (lib)
-    mkEnableOption mkPackageOption mkOption mkIf mkDefault types optionals
-    getExe;
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    mkIf
+    mkDefault
+    types
+    optionals
+    getExe
+    ;
   inherit (utils) escapeSystemdExecArgs;
   cfg = config.programs.firefoxNativefy;
   jsonFormat = pkgs.formats.json { };
@@ -32,8 +45,7 @@ let
       icon = mkOption {
         type = str;
         default = "Firefox";
-        description =
-          "Icon for the desktop entry. Can be an icon name, e.g. firefox, or an absolute path, e.g. /home/user/.local/share/icons/custom.png";
+        description = "Icon for the desktop entry. Can be an icon name, e.g. firefox, or an absolute path, e.g. /home/user/.local/share/icons/custom.png";
       };
 
       openLinksInBrowser = mkOption {
@@ -66,10 +78,12 @@ let
       };
 
       settings = mkOption {
-        type = attrsOf (jsonFormat.type // {
-          description =
-            "Firefox preference (int, bool, string, and also attrs, list, float as a JSON string)";
-        });
+        type = attrsOf (
+          jsonFormat.type
+          // {
+            description = "Firefox preference (int, bool, string, and also attrs, list, float as a JSON string)";
+          }
+        );
         default = { };
         example = literalExpression ''
           {
@@ -97,8 +111,7 @@ let
       useDefaultUserChrome = mkOption {
         type = bool;
         default = true;
-        description =
-          "Use the default userChrome.css which hides most UI elements";
+        description = "Use the default userChrome.css which hides most UI elements";
       };
       userChrome = mkOption {
         type = lines;
@@ -155,10 +168,10 @@ let
       };
     };
   };
-in {
+in
+{
   options.programs.firefoxNativefy = {
-    enable =
-      mkEnableOption ''Turn websites into "native" applications with Firefox'';
+    enable = mkEnableOption ''Turn websites into "native" applications with Firefox'';
 
     apps = mkOption {
       default = { };
@@ -168,9 +181,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.firefox.profiles = lib.attrsets.mapAttrs' (name: value:
-      let nameDns = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] name);
-      in {
+    programs.firefox.profiles = lib.attrsets.mapAttrs' (
+      name: value:
+      let
+        nameDns = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] name);
+      in
+      {
         name = nameDns;
         value = {
           isDefault = false;
@@ -182,44 +198,42 @@ in {
             # Set default permissions based on cfg.defaultPermissions
             "permissions.default.desktop-notification" =
               if value.defaultPermissions.notifications then 1 else 2;
-            "permissions.default.camera" =
-              if value.defaultPermissions.camera then 1 else 2;
-            "permissions.default.microphone" =
-              if value.defaultPermissions.microphone then 1 else 2;
-            "permissions.default.geo" =
-              if value.defaultPermissions.geolocation then 1 else 2;
-          } // value.settings;
+            "permissions.default.camera" = if value.defaultPermissions.camera then 1 else 2;
+            "permissions.default.microphone" = if value.defaultPermissions.microphone then 1 else 2;
+            "permissions.default.geo" = if value.defaultPermissions.geolocation then 1 else 2;
+          }
+          // value.settings;
           extraConfig = value.extraConfig;
           extensions = value.extensions;
 
           userChrome = lib.concatStrings [
-            (if value.useDefaultUserChrome then
-              builtins.readFile ./userChrome.css
-            else
-              "")
+            (if value.useDefaultUserChrome then builtins.readFile ./userChrome.css else "")
             value.userChrome
           ];
           userContent = value.userContent;
         };
-      }) cfg.apps;
+      }
+    ) cfg.apps;
 
-    xdg.desktopEntries = lib.attrsets.mapAttrs' (name: value:
-      let nameDns = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] name);
-      in {
+    xdg.desktopEntries = lib.attrsets.mapAttrs' (
+      name: value:
+      let
+        nameDns = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] name);
+      in
+      {
         name = nameDns;
         value = {
           type = "Application";
           name = value.name;
           icon = value.icon;
-          comment =
-            "${value.name}, nativefied from ${value.url} using Firefox Nativefy in Home Manager";
-          exec = ''
-            ${
-              getExe pkgs.firefox
-            } --name ${nameDns} --class ${nameDns} --new-instance -P ${nameDns} -url "${value.url}"'';
+          comment = "${value.name}, nativefied from ${value.url} using Firefox Nativefy in Home Manager";
+          exec = ''${getExe pkgs.firefox} --name ${nameDns} --class ${nameDns} --new-instance -P ${nameDns} -url "${value.url}"'';
           categories = [ "Network" ];
-          settings = { StartupWMClass = nameDns; };
+          settings = {
+            StartupWMClass = nameDns;
+          };
         };
-      }) cfg.apps;
+      }
+    ) cfg.apps;
   };
 }

@@ -1,5 +1,4 @@
 { config, ... }:
-
 {
   programs.thunderbird = {
     enable = true;
@@ -7,7 +6,14 @@
     profiles = {
       saghen = {
         isDefault = true;
-        accountsOrder = ["super" "bind" "saghendev" "liamcdyer" "liqwid" "superlodon"];
+        accountsOrder = [
+          "super"
+          "bind"
+          "saghendev"
+          "liamcdyer"
+          "liqwid"
+          "superlodon"
+        ];
         settings = {
           # required for userChrome.css and userContent.css
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

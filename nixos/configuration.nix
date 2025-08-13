@@ -1,7 +1,9 @@
 # TODO: build for march=native
-
-{ inputs, pkgs, ... }:
-
+{
+  inputs,
+  pkgs,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
@@ -41,7 +43,10 @@
       "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
-    trusted-users = [ "root" "saghen" ];
+    trusted-users = [
+      "root"
+      "saghen"
+    ];
   };
 
   nixpkgs = {
@@ -52,7 +57,11 @@
   users.users = {
     saghen = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "networkmanager" ];
+      extraGroups = [
+        "wheel"
+        "docker"
+        "networkmanager"
+      ];
     };
   };
 
@@ -68,4 +77,3 @@
   # Fish enables this by default for autocomplete but it adds +15s to build
   documentation.man.generateCaches = false;
 }
-
