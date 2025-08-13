@@ -1,5 +1,4 @@
 { config, ... }:
-
 {
   imports = [
     ./android.nix
@@ -16,6 +15,9 @@
     virtualisation.docker.enable = true;
     # required for nvidia support in docker
     hardware.graphics.enable32Bit = true;
+
+    # allow executables bundled for generic linux distros to run
+    programs.nix-ld.enable = true;
 
     # Higher performance dbus
     services.dbus.implementation = "broker";
