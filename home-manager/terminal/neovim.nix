@@ -130,13 +130,13 @@
       # misc
       bash-language-server
       dockerfile-language-server-nodejs
-      ts_query_ls
       postgres-lsp
+      harper # grammar/spelling
       # nix
       nil
       nixfmt
       # python
-      black
+      ruff
       basedpyright
       # rust
       # NOTE: rust-analyzer is managed by fenix
@@ -152,14 +152,6 @@
       nodePackages.svelte-language-server
       typescript
       vtsls
-
-      # for deving blink.cmp
-      # gleam
-      # llvmPackages_19.clang-tools
-      # clojure-lsp
-      # dart
-      # roslyn-ls
-      # ols
     ];
   };
 }

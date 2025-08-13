@@ -54,7 +54,7 @@
           "devtools.debugger.remote-enabled" = true;
           "devtools.toolbox.host" = "right";
 
-          "layout.frame_rate" = 144;
+          "layout.frame_rate" = config.machine.refreshRate;
           "gfx.webrender.all" = true;
           "gfx.vsync.force-disable-waitforvblank" = true;
 

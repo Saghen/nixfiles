@@ -26,9 +26,6 @@
     pulseaudio # utilities like pactl
     twitch-cli # login to twitch, used by some scripts
     xdo # send commands to X
-    # google cloud sdk with GKE auth support
-    (pkgs.google-cloud-sdk.withExtraComponents
-      (with pkgs.google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]))
     nix-index # provides nix-locate
 
     claude-code # AI coding

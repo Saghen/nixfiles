@@ -1,11 +1,13 @@
 { pkgs, ... }:
-
 {
   boot = {
     # 1000hz keyboard polling rate
     # who knows if that actually does anything
-    kernelParams = [ "quiet" "usbhid.kbpoll=1" ];
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_14;
+    kernelParams = [
+      "quiet"
+      "usbhid.kbpoll=1"
+    ];
+    kernelPackages = pkgs.linuxKernel.packages.linux_6_15;
 
     loader = {
       efi.canTouchEfiVariables = true;
