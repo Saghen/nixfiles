@@ -40,6 +40,11 @@
       url = "github:saghen/emmylua-analyzer-rust/nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    vicinae = {
+      url = "github:saghen/vicinae-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -48,6 +53,7 @@
       home-manager,
       sops-nix,
       hardware,
+      vicinae,
       ...
     }:
     let
@@ -76,6 +82,7 @@
                 };
                 sharedModules = [
                   sops-nix.homeManagerModules.sops
+                  vicinae.homeManagerModules.default
                   ./machines/${hostname}/machine.nix
                 ];
                 users.saghen = import ./home-manager/home.nix;
