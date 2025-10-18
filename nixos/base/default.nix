@@ -24,5 +24,8 @@
 
     # Distribute interrupts over cores (Improves responsiveness during 100% cpu load)
     services.irqbalance.enable = !config.machine.optimizePower;
+
+    # Power management for applications, and battery support for limbo
+    services.upower.enable = config.machine.optimizePower;
   };
 }

@@ -9,7 +9,7 @@
 
   config = {
     networking.hostName = "liam-laptop";
-    networking.hostId = "x0c35pt6";
+    networking.hostId = "968d12a1";
 
     # automatic firmware updates: fwupdmgr update
     services.fwupd.enable = true;

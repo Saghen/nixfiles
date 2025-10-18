@@ -63,12 +63,18 @@ in
     settings = {
       "$mod" = "SUPER";
 
-      monitor = [
-        # TODO: 10 bit breaks wayfreeze and screen sharing
-        "${builtins.elemAt monitors 0}, 3840x2160@240, 3840x0, 1"
-        "${builtins.elemAt monitors 1}, 3840x2160@240, 0x0, 1"
-        "Unknown-1, disable"
-      ];
+      monitor = let
+        monitors = config.machine.monitors;
+        width = config.machine.width;
+        height = config.machine.height;
+        refreshRate = config.machine.refreshRate;
+        
+        monitorStrings = lib.imap (i: monitor: 
+          "${monitor}, ${toString width}x${toString height}@${toString refreshRate}, ${toString ((builtins.length monitors - i) * width)}x0, 1"
+        ) monitors;
+      in
+        monitorStrings ++ [ "Unknown-1, disable" ];
+
       xwayland = {
         force_zero_scaling = true;
       };

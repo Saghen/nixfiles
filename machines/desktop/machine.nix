@@ -7,8 +7,9 @@
         "DP-4"
         "DP-6"
       ];
+      width = 3840;
+      height = 2160;
       refreshRate = 240;
-      resolution = "3840x2160";
       nvidia = true;
 
       disks = {

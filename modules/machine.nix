@@ -65,16 +65,22 @@ in
       ];
     };
 
+    width = lib.mkOption {
+      type = lib.types.int;
+      default = 3840;
+      description = "Width of the monitors";
+    };
+
+    height = lib.mkOption {
+      type = lib.types.int;
+      default = 2160;
+      description = "Height of the monitors";
+    };
+
     refreshRate = lib.mkOption {
       type = lib.types.int;
       default = 60;
-      description = "Refresh rate of monitors";
-    };
-
-    resolution = lib.mkOption {
-      type = lib.types.str;
-      default = "1920x1080";
-      description = "Resolution of monitors";
+      description = "Refresh rate of the monitors";
     };
 
     optimizePower = lib.mkOption {
