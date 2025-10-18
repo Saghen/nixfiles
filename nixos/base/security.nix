@@ -20,6 +20,9 @@
 
   security.polkit.enable = true;
 
+  # keyring
+  services.gnome.gnome-keyring.enable = true;
+
   # Enable PAM module for Yubikey for login and sudo
   security.pam = {
     u2f = {

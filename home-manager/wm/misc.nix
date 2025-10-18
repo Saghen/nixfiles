@@ -1,8 +1,5 @@
 { pkgs, ... }:
 {
-  # allow applications to store passwords in keyring
-  services.gnome-keyring.enable = true;
-
   # allow applications to request sudo
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
