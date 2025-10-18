@@ -113,7 +113,6 @@
       enable = true;
       flags = [ "--disable-up-arrow" ];
       settings = {
-        sync_address = "https://atuin.super.fish";
         style = "compact";
         enter_accept = true;
       };
