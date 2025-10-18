@@ -231,7 +231,7 @@ in
           # applications
           # TODO: wgpu selects non existent igpu by default
           # https://github.com/iced-rs/iced/issues/2810
-          "$mod, Space, exec, fish -c vicinae"
+          "$mod, Space, exec, fish -c 'vicinae toggle'"
           "$mod, Return, exec, footclient"
           # NOTE: specifying the window size avoids a flash of smaller window
           # NOTE: specifying the foreground color sets the cursor color when the background/foreground are the same
