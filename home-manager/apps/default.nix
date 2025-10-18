@@ -23,7 +23,6 @@
       helvum # GUI Audio routing: Control what apps get what audio
       mpv # Video player
       vlc # Video player
-      jellyfin-media-player # Jellyfin video player
       feh # Image viewer
       qimgv # Image viewer
       nomacs # Image viewer
@@ -31,7 +30,6 @@
       winetricks # Required by lutris
       seabird # Kubernetes client
       obs-studio # Record
-      jellyfin-media-player # Media player
     ];
 
     # google drive lite

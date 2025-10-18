@@ -18,17 +18,6 @@
   programs.gamescope = {
     enable = true;
     capSysNice = false; # doesn't work inside of steam
-    # https://github.com/ValveSoftware/gamescope/pull/1867
-    package = pkgs.gamescope.overrideAttrs (
-      final: prev: {
-        patches = prev.patches ++ [
-          (pkgs.fetchpatch {
-            url = "https://patch-diff.githubusercontent.com/raw/ValveSoftware/gamescope/pull/1867.patch";
-            hash = "sha256-L7E0MLZOuOCYmjZsjub8ua0SKO4T830pQL0/TMP/pOw=";
-          })
-        ];
-      }
-    );
   };
 
   programs.gamemode = {

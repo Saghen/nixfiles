@@ -122,14 +122,27 @@
       helm-ls
       yaml-language-server
       # lua
+      (pkgs.rustPlatform.buildRustPackage (finalAttrs: {
+        pname = "emmylua_ls";
+        version = "0.13.0";
+
+        buildAndTestSubdir = "crates/emmylua_ls";
+        cargoHash = "sha256-SbsYlIVWDpBU2bxJqXUtOiMHkOoa8Up27X7rVKLLLm0=";
+
+        src = fetchFromGitHub {
+          owner = "EmmyLuaLs";
+          repo = "emmylua-analyzer-rust";
+          tag = finalAttrs.version;
+          hash = "sha256-93PlsVvlUravsnW7YBCii04jCEJPP+6U2vYbVBjcX8M=";
+        };
+      }))
       lua-language-server
       stylua
-      inputs.emmylua-analyzer.packages.${pkgs.system}.default
       # go
       gopls
       # misc
       bash-language-server
-      dockerfile-language-server-nodejs
+      dockerfile-language-server
       postgres-lsp
       harper # grammar/spelling
       # nix

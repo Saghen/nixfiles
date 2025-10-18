@@ -16,6 +16,10 @@ in
 {
   home.packages = with pkgs; [ wl-clipboard ];
 
+  # launcher
+  services.vicinae.enable = true;
+
+  # wallpaper
   services.hyprpaper = {
     enable = true;
     settings = {
@@ -24,6 +28,7 @@ in
     };
   };
 
+  # turn off screens
   services.hypridle = {
     enable = true; # TODO: breaks VRR
     settings = {
@@ -49,36 +54,10 @@ in
     };
   };
 
-  # Night light
+  # night light
   services.gammarelay.enable = true;
 
-  # TODO: switch to https://codeberg.org/dnkl/fuzzel ? for the application icons
-  programs.tofi = {
-    enable = true;
-    settings =
-      let
-        colors = config.colors;
-      in
-      {
-        font = "${pkgs.noto-fonts}/share/fonts/noto/NotoSans[wdth,wght].ttf";
-        font-size = 16;
-
-        width = 720;
-        height = 540;
-
-        outline-width = 0;
-        border-width = 1;
-        border-color = colors.primary;
-        background-color = colors.base;
-        text-color = colors.text;
-        prompt-color = colors.primary;
-        selection-color = colors.yellow;
-
-        fuzzy-match = true;
-        drun-launch = true;
-      };
-  };
-
+  # window manager
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
@@ -120,7 +99,6 @@ in
         # scaling
         "GDK_SCALE,${toString config.machine.scalingFactor}"
         "QT_SCALE_FACTOR,${toString config.machine.scalingFactor}" # todo: does this do anything?
-        "STEAM_FORCE_DESKTOPUI_SCALING,${toString config.machine.scalingFactor}" # todo: is this needed?
 
         # enable wayland in all apps
         # "NIXOS_OZONE_WL,1"
@@ -361,9 +339,6 @@ in
         "immediate,class:(steam_app_.+|tf_linux64|gamescope)"
         # TODO: Can't click out of the game window onto the other monitor
         # "stayfocused,class:(steam_app_.+|tf_linux64|gamescope)"
-
-        # Jellyfin
-        "fullscreen,class:(com.github.iwalton3.jellyfin-media-player)"
 
         # Tiled
         "tile,class:(Spotify),title:(Spotify)" # must be specific, otherwise popups will tile

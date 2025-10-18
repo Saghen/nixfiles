@@ -54,15 +54,13 @@
     config.allowUnfree = true;
   };
 
-  users.users = {
-    saghen = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-        "docker"
-        "networkmanager"
-      ];
-    };
+  users.users.saghen = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+      "docker"
+      "networkmanager"
+    ];
   };
 
   # Trim SSD (https://kokada.capivaras.dev/blog/an-unordered-list-of-hidden-gems-inside-nixos/)

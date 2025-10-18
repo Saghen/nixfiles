@@ -7,7 +7,7 @@
       "quiet"
       "usbhid.kbpoll=1"
     ];
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_15;
+    kernelPackages = pkgs.linuxPackages_latest;
 
     loader = {
       efi.canTouchEfiVariables = true;

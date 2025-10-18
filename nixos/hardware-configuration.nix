@@ -26,7 +26,7 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/${config.machine.disks.boot.diskUuid}";
     fsType = config.machine.disks.boot.type;
-    # options = config.machine.disks.boot.options;
+    options = config.machine.disks.boot.options;
   };
 
   # Root
