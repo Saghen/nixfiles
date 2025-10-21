@@ -11,7 +11,8 @@ let
   convertHL = c: "0xff" + builtins.substring 1 6 c;
 
   gameWorkspace = toString (if builtins.length monitors > 1 then 3 else 5);
-  mediaWorkspace = toString (if builtins.length monitors > 1 then 7 else 4);
+  discordWorkspace = toString (if builtins.length monitors > 1 then 7 else 4);
+  spotifyWorkspace = toString (if builtins.length monitors > 1 then 7 else 5);
 in
 {
   home.packages = with pkgs; [ wl-clipboard ];
@@ -63,16 +64,20 @@ in
     settings = {
       "$mod" = "SUPER";
 
-      monitor = let
-        monitors = config.machine.monitors;
-        width = config.machine.width;
-        height = config.machine.height;
-        refreshRate = config.machine.refreshRate;
-        
-        monitorStrings = lib.imap (i: monitor: 
-          "${monitor}, ${toString width}x${toString height}@${toString refreshRate}, ${toString ((builtins.length monitors - i) * width)}x0, 1"
-        ) monitors;
-      in
+      monitor =
+        let
+          monitors = config.machine.monitors;
+          width = config.machine.width;
+          height = config.machine.height;
+          refreshRate = config.machine.refreshRate;
+
+          monitorStrings = lib.imap (
+            i: monitor:
+            "${monitor}, ${toString width}x${toString height}@${toString refreshRate}, ${
+              toString ((builtins.length monitors - i) * width)
+            }x0, 1"
+          ) monitors;
+        in
         monitorStrings ++ [ "Unknown-1, disable" ];
 
       xwayland = {
@@ -348,9 +353,9 @@ in
 
         # Tiled
         "tile,class:(Spotify),title:(Spotify)" # must be specific, otherwise popups will tile
-        "workspace ${mediaWorkspace},class:(Spotify),title:(Spotify)"
+        "workspace ${spotifyWorkspace},class:(Spotify),title:(Spotify)"
         "tile,class:(vesktop)"
-        "workspace ${mediaWorkspace},class:(vesktop)"
+        "workspace ${discordWorkspace},class:(vesktop)"
         "tile,class:(neovim)"
         "tile,class:(zellij-neovim)"
         "tile,class:(thunderbird),title:(Mozilla Thunderbird)" # must be specific, otherwise popups will tile
@@ -383,11 +388,11 @@ in
       ## Autostart
       exec-once = [
         "[workspace 1 silent] firefox-nightly"
-        "[workspace ${mediaWorkspace} silent] spotify"
+        "${pkgs.swayosd}/bin/swayosd-server"
+        "[workspace ${spotifyWorkspace} silent] spotify"
         # TODO: https://github.com/Vencord/Vesktop/issues/342
         # needed for working drag and drop
-        "[workspace ${mediaWorkspace} silent] vesktop"
-        "${pkgs.swayosd}/bin/swayosd-server"
+        "[workspace ${discordWorkspace} silent] vesktop"
       ]
       ++ lib.optionals config.machine.microphoneHack [
         # constantly set volume to 1 to counteract something adjusting it
