@@ -66,6 +66,8 @@
   # Trim SSD (https://kokada.capivaras.dev/blog/an-unordered-list-of-hidden-gems-inside-nixos/)
   # Make sure to enable boot.initrd.luks.devices.*.allowDiscards
   services.fstrim.enable = true;
+  # Monitor S.M.A.R.T. status
+  services.smartd.enable = true;
 
   # Fish
   users.defaultUserShell = pkgs.fish;
