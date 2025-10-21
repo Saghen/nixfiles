@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }:
 rec {
@@ -38,24 +39,7 @@ rec {
     '';
   };
 
-  # BTRFS snapshots to local storage
-  system.activationScripts.mkBtrbkHome = "mkdir -p /snapshots/home";
-  services.btrbk.instances = {
-    # home = {
-    #   onCalendar = "daily";
-    #
-    #   settings = {
-    #     snapshot_preserve = "14d";
-    #     snapshot_preserve_min = "2d";
-    #     volume."/" = {
-    #       subvolume = "home";
-    #       snapshot_dir = "/snapshots/home";
-    #     };
-    #   };
-    # };
-  };
-
-  # Backup home directory to remote
+  # Backup to super fish
   sops.secrets."restic/super-fish/repository" = {
     sopsFile = ../../keys/sops/restic.yaml;
     mode = "0440";
@@ -63,36 +47,44 @@ rec {
     group = "root";
   };
   sops.secrets."restic/super-fish/password" = sops.secrets."restic/super-fish/repository";
-  services.restic.backups = {
-    home = {
-      timerConfig = {
-        OnCalendar = "*-*-* 4:00:00";
-      }; # every day at 4am
-      repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
-      passwordFile = config.sops.secrets."restic/super-fish/password".path;
-      initialize = true;
-      user = "root";
-      paths = [ "/home/saghen" ];
-      exclude = [
-        "/home/*/.cache"
-        "/home/*/.local"
-        "/home/*/downloads"
+  services.restic.backups.home = lib.mkIf config.machine.backup.toSuperFish {
+    timerConfig = {
+      OnCalendar = "*-*-* 4:00:00";
+    }; # every day at 4am
+    repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
+    passwordFile = config.sops.secrets."restic/super-fish/password".path;
+    initialize = true;
+    user = "root";
+    paths = [ "/home/saghen" ];
+    exclude = [
+      "/home/*/.cache"
+      "/home/*/.local"
+      "/home/*/downloads"
 
-        "/home/*/beets"
-        "/home/*/Music"
+      "/home/*/beets"
+      "/home/*/Music"
 
-        "/home/*/games/lutris"
-        "/home/*/games/steam"
-        "/home/*/games/mod-organizer-2"
-        "/home/*/.steam"
+      "/home/*/games/lutris"
+      "/home/*/games/steam"
+      "/home/*/games/mod-organizer-2"
+      "/home/*/.steam"
 
-        "/home/**/node_modules"
-        "/home/**/.venv"
-        "/home/*/code/**/target"
-        "/home/*/code/huggingface/tokenizers"
-        "/home/*/code/tmp"
-        "/home/*/code/superfishial/readarr-dump"
-      ];
-    };
+      "/home/**/node_modules"
+      "/home/**/.venv"
+      "/home/*/code/**/target"
+      "/home/*/code/huggingface/tokenizers"
+      "/home/*/code/tmp"
+      "/home/*/code/superfishial/readarr-dump"
+    ];
+  };
+
+  # Restic HTTP server for super fish to backup to
+  sops.secrets."restic/super-fish/htpasswd" = sops.secrets."restic/super-fish/repository";
+  services.restic.server = {
+    enable = config.machine.backup.fromSuperFish;
+    appendOnly = true;
+    listenAddress = "0.0.0.0:9999";
+    privateRepos = true;
+    htpasswd-file = config.sops.secrets."restic/super-fish/htpasswd".path;
   };
 }

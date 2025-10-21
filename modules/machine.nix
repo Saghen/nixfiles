@@ -101,6 +101,25 @@ in
       description = "Enable microphone hack which forces the volume to 100%";
     };
 
+    backup = lib.mkOption {
+      default = { };
+      type = lib.types.submodule {
+        options = {
+          toSuperFish = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Enable backups to super fish";
+          };
+          fromSuperFish = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Enable backups from super fish";
+          };
+        };
+      };
+      description = "Backup configuration";
+    };
+
     disks = lib.mkOption {
       type = lib.types.submodule {
         options = {

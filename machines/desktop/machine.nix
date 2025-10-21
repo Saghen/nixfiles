@@ -14,6 +14,11 @@
 
       microphoneHack = true;
 
+      backup = {
+        toSuperFish = true;
+        fromSuperFish = true;
+      };
+
       disks = {
         boot = {
           diskUuid = "A4CE-53EE";
