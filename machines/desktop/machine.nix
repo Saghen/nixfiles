@@ -12,6 +12,8 @@
       refreshRate = 240;
       nvidia = true;
 
+      microphoneHack = true;
+
       disks = {
         boot = {
           diskUuid = "A4CE-53EE";

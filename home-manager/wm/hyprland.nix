@@ -388,6 +388,8 @@ in
         # needed for working drag and drop
         "[workspace ${mediaWorkspace} silent] vesktop"
         "${pkgs.swayosd}/bin/swayosd-server"
+      ]
+      ++ lib.optionals config.machine.microphoneHack [
         # constantly set volume to 1 to counteract something adjusting it
         "while true; do sleep 1 && ${pkgs.pulseaudio}/bin/pactl set-source-volume @DEFAULT_SOURCE@ 100%; done &"
       ];

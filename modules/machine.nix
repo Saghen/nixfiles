@@ -95,6 +95,12 @@ in
       description = "Enable NVIDIA GPU support";
     };
 
+    microphoneHack = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable microphone hack which forces the volume to 100%";
+    };
+
     disks = lib.mkOption {
       type = lib.types.submodule {
         options = {
