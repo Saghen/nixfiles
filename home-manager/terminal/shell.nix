@@ -31,6 +31,8 @@
 
         # customize transcient prompt
         starship_transient_prompt_func = "starship module directory && starship module character";
+
+        hibernate = "systemctl hibernate";
       };
       shellAbbrs = {
         cd = "z";
