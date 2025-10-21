@@ -89,8 +89,8 @@
     in
     {
       nixosConfigurations = {
-        desktop = mkSystem "desktop";
-        laptop = mkSystem "laptop";
+        liam-desktop = mkSystem "desktop";
+        liam-laptop = mkSystem "laptop";
       };
     };
 }
