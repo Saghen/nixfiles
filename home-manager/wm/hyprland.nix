@@ -220,17 +220,15 @@ in
           '';
           screenshotMonitor = screenshotTmpl ''-s "$(${monitorSlurp}/bin/monitor-slurp)"'';
 
-          subtext = builtins.substring 1 6 colors.subtext-1;
           launchNeovimZellij = pkgs.writeShellScriptBin "launch-neovim-zellij" ''
-            WINDOW_ADDRESS=$(hyprctl clients -j | jq 'map(select(.class == "zellij-neovim")) | .[0].address' -r)
+            WINDOW_ADDRESS=$(hyprctl clients -j | jq 'map(select(.title == "zellij-neovim")) | .[0].address' -r)
             if [ "$WINDOW_ADDRESS" == "null" ]; then
-              footclient \
-                -o colors.foreground=${subtext} \
-                -o pad=0x0 \
-                --window-size-pixels=3840x2160 \
-                --app-id zellij-neovim \
-                --title zellij-neovim \
-                fish -c "zellij --session neovim --new-session-with-layout neovim || zellij attach neovim"
+              ghostty \
+                --title=zellij-neovim \
+                --window-padding-x=0 \
+                --window-padding-y=0 \
+                -e fish -c "zellij --session neovim --new-session-with-layout neovim || zellij attach neovim" \
+                +new-window
             else
               hyprctl dispatch focuswindow zellij-neovim
             fi
@@ -243,11 +241,10 @@ in
           # TODO: wgpu selects non existent igpu by default
           # https://github.com/iced-rs/iced/issues/2810
           "$mod, Space, exec, fish -c 'vicinae toggle'"
-          "$mod, Return, exec, footclient"
+          "$mod, Return, exec, ghostty +new-window"
           # NOTE: specifying the window size avoids a flash of smaller window
           # NOTE: specifying the foreground color sets the cursor color when the background/foreground are the same
           "$mod, c, exec, ${launchNeovimZellij}/bin/launch-neovim-zellij"
-          "$mod + SHIFT, c, exec, footclient -o colors.foreground=${subtext} -o pad=0x0 --window-size-pixels=2560x1440 --app-id neovim --title neovim nvim"
           "$mod + SHIFT, Return, exec, foot" # fallback in case foot.service fails
 
           # screenshots
@@ -359,11 +356,13 @@ in
         "tile,class:(neovim)"
         "tile,class:(zellij-neovim)"
         "tile,class:(thunderbird),title:(Mozilla Thunderbird)" # must be specific, otherwise popups will tile
+        "tile,class:(com.mitchellh.ghostty),title:(zellij-neovim)"
 
         # Sizing
         "size 900 1000,class:(org.gnome.SystemMonitor)"
         "size 1200 800,class:(org.gnome.Nautilus)"
         "size 1800 1200,class:(steam),title:^(Steam)$"
+        "size 1750 1050,class:(com.mitchellh.ghostty)"
         "minsize 640 480,class:(qimgv)"
 
         # Floating
@@ -383,6 +382,7 @@ in
 
         # Disable animations
         "noanim 1,class:(foot(client)?)"
+        "noanim 1,class:(com.mitchellh.ghostty)"
       ];
 
       ## Autostart
