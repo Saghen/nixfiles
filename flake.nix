@@ -26,9 +26,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wayfreeze.url = "github:jappie3/wayfreeze";
-    centerpiece.url = "github:friedow/centerpiece";
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # rust toolchain
     fenix = {

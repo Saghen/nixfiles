@@ -14,6 +14,7 @@
   config = {
     home.packages = with pkgs; [
       vesktop # Discord with screen share and audio
+      signal-desktop # E2EE messaging
       nautilus # File management
       gnome-system-monitor # System resource monitor
       gparted # Disk management

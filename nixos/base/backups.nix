@@ -48,9 +48,7 @@ rec {
   };
   sops.secrets."restic/super-fish/password" = sops.secrets."restic/super-fish/repository";
   services.restic.backups.home = lib.mkIf config.machine.backup.toSuperFish {
-    timerConfig = {
-      OnCalendar = "*-*-* 4:00:00";
-    }; # every day at 4am
+    timerConfig.OnCalendar = "*-*-* 4:00:00";
     repositoryFile = config.sops.secrets."restic/super-fish/repository".path;
     passwordFile = config.sops.secrets."restic/super-fish/password".path;
     initialize = true;
@@ -79,12 +77,18 @@ rec {
   };
 
   # Restic HTTP server for super fish to backup to
-  sops.secrets."restic/super-fish/htpasswd" = sops.secrets."restic/super-fish/repository";
+  sops.secrets."restic/super-fish/htpasswd" = {
+    sopsFile = ../../keys/sops/restic.yaml;
+    mode = "0440";
+    owner = "restic";
+    group = "restic";
+  };
   services.restic.server = {
     enable = config.machine.backup.fromSuperFish;
     appendOnly = true;
     listenAddress = "0.0.0.0:9999";
     privateRepos = true;
+    # `nsp apacheHttpd` -> `htpasswd -B -c .htpasswd USERNAME`
     htpasswd-file = config.sops.secrets."restic/super-fish/htpasswd".path;
   };
 }

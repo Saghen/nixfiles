@@ -115,9 +115,6 @@
 
       ## LSPs, formatters, linters
       efm-langserver
-      # fp
-      nodePackages.purescript-language-server
-      haskell-language-server
       # kubernetes
       helm-ls
       yaml-language-server
@@ -162,7 +159,6 @@
       prettierd
       vscode-langservers-extracted # eslint, css, html, markdown, json
       biome
-      nodePackages.svelte-language-server
       typescript
       vtsls
     ];
