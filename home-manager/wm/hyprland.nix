@@ -128,11 +128,7 @@ in
         "col.inactive_border" = convertHL colors.base;
         "col.active_border" = convertHL colors.primary;
       };
-      decoration = {
-        blur = {
-          enabled = false;
-        };
-      };
+      decoration.blur.enabled = false;
       cursor = {
         no_hardware_cursors = true;
         no_warps = true;
@@ -146,9 +142,7 @@ in
         follow_mouse = 2;
         float_switch_override_focus = 0;
 
-        touchpad = {
-          natural_scroll = true;
-        };
+        touchpad.natural_scroll = true;
 
         kb_options = "caps:super";
         repeat_rate = 40;
@@ -176,9 +170,7 @@ in
         # Reduces latency by showing frames as they come in, and eliminates tearing
         vrr = 0;
       };
-      render = {
-        direct_scanout = true;
-      };
+      render.direct_scanout = 1;
       # debug = { disable_logs = false; };
 
       ## Animations
