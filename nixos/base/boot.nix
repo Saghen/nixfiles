@@ -15,10 +15,6 @@
       systemd-boot.enable = true;
     };
 
-    # Disable waiting for network because it takes 10s and we don't need it
-    # https://askubuntu.com/questions/1018576/what-does-networkmanager-wait-online-service-do
-    initrd.systemd.network.wait-online.enable = false;
-
     # Loading animation and LUKS password prompt
     initrd.systemd.enable = true;
     plymouth = {

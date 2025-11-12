@@ -59,7 +59,6 @@
     extraGroups = [
       "wheel"
       "docker"
-      "networkmanager"
     ];
   };
 

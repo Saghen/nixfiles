@@ -1,21 +1,19 @@
-{ lib, ... }:
+{ ... }:
 {
   # Bluetooth
   hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
 
   # Internet
-  networking.networkmanager = {
+  networking.useNetworkd = true;
+  networking.wireless.iwd.enable = true;
+  services.resolved = {
     enable = true;
-    insertNameservers = [
-      "1.1.1.1"
-      "1.0.0.1"
-    ];
+    dnsovertls = "true";
   };
-  # Causes long boots and hangs on update
-  # https://github.com/NixOS/nixpkgs/issues/180175#issuecomment-1473408913
-  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
-  systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
+  networking.nameservers = [
+    "1.1.1.1"
+    "1.0.0.1"
+  ];
 
   # VPNs
   services.tailscale = {
