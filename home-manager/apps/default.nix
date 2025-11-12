@@ -13,23 +13,22 @@
   ];
   config = {
     home.packages = with pkgs; [
+      bluetui # Bluetooth TUI
+      impala # WIFI TUI
+      nautilus # File management
       vesktop # Discord with screen share and audio
       signal-desktop # E2EE messaging
-      nautilus # File management
       gnome-system-monitor # System resource monitor
       gparted # Disk management
-      blueman # Bluetooth manager
       obsidian # Notes
       pavucontrol # GUI Volume mixer and device settings
       helvum # GUI Audio routing: Control what apps get what audio
       mpv # Video player
-      vlc # Video player
       feh # Image viewer
       qimgv # Image viewer
       nomacs # Image viewer
       lutris # Game manager
       winetricks # Required by lutris
-      seabird # Kubernetes client
       obs-studio # Record
     ];
 
